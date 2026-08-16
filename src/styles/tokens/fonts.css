@@ -1,0 +1,8 @@
+/* SUBSTITUTION NOTICE
+   No font binaries were supplied with the brand pack. The Home Assist wordmark and
+   collateral are set in a Myriad/Museo-class humanist sans; Source Sans 3 is the
+   closest freely-licensed match and is used for all UI and document type.
+   The Perform+ wordmark is a geometric sans; Montserrat substitutes for it and is
+   used only for Perform+ display type and tier labels.
+   Replace both here if the real licensed files are provided. */
+@import url("https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,300..800;1,400..700&family=Montserrat:wght@500;600;700;800&display=swap");

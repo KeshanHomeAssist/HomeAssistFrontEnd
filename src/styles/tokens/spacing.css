@@ -1,0 +1,12 @@
+:root{
+  /* 4px base grid */
+  --space-0:0; --space-1:4px; --space-2:8px; --space-3:12px; --space-4:16px;
+  --space-5:20px; --space-6:24px; --space-8:32px; --space-10:40px; --space-12:48px;
+  --space-16:64px; --space-20:80px; --space-24:96px;
+
+  --gutter-card:20px; --gutter-panel:24px; --gutter-section:48px;
+  --page-max:1200px; --reading-max:68ch;
+  --control-height-sm:32px; --control-height:40px; --control-height-lg:48px;
+  --touch-min:44px;
+  --doc-margin:22mm; --doc-band-height:34mm; /* @kind spacing */
+}

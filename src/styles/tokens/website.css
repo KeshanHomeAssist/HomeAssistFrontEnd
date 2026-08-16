@@ -1,0 +1,31 @@
+:root{
+  /* ---- Website build system (Home_Assist_Website_Build_Prompt.md, Part 0.2) ----
+     Exact values from the website brief. Where they differ from tokens/colors.css
+     by a shade, the brief wins for web builds; the core two brand colours are
+     identical in both. Deltas are documented in references/website.md. */
+  --web-blue:#2562AC; --web-navy:#182D55;
+  --web-blue-700:#1D4F8C;   /* hover */
+  --web-blue-300:#6D94C9;   /* focus ring */
+  --web-blue-100:#D9E4F2; --web-blue-050:#EEF3FA;
+  --web-navy-900:#101F3B; --web-navy-300:#5E6D8E;
+  --web-grey-050:#F6F8FA; --web-grey-100:#E9EDF2;  /* borders */
+  --web-grey-300:#C3CAD4; --web-grey-500:#7D8794;  /* muted text */
+  --web-grey-700:#4A5361;                          /* body text */
+
+  --web-label-tracking:0.14em;
+  --web-shadow-card:0 1px 3px rgba(24,45,85,.10), 0 4px 14px rgba(24,45,85,.06); /* @kind shadow */
+
+  /* Web type scale — display / h1 / h2 / h3 / body / small / label */
+  --web-size-display:40px; --web-lh-display:1.1; /* @kind other */
+  --web-size-h1:28px; --web-lh-h1:1.2; /* @kind other */
+  --web-size-h2:21px; --web-lh-h2:1.3; /* @kind other */
+  --web-size-h3:17px; --web-lh-h3:1.4; /* @kind other */
+  --web-size-body:15px; --web-lh-body:1.55; /* @kind other */
+  --web-size-small:13px; --web-lh-small:1.5; /* @kind other */
+  --web-size-label:11px; --web-lh-label:1.3; /* @kind other */
+
+  /* Layout */
+  --web-header-height:72px;
+  --web-measure-article:720px;
+  --web-tap-min:44px;
+}

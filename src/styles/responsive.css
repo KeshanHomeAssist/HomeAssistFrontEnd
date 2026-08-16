@@ -1,0 +1,91 @@
+/* ---------------------------------------------------------------------------
+   Baseline responsive layer.
+
+   The design export is, by its own README, "the desktop composition" — the
+   mobile drawer nav and the fixed WhatsApp/Call bar in the brief were never
+   built, and every layout is a fixed multi-column grid written as a React
+   inline style.
+
+   Inline styles beat stylesheets, so the only way to reflow them without
+   rewriting all eight pages is `!important` on attribute selectors. That is
+   deliberate and contained to this file. It stops the site scrolling sideways
+   on a phone and stacks the grids into one column; it is NOT a substitute for
+   designing the mobile layout properly.
+
+   Most Home Assist traffic will be mobile, so treat proper mobile design as
+   the next piece of work, not an optional polish pass.
+   --------------------------------------------------------------------------- */
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+img {
+  max-width: 100%;
+}
+
+@media (max-width: 1000px) {
+  /* Every multi-column grid collapses to two columns, then one. */
+  #root [style*="grid-template-columns"] {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}
+
+@media (max-width: 720px) {
+  #root [style*="grid-template-columns"] {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+
+  /* 40px side gutters are too wide on a phone. */
+  #root [style*="40px"] {
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+  }
+
+  /* Header: let the nav wrap under the logo rather than overflow. */
+  #root header {
+    height: auto !important;
+    position: static !important;
+  }
+
+  #root header > div {
+    flex-wrap: wrap !important;
+    gap: 12px !important;
+    padding-top: 12px !important;
+    padding-bottom: 12px !important;
+  }
+
+  #root header nav {
+    margin-left: 0 !important;
+    order: 3;
+    width: 100%;
+    gap: 14px !important;
+    flex-wrap: wrap !important;
+    row-gap: 8px !important;
+  }
+
+  /* Display and h1 type scales down so long headlines do not overflow. */
+  #root h1 {
+    font-size: clamp(26px, 7vw, 34px) !important;
+  }
+
+  #root h2 {
+    font-size: clamp(20px, 5.5vw, 26px) !important;
+  }
+}
+
+/* Tap targets: the brief specifies a minimum, the prototype only applies it
+   to form inputs. Extend it to the things people actually tap. */
+@media (pointer: coarse) {
+  #root a[href^="tel:"],
+  #root a[href^="mailto:"],
+  #root a[href*="wa.me"] {
+    min-height: var(--web-tap-min, 44px);
+    display: inline-flex;
+    align-items: center;
+  }
+}

@@ -1,0 +1,55 @@
+:root{
+  /* ---- Brand core (sampled from HomeAssist-logo-TM-01.png) ---- */
+  --ha-blue:#2562AC;          /* "Home" */
+  --ha-navy:#182D55;          /* "Assist" */
+  --ha-navy-deep:#0F1E3C;     /* deepest navy, video backgrounds */
+
+  /* ---- Blue ramp (sampled from meet background + letterhead) ---- */
+  --blue-900:#0F1E3C; --blue-800:#182D55; --blue-700:#20386A; --blue-600:#22407A;
+  --blue-500:#2562AC; --blue-400:#5381C0; --blue-300:#7EA2D2; --blue-200:#A8C1E1;
+  --blue-100:#D5DEEE; --blue-050:#EAF1F8;
+
+  /* ---- Secondary: the letterhead wave (blue -> teal -> green) ---- */
+  --teal-600:#3E809F; --teal-500:#5E9BA6; --teal-400:#82ABAB;  /* mist teal */
+  --green-600:#5B9271; --green-500:#74AB91; --green-400:#9BC4AC; --green-200:#CFE3D7;
+
+  /* ---- Illustration palette (do not use for UI chrome) ---- */
+  --olive-600:#647356; --olive-500:#8BA276; --olive-300:#BDD4A8;
+  --clay-500:#D64D45;   /* roof red — accent only, never a button */
+  --tan-400:#D8B28B; --brown-600:#5B4841;
+
+  /* ---- Neutrals (cool grey) ---- */
+  --grey-000:#FFFFFF; --grey-025:#F7F8FA; --grey-050:#F2F3F5; --grey-100:#E6E8EC;
+  --grey-200:#DEDEDE; --grey-300:#CCCCCC; --grey-400:#A3A9A7; --grey-500:#7C8590;
+  --grey-600:#5A626D; --grey-700:#3D444E; --grey-900:#1B1F26;
+
+  /* ---- Semantic: status ---- */
+  --status-success:#5B9271; --status-success-bg:#EDF5F0;
+  --status-warning:#C98A2E; --status-warning-bg:#FBF3E5;
+  --status-danger:#D64D45;  --status-danger-bg:#FBECEB;
+  --status-info:#2562AC;    --status-info-bg:#EAF1F8;
+  --status-neutral:#7C8590; --status-neutral-bg:#F2F3F5;
+
+  /* ---- Semantic: surface ---- */
+  --surface-page:#FFFFFF; --surface-subtle:#F7F8FA; --surface-card:#FFFFFF;
+  --surface-panel:#182D55; --surface-panel-alt:#0F1E3C; --surface-accent:#EAF1F8;
+  --surface-disabled:#F2F3F5;
+
+  /* ---- Semantic: text ---- */
+  --text-heading:#182D55; --text-body:#3D444E; --text-muted:#5A626D;
+  --text-faint:#7C8590; --text-link:#2562AC; --text-link-hover:#182D55;
+  --text-on-dark:#FFFFFF; --text-on-dark-muted:#A8C1E1; --text-disabled:#A3A9A7;
+
+  /* ---- Semantic: border ---- */
+  --border-subtle:#E6E8EC; --border-default:#CCCCCC; --border-strong:#182D55;
+  --border-focus:#2562AC; --border-on-dark:rgba(255,255,255,.28);
+
+  /* ---- Perform+ tiers (sampled from Perform+ artwork) ---- */
+  --tier-plastic:#A3A9A7; --tier-bronze:#A9713C; --tier-silver:#8E9AA6;
+  --tier-gold:#C29A3B;    --tier-platinum:#2562AC;
+
+  /* ---- Gradients ---- */
+  --gradient-band:linear-gradient(100deg,#2562AC 0%,#265293 42%,#3E809F 68%,#74AB91 100%); /* @kind color */
+  --gradient-navy:linear-gradient(180deg,#182D55 0%,#0F1E3C 100%); /* @kind color */
+  --gradient-mist:linear-gradient(120deg,#82ABAB 0%,#74AB91 100%); /* @kind color */
+}

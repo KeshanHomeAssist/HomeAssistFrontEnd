@@ -1,0 +1,31 @@
+node_modules/
+dist/
+dist-ssr/
+.vite/
+
+# Generated from design-export/ by `npm run prepare:ds`.
+# Committing these would mean two sources of truth for the same code.
+src/ds/index.js
+src/site/*.jsx
+public/icons/
+
+# Deploy credentials — xneelo FTP details give full write access to the
+# hosting account. These must never reach GitHub.
+deploy/.env.deploy
+.env
+.env.local
+*.pem
+*.key
+
+# Artwork from the design export that the site does not currently use.
+# It stays on disk (scripts/split-assets.mjs puts it there) but committing
+# ~17MB of unused binaries would bloat every clone forever. The originals live
+# in the Claude Design export, which is the source of truth for artwork.
+design-export/asset-library/
+
+# Editor / OS noise
+.DS_Store
+.idea/
+.vscode/
+*.swp
+npm-debug.log*

@@ -1,0 +1,13 @@
+/* Minimal element defaults so plain HTML inherits the identity. */
+html{-webkit-text-size-adjust:100%}
+body{margin:0;font:var(--text-body-font);color:var(--text-body);background:var(--surface-page);text-wrap:pretty}
+h1,h2,h3,h4{color:var(--text-heading);margin:0 0 var(--space-3);text-wrap:balance}
+h1{font:var(--text-h1-font)}h2{font:var(--text-h2-font)}h3{font:var(--text-h3-font)}
+h4{font:var(--weight-semibold) var(--size-h4)/var(--leading-snug) var(--font-core)}
+p{margin:0 0 var(--space-4);max-width:var(--reading-max)}
+a{color:var(--text-link);text-decoration:underline;text-underline-offset:2px;transition:color var(--duration-fast) var(--ease-standard)}
+a:hover{color:var(--text-link-hover)}
+small{font-size:var(--size-caption);color:var(--text-muted)}
+hr{border:0;border-top:1px solid var(--border-subtle);margin:var(--space-8) 0}
+::selection{background:var(--blue-200);color:var(--ha-navy)}
+.ha-label{font:var(--text-label-font);letter-spacing:var(--tracking-label);text-transform:uppercase;color:var(--ha-navy)}

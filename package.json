@@ -1,0 +1,29 @@
+{
+  "name": "homeassist-frontend",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Home Assist Technologies (Pty) Ltd — homeassist.co.za front end",
+  "type": "module",
+  "scripts": {
+    "prepare:ds": "node scripts/build-ds.mjs && node scripts/adapt-pages.mjs && node scripts/vendor-icons.mjs",
+    "dev": "npm run prepare:ds && vite",
+    "build": "npm run prepare:ds && vite build && vite build --ssr src/entry-server.jsx --outDir dist-ssr && node scripts/prerender.mjs",
+    "preview": "vite preview --outDir dist",
+    "serve:dist": "node scripts/serve-dist.mjs",
+    "verify": "node scripts/verify-build.mjs",
+    "split-assets": "node scripts/split-assets.mjs",
+    "optimise-images": "node scripts/optimise-images.mjs"
+  },
+  "dependencies": {
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^6.28.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.3.4",
+    "lucide-static": "^0.454.0",
+    "playwright": "^1.62.1",
+    "sharp": "^0.35.3",
+    "vite": "^5.4.11"
+  }
+}

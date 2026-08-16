@@ -1,0 +1,99 @@
+# ============================================================================
+# homeassist.co.za — Apache configuration for xneelo shared hosting
+#
+# The site is fully prerendered: every route is a real directory with an
+# index.html, so Apache serves it directly. There is no SPA rewrite here and
+# there does not need to be.
+#
+# NOTE ON HTTPS: Cloudflare sits in front of this server. Do NOT add a plain
+# "redirect http to https" rule based on %{HTTPS} — with Cloudflare's SSL mode
+# set to Flexible that produces an infinite redirect loop. The rule below reads
+# X-Forwarded-Proto, which is what Cloudflare actually sends. Set Cloudflare's
+# SSL/TLS mode to "Full (strict)" and this is correct and loop-free.
+# ============================================================================
+
+Options -Indexes
+DirectoryIndex index.html
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+
+  # Force HTTPS (Cloudflare-aware).
+  RewriteCond %{HTTP:X-Forwarded-Proto} =http
+  RewriteRule ^(.*)$ https://%{HTTP_HOST}/$1 [R=301,L]
+
+  # Canonical host: one hostname, so link equity and analytics do not split.
+  # Change both lines together if you decide on the apex instead of www.
+  RewriteCond %{HTTP_HOST} ^homeassist\.co\.za$ [NC]
+  RewriteRule ^(.*)$ https://www.homeassist.co.za/$1 [R=301,L]
+
+  # No SPA fallback rule here on purpose. Every route is a real directory
+  # containing index.html, so mod_dir serves it: /about redirects once to
+  # /about/ and then serves /about/index.html. Adding a rewrite would only
+  # create a way for it to go wrong.
+</IfModule>
+
+ErrorDocument 404 /404.html
+
+# ---------------------------------------------------------------------------
+# Compression
+# ---------------------------------------------------------------------------
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css
+  AddOutputFilterByType DEFLATE application/javascript application/x-javascript
+  AddOutputFilterByType DEFLATE application/json application/xml
+  AddOutputFilterByType DEFLATE image/svg+xml
+</IfModule>
+
+# ---------------------------------------------------------------------------
+# Caching
+#
+# Build assets carry a content hash in the filename, so they can be cached
+# forever. HTML must not be, or a deploy will not reach people who have already
+# visited. Purge the Cloudflare cache after each deploy regardless.
+# ---------------------------------------------------------------------------
+<IfModule mod_headers.c>
+  <FilesMatch "\.(js|css|woff2?|ttf|eot)$">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </FilesMatch>
+
+  <FilesMatch "\.(png|jpe?g|gif|svg|webp|avif|ico|pdf)$">
+    Header set Cache-Control "public, max-age=2592000"
+  </FilesMatch>
+
+  <FilesMatch "\.(html|xml|json)$">
+    Header set Cache-Control "public, max-age=0, must-revalidate"
+  </FilesMatch>
+
+  # Security headers.
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set X-Frame-Options "SAMEORIGIN"
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+  Header always set Permissions-Policy "geolocation=(), microphone=(), camera=()"
+  Header always unset X-Powered-By
+</IfModule>
+
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresByType text/css "access plus 1 year"
+  ExpiresByType application/javascript "access plus 1 year"
+  ExpiresByType image/png "access plus 1 month"
+  ExpiresByType image/jpeg "access plus 1 month"
+  ExpiresByType image/svg+xml "access plus 1 month"
+  ExpiresByType text/html "access plus 0 seconds"
+</IfModule>
+
+# ---------------------------------------------------------------------------
+# Correct types for fonts and modern images
+# ---------------------------------------------------------------------------
+<IfModule mod_mime.c>
+  AddType font/woff2 .woff2
+  AddType image/webp .webp
+  AddType image/avif .avif
+  AddType image/svg+xml .svg
+</IfModule>
+
+# Never serve these, whatever ends up on the server.
+<FilesMatch "(^\.|\.(map|log|bak|sql|env|json5)$|^package(-lock)?\.json$)">
+  Require all denied
+</FilesMatch>
