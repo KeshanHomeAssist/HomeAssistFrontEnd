@@ -36,46 +36,55 @@ placeholders. Do not upload a build that fails.
 
 ---
 
-## 2. Where staging lives
+## 2. Staging: staging.homeassist.co.za on Cloudflare Pages
 
-Two options. They differ in cost and in how much they touch the live account.
+**Decided 16 August 2026.** Staging runs on Cloudflare Pages with the custom
+domain `staging.homeassist.co.za`. Production goes to xneelo.
 
-### Option A — a subdomain on xneelo
+This gets the real hostname without buying a second xneelo hosting package, and
+without any credential that can write to the account the live WordPress site
+sits on. It rebuilds on every push to `main`.
 
-`staging.homeassist.co.za` served from the same hosting account.
+### Set it up once
 
-On xneelo a subdomain is added in the Control Panel either as its own hosting
-package or as a Parked/Multiple domain — **applicable hosting fees apply**, so
-this is not free, and the subdomain needs its own document root. Confirm the
-exact path in konsoleH before the first upload: pointing `STAGING_REMOTE_DIR` at
-the wrong directory will upload this site straight over the WordPress install.
+1. Cloudflare dashboard → **Workers & Pages** → **Create** → **Pages** →
+   **Connect to Git**, and pick `KeshanHomeAssist/HomeAssistFrontEnd`.
+2. Build settings:
+   - Framework preset: **None**
+   - Build command: `npm run build`
+   - Build output directory: `dist`
+   - Node version: set the environment variable `NODE_VERSION` to `20`
+3. Deploy. You get a `*.pages.dev` URL in a couple of minutes.
+4. In the Pages project → **Custom domains** → **Set up a custom domain** →
+   `staging.homeassist.co.za`. Because the zone is already on Cloudflare, the
+   DNS record is created for you and the certificate is issued automatically.
 
-If the parent domain and the subdomain are not hosted in the same place you also
-have to create the DNS record manually.
+`public/_headers` gives Pages the same caching and security headers that
+`.htaccess` gives Apache, so staging and production behave the same. Note that
+**`.htaccess` does nothing on Pages** — if you change one, change both.
 
-Then, in Cloudflare, add an `A` record for `staging` pointing at the xneelo IP.
-**Set it to DNS-only (grey cloud), not proxied** — you want to see the origin
-directly while testing, without a cache layer confusing you.
+### Keep staging out of Google
 
-Add this to the staging document root so it never gets indexed:
+A real hostname will get crawled. Pick one:
 
-```
-User-agent: *
-Disallow: /
-```
+- **Cloudflare Access** (Zero Trust → Access → Applications) in front of
+  `staging.homeassist.co.za`, restricted to your team's email addresses. Free at
+  your scale, and it keeps the work private as well as unindexed. This is the
+  better option.
+- Or a **Response Header Transform Rule** on hostname
+  `staging.homeassist.co.za` setting `X-Robots-Tag: noindex, nofollow`.
 
-### Option B — Cloudflare Pages for staging only
+Do not rely on editing `robots.txt`, because that file is shared with the
+production build.
 
-Connect this GitHub repo to Cloudflare Pages, build command `npm run build`,
-output directory `dist`. You get a `*.pages.dev` URL in about two minutes, at no
-cost, that rebuilds on every push. Production still goes to xneelo.
+### If you later want staging on xneelo instead
 
-This touches nothing on the xneelo account and cannot affect the live site. It
-is the lower-risk way to review the build, and it costs nothing.
-
-**Recommendation: Option B for reviewing, Option A only if you specifically need
-staging on the real domain** (for example, to test something that depends on the
-hostname).
+An xneelo subdomain is added in the Control Panel as its own hosting package or
+as a Parked/Multiple domain, and **applicable hosting fees apply**. It needs its
+own document root — confirm the exact path in konsoleH before the first upload,
+because pointing `STAGING_REMOTE_DIR` at the wrong directory uploads this site
+straight over the WordPress install. `deploy/deploy.sh staging` is already set up
+for that route if you take it.
 
 ---
 

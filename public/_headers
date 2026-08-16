@@ -1,0 +1,28 @@
+# Cloudflare Pages equivalent of the caching and security rules in .htaccess.
+#
+# Pages does not read .htaccess — that file only applies when Apache is serving
+# the site, i.e. on xneelo. This file only applies on Cloudflare Pages. Keeping
+# both means staging on Pages and production on xneelo behave the same way, so
+# what you sign off on staging is what you get live.
+#
+# If you change one, change the other.
+
+/*
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: SAMEORIGIN
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: geolocation=(), microphone=(), camera=()
+
+# Build output carries a content hash in the filename, so it can never go stale.
+/assets/build/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/icons/*
+  Cache-Control: public, max-age=2592000
+
+/assets/*
+  Cache-Control: public, max-age=2592000
+
+# HTML must revalidate or a deploy never reaches people who have been before.
+/*.html
+  Cache-Control: public, max-age=0, must-revalidate

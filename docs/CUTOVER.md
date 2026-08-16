@@ -10,58 +10,32 @@ currently earning.
 
 ---
 
-## 1. What this site does not replace
+## 1. What this site deliberately does not replace
 
-Decide on each of these **before** you point the root domain here.
+**Decided 16 August 2026 — these are being retired, not rebuilt:**
 
-### WooCommerce — you currently sell two things
+- **The WooCommerce shop.** `/shop/`, the Smart Water Meter (R3,249) and Pipe
+  Betterment (R405) products, cart, checkout and `/my-account/`.
+- **The smart meter line.** `/smart-meters/`, `/meter-hardware/`,
+  `/watermeterinfo/`, `/installation/`, `/pricing/` and the two T&C pages.
+- **Careers and jobs.** `/careers/` and the empty WP Job Manager board at
+  `/jobs/`. Note that `/join` is the contractor network, not staff recruitment —
+  do not redirect applicants there.
+- **`/staff-leave-request-form/`** — an internal HR form that should never have
+  been publicly reachable.
 
-| URL | Product | Price |
-|---|---|---|
-| `/product/smart-meter/` | Smart Water Meter | R3,249.00 |
-| `/product/pipe-betterment/` | Pipe Betterment | R405.00 |
+The redirect map in section 3 reflects these decisions.
 
-There is no shop, cart, or checkout in this build. Cutting over removes your
-ability to take those orders online. Options: keep WooCommerce running on a
-subdomain (`shop.homeassist.co.za`), move the products to an enquiry form, or
-accept the loss deliberately.
+### One item still open: the complaints policy
 
-Note `/shop/` currently renders PHP warnings above the page content, exposing the
-server path, so it is not in good shape either way.
+`/complaints/` carries the full complaints policy and the PIRB audit process.
+This one is worth a second look before it goes, because for an insurance-adjacent
+business a published complaints procedure can be a regulatory expectation rather
+than a marketing page. If it needs to stay reachable, the cheapest answer is a
+short `/complaints` page in this build rather than keeping WordPress alive for it.
 
-### Smart meters — a whole product line with real content
-
-`/smart-meters/`, `/meter-hardware/`, `/watermeterinfo/`, `/installation/`,
-`/pricing/`, and the two T&C pages all carry genuine content about the water and
-electricity meter business. None of it exists on the new site.
-
-If smart meters are still a live line, this site needs a page for them before
-cutover. If they are not, say so explicitly and redirect the URLs — but do not
-let it happen by accident.
-
-### Pricing
-
-`/pricing/` publishes four price bands today. The new site has no pricing page,
-and several prices are still `[CONFIRM]` placeholders. Anyone arriving on an old
-pricing link will land somewhere with less information than they had.
-
-### Careers and jobs
-
-`/careers/` lists a live role. `/jobs/` is a WP Job Manager board with nothing
-published. The new site has no careers page. `/join` is for contractors, not
-staff — sending job applicants there is wrong.
-
-### Complaints policy
-
-`/complaints/` carries a full complaints policy and the PIRB audit process. For
-an insurance-adjacent business this is worth keeping accessible, and it may be a
-compliance expectation. There is no equivalent page here.
-
-### Customer logins
-
-`/my-account/` and `/job-dashboard/` are functional WordPress account pages.
-Check whether anyone actually uses them before removing them — the new `/portal`
-links to `portal.homeassist.co.za`, which is a different system.
+Until that is decided, `/complaints/` is left out of the redirect map — meaning it
+will 404 after cutover. Decide before you go live.
 
 ---
 
@@ -150,7 +124,28 @@ Redirect 301 /anode-infographic/                    /blog
 Redirect 301 /home-assist-fighting-covid-19/        /blog
 Redirect 301 /covid-safety/                         /blog
 
-# Retired outright — 410 tells Google to drop them rather than keep retrying
+# Retired lines — send a person somewhere useful rather than a dead end.
+# Google may treat a mass redirect to the home page as a soft 404 and drop the
+# URL anyway, which is the intended outcome. The point of the 301 is the human
+# with an old bookmark or an old quote in their inbox.
+Redirect 301 /smart-meters/                         /
+Redirect 301 /meter-hardware/                       /
+Redirect 301 /watermeterinfo/                       /
+Redirect 301 /installation/                         /
+Redirect 301 /pricing/                              /
+Redirect 301 /smart-digital-water-meter-tscs/       /terms
+Redirect 301 /prepaid-water-meter-tscs/             /terms
+Redirect 301 /shop/                                 /
+Redirect 301 /product/smart-meter/                  /
+Redirect 301 /product/pipe-betterment/              /
+Redirect 301 /careers/                              /about
+
+# Retired outright — 410 tells Google to drop them and stop retrying.
+# Transactional machinery and orphan pages: nobody arrives here with intent.
+Redirect 410 /cart-2/
+Redirect 410 /checkout/
+Redirect 410 /jobs/
+Redirect 410 /platform-learn-more/
 Redirect 410 /sample-page-2/
 Redirect 410 /elementor-4445/
 Redirect 410 /top-bar-header/
@@ -163,17 +158,12 @@ Redirect 410 /staff-leave-request-form/
 Redirect 410 /meter-inquiry-form-step-3/
 ```
 
-**Deliberately not in this list**, because they need a decision first:
+**Deliberately not in this list:** `/complaints/`. See section 1 — it needs a
+decision, and it will 404 until you make one.
 
-```
-/smart-meters/  /meter-hardware/  /watermeterinfo/  /installation/  /pricing/
-/smart-digital-water-meter-tscs/  /prepaid-water-meter-tscs/
-/shop/  /product/smart-meter/  /product/pipe-betterment/  /cart-2/  /checkout/
-/careers/  /jobs/  /complaints/  /platform-learn-more/
-```
-
-Add them once you have decided whether the content moves, gets rebuilt here, or
-is retired.
+If you are serving from Cloudflare Pages rather than xneelo, the same rules go in
+a `public/_redirects` file instead (`/old-path /new-path 301`, one per line).
+`.htaccess` does nothing on Pages.
 
 ---
 
