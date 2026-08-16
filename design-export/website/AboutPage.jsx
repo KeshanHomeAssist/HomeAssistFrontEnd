@@ -39,9 +39,6 @@ function AboutPage() {
           <div style={{ font: '700 21px/1.2 var(--font-core)', color: 'var(--web-navy)' }}>Keshan Patel</div>
           <div style={{ ...SMALL, marginTop: 6 }}>Founder and Chief Executive</div>
         </div>
-        {[0, 1].map(i => <div key={i} style={{ border: '1px dashed var(--web-grey-300)', borderRadius: 4, padding: 24, background: 'var(--web-grey-050)' }}>
-          <div style={LABEL}>Team member slot</div>
-          <p style={{ ...SMALL, marginTop: 6 }}>Name and role to be added.</p>
         </div>)}
       </div>
     </Section>
@@ -71,7 +68,7 @@ function AboutPage() {
           <div style={{ ...LABEL, marginBottom: 8 }}>Received</div>
           <p style={{ ...BODY, margin: 0 }}>We have your message and will come back to you. For anything urgent, message us on WhatsApp at {CH.waHome}.</p>
         </div>
-        : <form onSubmit={e => { e.preventDefault(); setSent(true); }} style={{ ...CARD, padding: 32, maxWidth: 760 }}>
+        : <form onSubmit={e => { e.preventDefault(); sendForm(e.currentTarget, { to: CH.help, subject: 'Website message' }); setSent(true); }} style={{ ...CARD, padding: 32, maxWidth: 760 }}>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20, marginBottom: 20 }}>
             <FieldRow label="Name"><input style={INPUT} required /></FieldRow>
             <FieldRow label="Email"><input style={INPUT} type="email" required /></FieldRow>
@@ -93,7 +90,7 @@ function AboutPage() {
     <Section tint eyebrow="Where we are" title="Pinelands, Cape Town">
       <div style={{ display: 'grid', gridTemplateColumns: '.8fr 1.2fr', gap: 32, alignItems: 'stretch' }}>
         <div style={{ ...CARD, display: 'grid', gap: 20, alignContent: 'start' }}>
-          {[['Address', CH.address], ['Phone', CH.phone], ['Email', CH.biz]].map(([l, v]) =>
+          {[['Address', CH.address], ['Phone', CH.phone], ['Email', CH.help]].map(([l, v]) =>
             <div key={l}><div style={LABEL}>{l}</div><p style={{ ...BODY, margin: '5px 0 0' }}>{v}</p></div>)}
         </div>
         <div style={{ border: '1px solid var(--web-grey-100)', borderRadius: 4, background: 'var(--web-grey-050)', minHeight: 260, display: 'grid', placeItems: 'center' }}>

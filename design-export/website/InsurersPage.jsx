@@ -43,7 +43,7 @@ function ModuleCard({ number, title, icon, lines, open, onToggle }) {
 function InsurersGate({ onUnlock }) {
   const [email, setEmail] = React.useState('');
   return <div style={{ position: 'fixed', inset: 0, zIndex: 40, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24, background: 'rgba(11,29,58,.55)' }}>
-    <form onSubmit={e => { e.preventDefault(); onUnlock(email); }} style={{ ...CARD, padding: 36, width: 'min(520px,100%)', boxShadow: '0 24px 60px rgba(11,29,58,.35)' }}>
+    <form onSubmit={e => { e.preventDefault(); sendForm(e.currentTarget, { to: CH.biz, subject: 'Insurer page enquiry' }); onUnlock(email); }} style={{ ...CARD, padding: 36, width: 'min(520px,100%)', boxShadow: '0 24px 60px rgba(11,29,58,.35)' }}>
       <img src="../../assets/logo/homeassist-logo-horizontal.png" alt="Home Assist" style={{ height: 26, width: 'auto', display: 'block', marginBottom: 22 }} />
       <div style={{ ...LABEL, marginBottom: 10 }}>For insurers, UMAs and brokers</div>
       <h2 style={{ ...H2, fontSize: 24, marginBottom: 12 }}>Enter your email to view this page</h2>
@@ -51,11 +51,15 @@ function InsurersGate({ onUnlock }) {
       <FieldRow label="Work email">
         <input style={INPUT} type="email" required autoFocus value={email} onChange={e => setEmail(e.target.value)} placeholder="name@company.co.za" />
       </FieldRow>
+      <label style={{ ...BODY, display: 'flex', gap: 10, alignItems: 'flex-start', margin: '14px 0 0' }}>
+        <input type="checkbox" style={{ marginTop: 3 }} />
+        <span>Send me occasional Home Assist updates for insurers and brokers.</span>
+      </label>
       <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', marginTop: 20 }}>
         <Button size="lg" variant="navy">View the page</Button>
         <Button as="a" size="lg" variant="ghost" href={CH.booking} target="_blank" rel="noopener">Book a meeting instead</Button>
       </div>
-      <p style={{ ...SMALL, marginTop: 16 }}>We use it to follow up on this enquiry only. No newsletter, no list.</p>
+      <p style={{ ...SMALL, marginTop: 16 }}>We use it to follow up on this enquiry only. You are not added to any list unless you tick the box.</p>
     </form>
   </div>;
 }
@@ -63,9 +67,16 @@ function InsurersGate({ onUnlock }) {
 function InsurersPage() {
   const KEY = 'ha-insurers-email';
   const [visible, setVisible] = React.useState(() => { try { return !!localStorage.getItem(KEY); } catch (e) { return false; } });
-  const unlock = email => { try { localStorage.setItem(KEY, email); } catch (e) {} setVisible(true); };
+  const [justUnlocked, setJustUnlocked] = React.useState(false);
+  const unlock = email => { try { localStorage.setItem(KEY, email); } catch (e) {} setVisible(true); setJustUnlocked(true); };
   return <React.Fragment>
     {!visible ? <InsurersGate onUnlock={unlock} /> : null}
+    {justUnlocked ? <div style={{ background: 'var(--web-blue-050)', borderBottom: '1px solid var(--web-blue-100)' }}>
+      <div style={{ ...WRAP, padding: '14px 40px', display: 'flex', gap: 12, alignItems: 'center', flexWrap: 'wrap' }}>
+        <Icon name="check" size={18} color="var(--web-blue)" />
+        <p style={{ ...BODY, margin: 0 }}>Thank you. The Home Assist CEO will reach out to you during working hours.</p>
+      </div>
+    </div> : null}
     <div style={{ filter: visible ? 'none' : 'blur(6px)', pointerEvents: visible ? 'auto' : 'none', userSelect: visible ? 'auto' : 'none', transition: 'filter 320ms cubic-bezier(.2,0,.2,1)' }} aria-hidden={!visible}>
       <InsurersBody />
     </div>
@@ -93,7 +104,7 @@ function InsurersBody() {
           <p style={{ ...BODY, color: 'rgba(255,255,255,.85)', fontSize: 17, maxWidth: '58ch', marginBottom: 26 }}>Home Assist takes the incident from first notification to a closed, evidenced, compliant file. Take the whole process, or take the modules you are missing.</p>
           <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
             <Button as="a" size="lg" variant="onDark" href={CH.booking} target="_blank" rel="noopener">Book Free Pilot</Button>
-            <Button as="a" size="lg" variant="ghost" href={wa('Hi Home Assist, I am enquiring about claims management for our book. ', true)} target="_blank" rel="noopener" style={{ color: '#fff', border: '1px solid rgba(255,255,255,.5)' }} iconLeft={<Icon name="message-circle" size={18} color="#fff" />}>WhatsApp {CH.waBiz}</Button>
+            <Button as="a" size="lg" variant="ghost" href={wa('Hi Home Assist, I am enquiring about claims management for our book. ', true)} target="_blank" rel="noopener" style={{ color: '#fff', border: '1px solid rgba(255,255,255,.5)' }} iconLeft={<Icon name="message-circle" size={18} color="#fff" />}>WhatsApp us</Button>
           </div>
         </div>
         <div style={{ border: '1px solid rgba(255,255,255,.22)', borderRadius: 4, padding: 28 }}>
@@ -139,7 +150,7 @@ function InsurersBody() {
         <p style={{ ...BODY, maxWidth: '62ch', marginBottom: 20 }}>Meet with us online or in person to discuss how we can help you get control of your property book</p>
         <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
           <Button as="a" size="lg" variant="navy" href={CH.booking} target="_blank" rel="noopener" iconLeft={<Icon name="calendar" size={18} color="#fff" />}>Book a meeting</Button>
-          <Button as="a" size="lg" variant="ghost" href={wa('Hi Home Assist, I would like to book a meeting about our property book. ', true)} target="_blank" rel="noopener">WhatsApp {CH.waBiz}</Button>
+          <Button as="a" size="lg" variant="ghost" href={wa('Hi Home Assist, I would like to book a meeting about our property book. ', true)} target="_blank" rel="noopener">WhatsApp us</Button>
         </div>
         <p style={{ ...SMALL, marginTop: 16 }}>Pick a slot that suits you. Thirty minutes, no pack to read first.</p>
       </div>
@@ -165,7 +176,7 @@ function InsurersBody() {
 
     <NavyBand eyebrow="Next step" title="Send us a sample of settled claims. We will verify them and show you what we find.">
       <Button as="a" size="lg" variant="onDark" href={CH.booking} target="_blank" rel="noopener">Book a sample review</Button>
-      <Button as="a" size="lg" variant="ghost" href={wa('Hi Home Assist, we would like to discuss a sample claim review. ', true)} target="_blank" rel="noopener" style={{ color: '#fff', border: '1px solid rgba(255,255,255,.5)' }}>WhatsApp {CH.waBiz}</Button>
+      <Button as="a" size="lg" variant="ghost" href={wa('Hi Home Assist, we would like to discuss a sample claim review. ', true)} target="_blank" rel="noopener" style={{ color: '#fff', border: '1px solid rgba(255,255,255,.5)' }}>WhatsApp us</Button>
     </NavyBand>
   </main>;
 }

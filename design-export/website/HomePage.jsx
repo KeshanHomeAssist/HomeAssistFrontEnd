@@ -111,7 +111,7 @@ function HomePage({ go }) {
     <div style={{ background: 'var(--web-grey-050)', borderBottom: '1px solid var(--web-grey-100)' }}>
       <div style={{ ...WRAP, padding: '20px 40px', display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 24 }}>
         {[['Verified artisans', 'Registered, licensed, vetted & Contracted'], ['COC issued, checked and logged', 'All Installations are aligned to South African National Standards SANS'], ['24/7 response', 'WhatsApp and hotline, every day'], ['Work guaranteed', '1 year workmanship warranty on all work. Terms and conditions apply.']].map(([l, v]) =>
-          <div key={l}><div style={LABEL}>{l}</div><div style={{ ...SMALL, marginTop: 6 }}>{v || <Confirm />}</div></div>)}
+          <div key={l}><div style={LABEL}>{l}</div><div style={{ ...SMALL, marginTop: 6 }}>{v}</div></div>)}
       </div>
     </div>
 
@@ -270,6 +270,8 @@ function HomePage({ go }) {
             </div>)}
           </div>
           <Button as="a" variant="ghost" fullWidth href="https://www.google.com/search?q=home+assist+technologies" target="_blank" rel="noopener" style={{ marginTop: 18 }}>Read them on Google</Button>
+          <Button as="a" variant="navy" fullWidth href={CH.rating} target="_blank" rel="noopener" style={{ marginTop: 10 }}>Rate us</Button>
+          <p style={{ ...SMALL, marginTop: 10 }}>A private rating on a job we handled for you — or change a rating you have already given.</p>
         </div>
         <ReviewsCarousel />
       </div>
@@ -304,7 +306,7 @@ function RequestForm() {
   </Section>;
   return <Section tint eyebrow="Service request" title="Tell us what you need"
     intro="We will match you with an artisan and come back to you on WhatsApp.">
-    <form onSubmit={e => { e.preventDefault(); setSent(true); }} style={{ ...CARD, padding: 32, maxWidth: 900 }}>
+    <form onSubmit={e => { e.preventDefault(); sendForm(e.currentTarget, { to: CH.help, subject: 'Website service request' }); setSent(true); }} style={{ ...CARD, padding: 32, maxWidth: 900 }}>
       <div style={row}>
         <FieldRow label="Full name"><input style={INPUT} required /></FieldRow>
         <FieldRow label="Mobile number" hint="South African format, e.g. 082 123 4567"><input style={INPUT} type="tel" required /></FieldRow>
@@ -348,7 +350,7 @@ function RequestForm() {
         <span>I agree that Home Assist may contact me about this request.</span>
       </label>
       <Button size="lg" variant="navy">Send my request</Button>
-      <p style={{ ...SMALL, marginTop: 14 }}>Submissions post to a placeholder endpoint. Routing to the operations team and to WhatsApp is wired later.</p>
+      <p style={{ ...SMALL, marginTop: 14 }}>Your request goes to the Home Assist help desk. For anything urgent, message us on WhatsApp — we pick up 24 hours a day.</p>
     </form>
   </Section>;
 }

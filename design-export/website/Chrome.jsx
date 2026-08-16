@@ -9,9 +9,81 @@ const CH = {
   address: '12 Uitvlugt Road, Pinelands, Cape Town, South Africa, 7405',
   portal: 'https://portal.homeassist.co.za/',
   register: 'https://portal.homeassist.co.za/Account/Register',
-  booking: 'https://calendar.app.google/9QkhMLKCyLuHyp696'
+  booking: 'https://calendar.app.google/9QkhMLKCyLuHyp696',
+  complaints: 'complaints@homeassist.co.za',
+  rating: 'https://portal.homeassist.co.za/rating',
+  leonie: 'leonie@homeassist.co.za',
+  vimla: 'vimla@homeassist.co.za'
 };
 const wa = (msg, biz) => `https://wa.me/${biz ? CH.waBizDigits : CH.waHomeDigits}?text=${encodeURIComponent(msg)}`;
+
+const mailtoLink = (to, subject) => 'mailto:' + to + '?subject=' + encodeURIComponent(subject);
+
+/* FORM DELIVERY
+   This is a static site, so a form has nowhere to post to on its own.
+
+   Set FORM_ACCESS_KEY to a Web3Forms access key (web3forms.com — free, no
+   account, the key arrives by email) and every form starts delivering properly
+   to the address that form specifies.
+
+   Until it is set, sendForm falls back to opening the visitor's mail client
+   with all the answers filled in. That works, but it loses anyone browsing on a
+   phone or webmail with no mail client configured — which is most people. Treat
+   the fallback as a stopgap, not the finished thing. */
+const FORM_ACCESS_KEY = '';
+
+/* Reads a form's answers using the visible field labels, so the email that
+   arrives reads the way the page does. */
+function formAnswers(form) {
+  const out = [];
+  const radioSeen = new Set();
+  form.querySelectorAll('input, select, textarea').forEach(el => {
+    if (el.type === 'submit' || el.type === 'button') return;
+    const wrap = el.closest('label');
+    const wrapText = wrap ? wrap.textContent.trim() : '';
+
+    if (el.type === 'radio') {
+      if (!el.checked) return;
+      const group = el.getAttribute('name') || 'Choice';
+      if (radioSeen.has(group)) return;
+      radioSeen.add(group);
+      out.push([group, wrapText]);
+      return;
+    }
+    if (el.type === 'checkbox') {
+      out.push([wrapText.slice(0, 90) || 'Consent', el.checked ? 'Yes' : 'No']);
+      return;
+    }
+    const span = wrap ? wrap.querySelector('span') : null;
+    const label = span ? span.textContent.trim() : (el.getAttribute('placeholder') || 'Field');
+    if (el.value) out.push([label, el.value]);
+  });
+  return out;
+}
+
+function sendForm(form, { to, subject }) {
+  const answers = formAnswers(form);
+  const body = answers.map(([k, v]) => k + ': ' + v).join('\n');
+
+  if (FORM_ACCESS_KEY) {
+    const payload = {
+      access_key: FORM_ACCESS_KEY,
+      subject: subject,
+      from_name: 'homeassist.co.za',
+      to: to,
+      message: body
+    };
+    answers.forEach(([k, v]) => { payload[k] = v; });
+    return fetch('https://api.web3forms.com/submit', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+      body: JSON.stringify(payload)
+    }).then(() => true).catch(() => false);
+  }
+
+  window.location.href = mailtoLink(to, subject) + '&body=' + encodeURIComponent(body);
+  return Promise.resolve(true);
+}
 
 const NAV = [
   { id: 'home', label: 'Home', route: '/' },
@@ -90,6 +162,7 @@ function Footer({ go }) {
         <div><div style={{ ...head, marginBottom: 2 }}>WhatsApp</div><a href={wa('Hi Home Assist, ')} style={link}>{CH.waHome}</a></div>
         <div><div style={{ ...head, marginBottom: 2 }}>Phone</div><a href={'tel:' + CH.phoneTel} style={link}>{CH.phone}</a></div>
         <div><div style={{ ...head, marginBottom: 2 }}>Email</div><a href={'mailto:' + CH.help} style={link}>{CH.help}</a></div>
+        <div><div style={{ ...head, marginBottom: 2 }}>Complaints</div><a href={mailtoLink(CH.complaints, 'Complaint')} style={link}>{CH.complaints}</a></div>
         <div><div style={{ ...head, marginBottom: 2 }}>Address</div><span style={{ ...link, opacity: .82 }}>{CH.address}</span></div>
       </div>
     </div>
@@ -174,4 +247,4 @@ function Confirm({ children }) {
   return <span style={{ ...LABEL, color: 'var(--web-blue)', border: '1px solid var(--web-blue-100)', background: 'var(--web-blue-050)', padding: '2px 6px', borderRadius: 2, whiteSpace: 'nowrap' }}>[CONFIRM{children ? ' ' + children : ''}]</span>;
 }
 
-Object.assign(window, { CH, wa, NAV, WRAP, LABEL, H1, H2, H3, DISPLAY, BODY, SMALL, CARD, INPUT, Eyebrow, Section, Header, Footer, NavyBand, LabelCard, Stat, Steps, Accordion, FieldRow, ChannelCard, Confirm });
+Object.assign(window, { CH, wa, mailtoLink, sendForm, FORM_ACCESS_KEY, NAV, WRAP, LABEL, H1, H2, H3, DISPLAY, BODY, SMALL, CARD, INPUT, Eyebrow, Section, Header, Footer, NavyBand, LabelCard, Stat, Steps, Accordion, FieldRow, ChannelCard, Confirm });

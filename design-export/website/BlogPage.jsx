@@ -51,7 +51,7 @@ const PLATES = [
   ['plate-handwritten-serial.jpg', 'Serial written on the element cover']
 ];
 
-const POSTS = [
+const ALL_POSTS = [
   ['Insurance', 'The 2026/27 fire season won’t break your claims budget. It will break your call centre.', 'NOAA now puts a very strong El Niño over the 2026/27 summer at above 90%, with a 69% chance of a record-breaking event. South African insurers and brokers are not resourced for the FNOL surge that follows.', '17 August 2026', '8 min', '', false, EL_NINO_BODY, EL_NINO_SOURCES, YOUTUBE_ID],
   ['Geysers', 'What to do in the first ten minutes after your geyser bursts', 'Close the main water supply, then switch the geyser off at the distribution board. The order matters: water first, then electricity.', '12 August 2026', '4 min', 'blog-geyser-kwikot.png'],
   ['Geysers', 'How to tell if your geyser is still under warranty', 'The serial number plate carries the manufacturer and the date of manufacture. Decode it before you agree to a replacement.', '5 August 2026', '5 min', 'serial-plate-electrolux.jpg', false, null, null, '', PLATES],
@@ -60,6 +60,12 @@ const POSTS = [
   ['Insurance claims', 'Your insurer paid you out in cash. What now?', 'A cash settlement makes you the contractor. Verify the quote, the registration and the certificate before the work starts.', '15 July 2026', '5 min', 'techman-phone-home.png'],
   ['Geysers', 'Solar, heat pump or electric — which geyser should you replace yours with?', 'The right answer depends on your household’s hot water pattern, your roof, and what your budget can carry up front.', '8 July 2026', '7 min', 'blog-solar-geyser.png']
 ];
+
+/* Only posts with a written body are published. The rest stay above as drafts:
+   they get no card on /blog, no URL of their own, and no sitemap entry, so we
+   are never offering Google a page that says "to be written". Give a draft a
+   body array and it publishes itself on the next build. */
+const POSTS = ALL_POSTS.filter(p => Array.isArray(p[7]) && p[7].length > 0);
 
 function BlogPage() {
   const [post, setPost] = React.useState(null);
