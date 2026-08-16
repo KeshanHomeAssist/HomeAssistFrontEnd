@@ -60,6 +60,7 @@ function InsurersGate({ onUnlock }) {
         <Button as="a" size="lg" variant="ghost" href={CH.booking} target="_blank" rel="noopener">Book a meeting instead</Button>
       </div>
       <p style={{ ...SMALL, marginTop: 16 }}>We use it to follow up on this enquiry only. You are not added to any list unless you tick the box.</p>
+      <p style={{ ...SMALL, marginTop: 8 }}>If we take it further, a mutual NDA comes first. Anything you send is used only to produce your settlement report, and deleted in full if you are not happy with it.</p>
     </form>
   </div>;
 }
@@ -172,6 +173,12 @@ function InsurersBody() {
             <p style={BODY}>Settlement runs off a float held against the book. The provider is paid on a verified, evidenced file — before photographs, quote, invoice, logged certificate, after photographs.</p>
             <p style={{ ...BODY, margin: 0 }}>Reconciliation and float reporting are retrievable from the portal at any time.</p>
           </div>
+        </div>
+        <div style={{ ...CARD, borderLeft: '3px solid var(--web-blue)' }}>
+          <div style={{ ...LABEL, marginBottom: 10 }}>Your data</div>
+          <h3 style={H3}>A mutual NDA before anything is shared</h3>
+          <p style={BODY}>Before you send us a single claim file, Home Assist provides our standard mutual non-disclosure agreement. Your data is used for one purpose: producing your settlement report.</p>
+          <p style={{ ...BODY, margin: 0 }}>If you are not happy with what we come back with, we delete everything you provided, in full.</p>
         </div>
       </div>
     </Section>
