@@ -23,19 +23,15 @@ currently earning.
   do not redirect applicants there.
 - **`/staff-leave-request-form/`** — an internal HR form that should never have
   been publicly reachable.
+- **`/complaints/`** — the complaints policy and PIRB audit process page.
+  Confirmed retired. It now redirects to `/about`, so anyone following an old
+  link still lands on contact details rather than a dead end. If a published
+  complaints procedure later turns out to be a regulatory requirement, a short
+  `/complaints` page in this build is a small job — the copy is recoverable from
+  the WordPress backup.
 
-The redirect map in section 3 reflects these decisions.
-
-### One item still open: the complaints policy
-
-`/complaints/` carries the full complaints policy and the PIRB audit process.
-This one is worth a second look before it goes, because for an insurance-adjacent
-business a published complaints procedure can be a regulatory expectation rather
-than a marketing page. If it needs to stay reachable, the cheapest answer is a
-short `/complaints` page in this build rather than keeping WordPress alive for it.
-
-Until that is decided, `/complaints/` is left out of the redirect map — meaning it
-will 404 after cutover. Decide before you go live.
+The redirect map in section 3 reflects all of these decisions. Nothing in it is
+conditional any more.
 
 ---
 
@@ -109,6 +105,7 @@ Redirect 301 /job-dashboard/                        /portal
 Redirect 301 /contact/                              /about
 Redirect 301 /contact-page/                         /about
 Redirect 301 /email-us/                             /about
+Redirect 301 /complaints/                           /about
 Redirect 301 /faq/                                  /#faq
 Redirect 301 /legal/                                /terms
 Redirect 301 /privacy-policy-3/                     /privacy-policy
@@ -158,9 +155,6 @@ Redirect 410 /staff-leave-request-form/
 Redirect 410 /meter-inquiry-form-step-3/
 ```
 
-**Deliberately not in this list:** `/complaints/`. See section 1 — it needs a
-decision, and it will 404 until you make one.
-
 If you are serving from Cloudflare Pages rather than xneelo, the same rules go in
 a `public/_redirects` file instead (`/old-path /new-path 301`, one per line).
 `.htaccess` does nothing on Pages.
@@ -171,7 +165,7 @@ a `public/_redirects` file instead (`/old-path /new-path 301`, one per line).
 
 1. Back up WordPress files and database. Verify the backup opens.
 2. Export the current Yoast sitemap URL list — a record of what was indexed.
-3. Decide the shop / smart meters / careers / complaints questions above.
+3. Confirm the redirect map in section 3 still matches what is on the live site.
 4. Deploy this site to staging and click through every page on a phone.
 5. Add the redirect block to the production `.htaccess`.
 6. Deploy to production.
