@@ -1,3 +1,135 @@
+#!/usr/bin/env python3
+"""
+Applies Keshan's 16 August change list to the design export.
+
+Written as a script rather than hand edits so the exact same change can be
+replayed on another copy of the repo and so it fails loudly if the source has
+moved on, instead of silently half-applying.
+
+Run from the repo root:  python3 scripts/patch-2026-08-16.py
+"""
+import sys, pathlib
+
+ROOT = pathlib.Path(__file__).resolve().parent.parent
+W = ROOT / 'design-export' / 'website'
+
+def edit(path, old, new, count=1):
+    p = W / path if not str(path).startswith('scripts') else ROOT / path
+    s = p.read_text()
+    n = s.count(old)
+    if n != count:
+        sys.exit(f"ABORT {path}: expected {count} occurrence(s) of:\n---\n{old[:200]}\n---\nfound {n}")
+    p.write_text(s.replace(old, new))
+    print(f"  {path}: {count} edit(s)")
+
+print("Chrome.jsx")
+
+# --- contact constants: complaints, the two named team contacts, the rating link
+edit('Chrome.jsx',
+"""  booking: 'https://calendar.app.google/9QkhMLKCyLuHyp696'
+};""",
+"""  booking: 'https://calendar.app.google/9QkhMLKCyLuHyp696',
+  complaints: 'complaints@homeassist.co.za',
+  rating: 'https://portal.homeassist.co.za/rating',
+  leonie: 'leonie@homeassist.co.za',
+  vimla: 'vimla@homeassist.co.za'
+};""")
+
+# --- form delivery
+edit('Chrome.jsx',
+"""const wa = (msg, biz) => `https://wa.me/${biz ? CH.waBizDigits : CH.waHomeDigits}?text=${encodeURIComponent(msg)}`;""",
+"""const wa = (msg, biz) => `https://wa.me/${biz ? CH.waBizDigits : CH.waHomeDigits}?text=${encodeURIComponent(msg)}`;
+
+const mailtoLink = (to, subject) => 'mailto:' + to + '?subject=' + encodeURIComponent(subject);
+
+/* FORM DELIVERY
+   This is a static site, so a form has nowhere to post to on its own.
+
+   Set FORM_ACCESS_KEY to a Web3Forms access key (web3forms.com — free, no
+   account, the key arrives by email) and every form starts delivering properly
+   to the address that form specifies.
+
+   Until it is set, sendForm falls back to opening the visitor's mail client
+   with all the answers filled in. That works, but it loses anyone browsing on a
+   phone or webmail with no mail client configured — which is most people. Treat
+   the fallback as a stopgap, not the finished thing. */
+const FORM_ACCESS_KEY = '';
+
+/* Reads a form's answers using the visible field labels, so the email that
+   arrives reads the way the page does. */
+function formAnswers(form) {
+  const out = [];
+  const radioSeen = new Set();
+  form.querySelectorAll('input, select, textarea').forEach(el => {
+    if (el.type === 'submit' || el.type === 'button') return;
+    const wrap = el.closest('label');
+    const wrapText = wrap ? wrap.textContent.trim() : '';
+
+    if (el.type === 'radio') {
+      if (!el.checked) return;
+      const group = el.getAttribute('name') || 'Choice';
+      if (radioSeen.has(group)) return;
+      radioSeen.add(group);
+      out.push([group, wrapText]);
+      return;
+    }
+    if (el.type === 'checkbox') {
+      out.push([wrapText.slice(0, 90) || 'Consent', el.checked ? 'Yes' : 'No']);
+      return;
+    }
+    const span = wrap ? wrap.querySelector('span') : null;
+    const label = span ? span.textContent.trim() : (el.getAttribute('placeholder') || 'Field');
+    if (el.value) out.push([label, el.value]);
+  });
+  return out;
+}
+
+function sendForm(form, { to, subject }) {
+  const answers = formAnswers(form);
+  const body = answers.map(([k, v]) => k + ': ' + v).join('\\n');
+
+  if (FORM_ACCESS_KEY) {
+    const payload = {
+      access_key: FORM_ACCESS_KEY,
+      subject: subject,
+      from_name: 'homeassist.co.za',
+      to: to,
+      message: body
+    };
+    answers.forEach(([k, v]) => { payload[k] = v; });
+    return fetch('https://api.web3forms.com/submit', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+      body: JSON.stringify(payload)
+    }).then(() => true).catch(() => false);
+  }
+
+  window.location.href = mailtoLink(to, subject) + '&body=' + encodeURIComponent(body);
+  return Promise.resolve(true);
+}""")
+
+# --- footer gains the complaints address
+edit('Chrome.jsx',
+"""        <div><div style={{ ...head, marginBottom: 2 }}>Email</div><a href={'mailto:' + CH.help} style={link}>{CH.help}</a></div>""",
+"""        <div><div style={{ ...head, marginBottom: 2 }}>Email</div><a href={'mailto:' + CH.help} style={link}>{CH.help}</a></div>
+        <div><div style={{ ...head, marginBottom: 2 }}>Complaints</div><a href={mailtoLink(CH.complaints, 'Complaint')} style={link}>{CH.complaints}</a></div>""")
+
+edit('Chrome.jsx',
+"""Object.assign(window, { CH, wa, NAV,""",
+"""Object.assign(window, { CH, wa, mailtoLink, sendForm, FORM_ACCESS_KEY, NAV,""")
+
+print("HomePage.jsx")
+
+# 1. the warranty line is confirmed correct — drop the [CONFIRM] fallback
+edit('HomePage.jsx',
+"""<div style={{ ...SMALL, marginTop: 6 }}>{v || <Confirm />}</div>""",
+"""<div style={{ ...SMALL, marginTop: 6 }}>{v}</div>""")
+
+# 2. service request goes to the help desk
+edit('HomePage.jsx',
+"""    <form onSubmit={e => { e.preventDefault(); setSent(true); }} style={{ ...CARD, padding: 32, maxWidth: 900 }}>""",
+"""    <form onSubmit={e => { e.preventDefault(); sendForm(e.currentTarget, { to: CH.help, subject: 'Website service request' }); setSent(true); }} style={{ ...CARD, padding: 32, maxWidth: 900 }}>""")
+
 # 3. Rate us, in the reviews section
 edit('HomePage.jsx',
 """          <Button as="a" variant="ghost" fullWidth href="https://www.google.com/search?q=home+assist+technologies" target="_blank" rel="noopener" style={{ marginTop: 18 }}>Read them on Google</Button>""",
@@ -123,3 +255,9 @@ edit('HomePage.jsx',
 """      <p style={{ ...SMALL, marginTop: 14 }}>Your request goes to the Home Assist help desk. For anything urgent, message us on WhatsApp — we pick up 24 hours a day.</p>""")
 
 # 12. the About address block is the public one, so it shows the help desk,
+#     not the CEO. Insurers already have their own strip on the same page.
+edit('AboutPage.jsx',
+"""          {[['Address', CH.address], ['Phone', CH.phone], ['Email', CH.biz]].map(([l, v]) =>""",
+"""          {[['Address', CH.address], ['Phone', CH.phone], ['Email', CH.help]].map(([l, v]) =>""")
+
+print("\nall edits applied")
