@@ -19,26 +19,29 @@ const wa = (msg, biz) => `https://wa.me/${biz ? CH.waBizDigits : CH.waHomeDigits
 
 const mailtoLink = (to, subject) => 'mailto:' + to + '?subject=' + encodeURIComponent(subject);
 
-/* FORM DELIVERY
-   This is a static site, so a form has nowhere to post to on its own.
+/* FORM DELIVERY — WhatsApp handoff.
 
-   Set FORM_ACCESS_KEY to a Web3Forms access key (web3forms.com — free, no
-   account, the key arrives by email) and every form starts delivering properly
-   to the address that form specifies.
+   This is a static site with no server, so a form has nowhere to post to.
+   The obvious fallback, a mailto: link, was tested and silently did nothing:
+   the page reported success and the enquiry vanished. A form that loses work
+   while telling the customer it worked is worse than no form at all.
 
-   Until it is set, sendForm falls back to opening the visitor's mail client
-   with all the answers filled in. That works, but it loses anyone browsing on a
-   phone or webmail with no mail client configured — which is most people. Treat
-   the fallback as a stopgap, not the finished thing. */
-const FORM_ACCESS_KEY = '';
+   So a submitted form composes a WhatsApp message containing every answer and
+   opens it. Home Assist already answers WhatsApp 24/7 and the whole site points
+   people there, so this lands the enquiry in the channel that is actually
+   staffed — on any device, with nothing to configure.
 
-/* Reads a form's answers using the visible field labels, so the email that
+   To add email delivery later, POST the same answers to a form service
+   (Web3Forms or similar) inside whatsappHandoff and keep the WhatsApp open as
+   the visible confirmation. */
+
+/* Reads a form's answers using the visible field labels, so the message that
    arrives reads the way the page does. */
 function formAnswers(form) {
   const out = [];
   const radioSeen = new Set();
   form.querySelectorAll('input, select, textarea').forEach(el => {
-    if (el.type === 'submit' || el.type === 'button') return;
+    if (el.type === 'submit' || el.type === 'button' || el.type === 'file') return;
     const wrap = el.closest('label');
     const wrapText = wrap ? wrap.textContent.trim() : '';
 
@@ -51,7 +54,8 @@ function formAnswers(form) {
       return;
     }
     if (el.type === 'checkbox') {
-      out.push([wrapText.slice(0, 90) || 'Consent', el.checked ? 'Yes' : 'No']);
+      if (!el.checked) return;
+      out.push([wrapText.slice(0, 90) || 'Consent', 'Yes']);
       return;
     }
     const span = wrap ? wrap.querySelector('span') : null;
@@ -61,28 +65,16 @@ function formAnswers(form) {
   return out;
 }
 
-function sendForm(form, { to, subject }) {
+/* Opens WhatsApp with the form's answers as the message body. Returns the URL
+   so the page can offer a manual link if the browser blocked the new tab. */
+function whatsappHandoff(form, { biz = false, intro }) {
   const answers = formAnswers(form);
-  const body = answers.map(([k, v]) => k + ': ' + v).join('\n');
-
-  if (FORM_ACCESS_KEY) {
-    const payload = {
-      access_key: FORM_ACCESS_KEY,
-      subject: subject,
-      from_name: 'homeassist.co.za',
-      to: to,
-      message: body
-    };
-    answers.forEach(([k, v]) => { payload[k] = v; });
-    return fetch('https://api.web3forms.com/submit', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-      body: JSON.stringify(payload)
-    }).then(() => true).catch(() => false);
-  }
-
-  window.location.href = mailtoLink(to, subject) + '&body=' + encodeURIComponent(body);
-  return Promise.resolve(true);
+  const text = intro + '\n\n' + answers.map(([k, v]) => k + ': ' + v).join('\n');
+  const url = wa(text, biz);
+  let opened = null;
+  try { opened = window.open(url, '_blank', 'noopener'); } catch (e) { opened = null; }
+  if (!opened) window.location.href = url;
+  return url;
 }
 
 const NAV = [
@@ -247,4 +239,4 @@ function Confirm({ children }) {
   return <span style={{ ...LABEL, color: 'var(--web-blue)', border: '1px solid var(--web-blue-100)', background: 'var(--web-blue-050)', padding: '2px 6px', borderRadius: 2, whiteSpace: 'nowrap' }}>[CONFIRM{children ? ' ' + children : ''}]</span>;
 }
 
-Object.assign(window, { CH, wa, mailtoLink, sendForm, FORM_ACCESS_KEY, NAV, WRAP, LABEL, H1, H2, H3, DISPLAY, BODY, SMALL, CARD, INPUT, Eyebrow, Section, Header, Footer, NavyBand, LabelCard, Stat, Steps, Accordion, FieldRow, ChannelCard, Confirm });
+Object.assign(window, { CH, wa, mailtoLink, whatsappHandoff, NAV, WRAP, LABEL, H1, H2, H3, DISPLAY, BODY, SMALL, CARD, INPUT, Eyebrow, Section, Header, Footer, NavyBand, LabelCard, Stat, Steps, Accordion, FieldRow, ChannelCard, Confirm });

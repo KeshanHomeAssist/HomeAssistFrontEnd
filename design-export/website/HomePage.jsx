@@ -292,21 +292,23 @@ function HomePage({ go }) {
 
 function RequestForm() {
   const [sent, setSent] = React.useState(false);
+  const [waLink, setWaLink] = React.useState('');
   const row = { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20, marginBottom: 20 };
   if (sent) return <Section tint eyebrow="Request received">
     <div style={{ background: 'var(--web-navy)', borderRadius: 4, padding: '40px 44px' }}>
-      <Eyebrow onDark>We have your request</Eyebrow>
-      <h2 style={{ ...H2, color: '#fff', fontSize: 26 }}>We have your request.</h2>
-      <p style={{ ...BODY, color: 'rgba(255,255,255,.85)', maxWidth: '60ch' }}>A consultant is matching you with an artisan in your area and will come back to you on WhatsApp. For anything urgent, message us and we will pick it up immediately.</p>
-      <div style={{ display: 'flex', gap: 12 }}>
-        <Button as="a" variant="onDark" href={wa('Hi Home Assist, I have just sent a request through the website. ')} target="_blank" rel="noopener">Message us on WhatsApp</Button>
-        <Button variant="ghost" onClick={() => setSent(false)} style={{ color: '#fff', border: '1px solid rgba(255,255,255,.5)' }}>Send another request</Button>
+      <Eyebrow onDark>One step left</Eyebrow>
+      <h2 style={{ ...H2, color: '#fff', fontSize: 26 }}>Press send on WhatsApp and we have it.</h2>
+      <p style={{ ...BODY, color: 'rgba(255,255,255,.85)', maxWidth: '60ch' }}>WhatsApp has opened with your details already filled in. Send the message and a consultant will pick it up — we answer 24 hours a day. If WhatsApp did not open, use the button below.</p>
+      <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
+        <Button as="a" variant="onDark" href={waLink || wa('Hi Home Assist, I would like to log a service request. ')} target="_blank" rel="noopener">Open WhatsApp with my request</Button>
+        <Button as="a" variant="ghost" href={'tel:' + CH.phoneTel} style={{ color: '#fff', border: '1px solid rgba(255,255,255,.5)' }}>Call {CH.phone} instead</Button>
+        <Button variant="ghost" onClick={() => setSent(false)} style={{ color: '#fff', border: '1px solid rgba(255,255,255,.5)' }}>Edit my request</Button>
       </div>
     </div>
   </Section>;
   return <Section tint eyebrow="Service request" title="Tell us what you need"
     intro="We will match you with an artisan and come back to you on WhatsApp.">
-    <form onSubmit={e => { e.preventDefault(); sendForm(e.currentTarget, { to: CH.help, subject: 'Website service request' }); setSent(true); }} style={{ ...CARD, padding: 32, maxWidth: 900 }}>
+    <form onSubmit={e => { e.preventDefault(); setWaLink(whatsappHandoff(e.currentTarget, { intro: 'New service request from the Home Assist website.' })); setSent(true); }} style={{ ...CARD, padding: 32, maxWidth: 900 }}>
       <div style={row}>
         <FieldRow label="Full name"><input style={INPUT} required /></FieldRow>
         <FieldRow label="Mobile number" hint="South African format, e.g. 082 123 4567"><input style={INPUT} type="tel" required /></FieldRow>
@@ -349,8 +351,8 @@ function RequestForm() {
         <input type="checkbox" required style={{ marginTop: 3 }} />
         <span>I agree that Home Assist may contact me about this request.</span>
       </label>
-      <Button size="lg" variant="navy">Send my request</Button>
-      <p style={{ ...SMALL, marginTop: 14 }}>Your request goes to the Home Assist help desk. For anything urgent, message us on WhatsApp — we pick up 24 hours a day.</p>
+      <Button size="lg" variant="navy" iconLeft={<Icon name="message-circle" size={18} color="#fff" />}>Send my request on WhatsApp</Button>
+      <p style={{ ...SMALL, marginTop: 14 }}>This opens WhatsApp with your answers filled in, so you can send them to us in one tap. We answer 24 hours a day.</p>
     </form>
   </Section>;
 }

@@ -43,7 +43,7 @@ function ModuleCard({ number, title, icon, lines, open, onToggle }) {
 function InsurersGate({ onUnlock }) {
   const [email, setEmail] = React.useState('');
   return <div style={{ position: 'fixed', inset: 0, zIndex: 40, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24, background: 'rgba(11,29,58,.55)' }}>
-    <form onSubmit={e => { e.preventDefault(); sendForm(e.currentTarget, { to: CH.biz, subject: 'Insurer page enquiry' }); onUnlock(email); }} style={{ ...CARD, padding: 36, width: 'min(520px,100%)', boxShadow: '0 24px 60px rgba(11,29,58,.35)' }}>
+    <form onSubmit={e => { e.preventDefault(); onUnlock(email); }} style={{ ...CARD, padding: 36, width: 'min(520px,100%)', boxShadow: '0 24px 60px rgba(11,29,58,.35)' }}>
       <img src="../../assets/logo/homeassist-logo-horizontal.png" alt="Home Assist" style={{ height: 26, width: 'auto', display: 'block', marginBottom: 22 }} />
       <div style={{ ...LABEL, marginBottom: 10 }}>For insurers, UMAs and brokers</div>
       <h2 style={{ ...H2, fontSize: 24, marginBottom: 12 }}>Enter your email to view this page</h2>
@@ -74,7 +74,9 @@ function InsurersPage() {
     {justUnlocked ? <div style={{ background: 'var(--web-blue-050)', borderBottom: '1px solid var(--web-blue-100)' }}>
       <div style={{ ...WRAP, padding: '14px 40px', display: 'flex', gap: 12, alignItems: 'center', flexWrap: 'wrap' }}>
         <Icon name="check" size={18} color="var(--web-blue)" />
-        <p style={{ ...BODY, margin: 0 }}>Thank you. The Home Assist CEO will reach out to you during working hours.</p>
+        <p style={{ ...BODY, margin: 0, flex: '1 1 340px' }}>The page is open. To speak to the Home Assist CEO directly, book a meeting or message us — we come back during working hours.</p>
+        <Button as="a" variant="navy" href={CH.booking} target="_blank" rel="noopener">Book a meeting</Button>
+        <Button as="a" variant="secondary" href={wa('Hi Home Assist, I have just read the insurers page and would like to talk. ', true)} target="_blank" rel="noopener">WhatsApp us</Button>
       </div>
     </div> : null}
     <div style={{ filter: visible ? 'none' : 'blur(6px)', pointerEvents: visible ? 'auto' : 'none', userSelect: visible ? 'auto' : 'none', transition: 'filter 320ms cubic-bezier(.2,0,.2,1)' }} aria-hidden={!visible}>

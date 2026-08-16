@@ -2,6 +2,7 @@ const { Button, Icon } = window.HomeAssistDesignSystem_cf0a2b;
 
 function AboutPage() {
   const [sent, setSent] = React.useState(false);
+  const [waLink, setWaLink] = React.useState('');
   return <main>
     <section style={{ borderBottom: '1px solid var(--web-grey-100)' }}>
       <div style={{ ...WRAP, padding: '56px 40px 48px' }}>
@@ -77,10 +78,11 @@ function AboutPage() {
     <Section eyebrow="Message us" title={sent ? 'Message sent' : 'Send us a message'}>
       {sent
         ? <div style={{ ...CARD, borderLeft: '3px solid var(--web-blue)', maxWidth: 760 }}>
-          <div style={{ ...LABEL, marginBottom: 8 }}>Received</div>
-          <p style={{ ...BODY, margin: 0 }}>We have your message and will come back to you. For anything urgent, message us on WhatsApp at {CH.waHome}.</p>
+          <div style={{ ...LABEL, marginBottom: 8 }}>One step left</div>
+          <p style={{ ...BODY, margin: '0 0 16px' }}>WhatsApp has opened with your message filled in. Send it and we will come back to you. If it did not open, use the button below.</p>
+          <Button as="a" variant="navy" href={waLink || wa('Hi Home Assist, ')} target="_blank" rel="noopener">Open WhatsApp with my message</Button>
         </div>
-        : <form onSubmit={e => { e.preventDefault(); sendForm(e.currentTarget, { to: CH.help, subject: 'Website message' }); setSent(true); }} style={{ ...CARD, padding: 32, maxWidth: 760 }}>
+        : <form onSubmit={e => { e.preventDefault(); setWaLink(whatsappHandoff(e.currentTarget, { intro: 'New message from the Home Assist website.' })); setSent(true); }} style={{ ...CARD, padding: 32, maxWidth: 760 }}>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20, marginBottom: 20 }}>
             <FieldRow label="Name"><input style={INPUT} required /></FieldRow>
             <FieldRow label="Email"><input style={INPUT} type="email" required /></FieldRow>
@@ -95,7 +97,7 @@ function AboutPage() {
             <input type="checkbox" required style={{ marginTop: 3 }} />
             <span>I agree that Home Assist may contact me about this message.</span>
           </label>
-          <Button size="lg" variant="navy">Send message</Button>
+          <Button size="lg" variant="navy" iconLeft={<Icon name="message-circle" size={18} color="#fff" />}>Send on WhatsApp</Button>
         </form>}
     </Section>
 
@@ -105,11 +107,15 @@ function AboutPage() {
           {[['Address', CH.address], ['Phone', CH.phone], ['Email', CH.help]].map(([l, v]) =>
             <div key={l}><div style={LABEL}>{l}</div><p style={{ ...BODY, margin: '5px 0 0' }}>{v}</p></div>)}
         </div>
-        <div style={{ border: '1px solid var(--web-grey-100)', borderRadius: 4, background: 'var(--web-grey-050)', minHeight: 260, display: 'grid', placeItems: 'center' }}>
-          <div style={{ textAlign: 'center' }}>
-            <Icon name="map-pin" size={24} color="var(--web-grey-500)" />
-            <p style={{ ...SMALL, marginTop: 10 }}>Embedded map — Google Maps iframe for 12 Uitvlugt Road, Pinelands</p>
-          </div>
+        <div style={{ border: '1px solid var(--web-grey-100)', borderRadius: 4, overflow: 'hidden', minHeight: 260 }}>
+          <iframe
+            title="Home Assist Technologies — 12 Uitvlugt Road, Pinelands, Cape Town"
+            src="https://www.google.com/maps?q=12+Uitvlugt+Road,+Pinelands,+Cape+Town,+7405&output=embed"
+            style={{ border: 0, width: '100%', height: '100%', minHeight: 260, display: 'block' }}
+            loading="lazy"
+            referrerPolicy="no-referrer-when-downgrade"
+            allowFullScreen
+          ></iframe>
         </div>
       </div>
     </Section>

@@ -29,7 +29,7 @@ const OUT = resolve(here, '../src/site');
 
 // Everything Chrome.jsx used to publish on `window`.
 const CHROME_EXPORTS = [
-  'CH', 'wa', 'mailtoLink', 'sendForm', 'FORM_ACCESS_KEY', 'NAV', 'WRAP', 'LABEL', 'H1', 'H2', 'H3', 'DISPLAY', 'BODY',
+  'CH', 'wa', 'mailtoLink', 'whatsappHandoff', 'NAV', 'WRAP', 'LABEL', 'H1', 'H2', 'H3', 'DISPLAY', 'BODY',
   'SMALL', 'CARD', 'INPUT', 'Eyebrow', 'Section', 'Header', 'Footer',
   'NavyBand', 'LabelCard', 'Stat', 'Steps', 'Accordion', 'FieldRow',
   'ChannelCard', 'Confirm',
