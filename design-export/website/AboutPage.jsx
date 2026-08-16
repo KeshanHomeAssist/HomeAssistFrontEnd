@@ -39,19 +39,31 @@ function AboutPage() {
           <div style={{ font: '700 21px/1.2 var(--font-core)', color: 'var(--web-navy)' }}>Keshan Patel</div>
           <div style={{ ...SMALL, marginTop: 6 }}>Founder and Chief Executive</div>
         </div>
+        {[
+          ['Leonie Moses', 'Customer Success Team Leader', CH.leonie, 'Website inquiry for Service',
+            'If you did not get the service you needed and your job is live, reach out to Leonie.'],
+          ['Vimla Govender', 'Technical Support and Provider Onboarding', CH.vimla, 'Website inquiry for Support',
+            'For anything technical, or for help onboarding as a new service provider, reach out to Vimla.']
+        ].map(([name, role, email, subject, note]) => <div key={name} style={CARD}>
+          <div style={{ font: '700 21px/1.2 var(--font-core)', color: 'var(--web-navy)' }}>{name}</div>
+          <div style={{ ...SMALL, marginTop: 6 }}>{role}</div>
+          <p style={{ ...BODY, margin: '12px 0 16px' }}>{note}</p>
+          <Button as="a" variant="secondary" href={mailtoLink(email, subject)}>Email {name.split(' ')[0]}</Button>
         </div>)}
       </div>
     </Section>
 
     <Section tint eyebrow="Contact" title="How to reach us"
       intro="WhatsApp is the fastest route for anything urgent. The hotline and help desk are attended during business hours and on call after hours.">
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 20, marginBottom: 20 }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 20, marginBottom: 20 }}>
         <ChannelCard label="WhatsApp" value={CH.waHome} note="The fastest way to reach us. Available 24/7."
           action={<Button as="a" variant="navy" href={wa('Hi Home Assist, ')} target="_blank" rel="noopener" iconLeft={<Icon name="message-circle" size={17} color="#fff" />}>Message us</Button>} />
         <ChannelCard label="Phone" value={CH.phone} note="Speak to a consultant."
           action={<Button as="a" variant="secondary" href={'tel:' + CH.phoneTel} iconLeft={<Icon name="phone" size={17} color="var(--web-navy)" />}>Call now</Button>} />
         <ChannelCard label="Help desk" value={CH.help} note="Customer success and follow-ups on existing jobs."
           action={<Button as="a" variant="secondary" href={'mailto:' + CH.help}>Email the help desk</Button>} />
+        <ChannelCard label="Complaints" value={CH.complaints} note="A formal complaint about a job, a technician or how a case was handled."
+          action={<Button as="a" variant="secondary" href={mailtoLink(CH.complaints, 'Complaint')}>Log a complaint</Button>} />
       </div>
       <div style={{ ...CARD, background: '#fff', display: 'flex', gap: 32, alignItems: 'center', flexWrap: 'wrap' }}>
         <div style={{ flex: '1 1 320px' }}>
