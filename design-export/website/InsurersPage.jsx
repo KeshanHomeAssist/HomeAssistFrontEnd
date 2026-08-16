@@ -40,50 +40,20 @@ function ModuleCard({ number, title, icon, lines, open, onToggle }) {
   </div>;
 }
 
-function InsurersGate({ onUnlock }) {
-  const [email, setEmail] = React.useState('');
-  return <div style={{ position: 'fixed', inset: 0, zIndex: 40, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24, background: 'rgba(11,29,58,.55)' }}>
-    <form onSubmit={e => { e.preventDefault(); onUnlock(email); }} style={{ ...CARD, padding: 36, width: 'min(520px,100%)', boxShadow: '0 24px 60px rgba(11,29,58,.35)' }}>
-      <img src="../../assets/logo/homeassist-logo-horizontal.png" alt="Home Assist" style={{ height: 26, width: 'auto', display: 'block', marginBottom: 22 }} />
-      <div style={{ ...LABEL, marginBottom: 10 }}>For insurers, UMAs and brokers</div>
-      <h2 style={{ ...H2, fontSize: 24, marginBottom: 12 }}>Enter your email to view this page</h2>
-      <p style={{ ...BODY, maxWidth: '46ch' }}>This page sets out how we manage a property claims book. Give us a work email address and it opens.</p>
-      <FieldRow label="Work email">
-        <input style={INPUT} type="email" required autoFocus value={email} onChange={e => setEmail(e.target.value)} placeholder="name@company.co.za" />
-      </FieldRow>
-      <label style={{ ...BODY, display: 'flex', gap: 10, alignItems: 'flex-start', margin: '14px 0 0' }}>
-        <input type="checkbox" style={{ marginTop: 3 }} />
-        <span>Send me occasional Home Assist updates for insurers and brokers.</span>
-      </label>
-      <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', marginTop: 20 }}>
-        <Button size="lg" variant="navy">View the page</Button>
-        <Button as="a" size="lg" variant="ghost" href={CH.booking} target="_blank" rel="noopener">Book a meeting instead</Button>
-      </div>
-      <p style={{ ...SMALL, marginTop: 16 }}>We use it to follow up on this enquiry only. You are not added to any list unless you tick the box.</p>
-      <p style={{ ...SMALL, marginTop: 8 }}>If we take it further, a mutual NDA comes first. Anything you send is used only to produce your settlement report, and deleted in full if you are not happy with it.</p>
-    </form>
-  </div>;
-}
+/* The email gate that used to live here is gone.
+
+   It was a client-side modal: it blurred the page with CSS, kept the content in
+   the page source where anyone could read it with View Source, let Google index
+   the lot, and captured the address nowhere. It looked like a gate without
+   being one.
+
+   Cloudflare Access now protects /insurers. It verifies the address with a
+   one-time PIN before the page is served at all, and logs every entry with a
+   timestamp — so the commercial detail is genuinely private, and you know
+   exactly who read it. */
 
 function InsurersPage() {
-  const KEY = 'ha-insurers-email';
-  const [visible, setVisible] = React.useState(() => { try { return !!localStorage.getItem(KEY); } catch (e) { return false; } });
-  const [justUnlocked, setJustUnlocked] = React.useState(false);
-  const unlock = email => { try { localStorage.setItem(KEY, email); } catch (e) {} setVisible(true); setJustUnlocked(true); };
-  return <React.Fragment>
-    {!visible ? <InsurersGate onUnlock={unlock} /> : null}
-    {justUnlocked ? <div style={{ background: 'var(--web-blue-050)', borderBottom: '1px solid var(--web-blue-100)' }}>
-      <div style={{ ...WRAP, padding: '14px 40px', display: 'flex', gap: 12, alignItems: 'center', flexWrap: 'wrap' }}>
-        <Icon name="check" size={18} color="var(--web-blue)" />
-        <p style={{ ...BODY, margin: 0, flex: '1 1 340px' }}>The page is open. To speak to the Home Assist CEO directly, book a meeting or message us — we come back during working hours.</p>
-        <Button as="a" variant="navy" href={CH.booking} target="_blank" rel="noopener">Book a meeting</Button>
-        <Button as="a" variant="secondary" href={wa('Hi Home Assist, I have just read the insurers page and would like to talk. ', true)} target="_blank" rel="noopener">WhatsApp us</Button>
-      </div>
-    </div> : null}
-    <div style={{ filter: visible ? 'none' : 'blur(6px)', pointerEvents: visible ? 'auto' : 'none', userSelect: visible ? 'auto' : 'none', transition: 'filter 320ms cubic-bezier(.2,0,.2,1)' }} aria-hidden={!visible}>
-      <InsurersBody />
-    </div>
-  </React.Fragment>;
+  return <InsurersBody />;
 }
 
 function InsurersBody() {
