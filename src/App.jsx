@@ -1,7 +1,8 @@
 import React from 'react';
 import { Routes, Route, useNavigate, useLocation, useParams, Navigate } from 'react-router-dom';
 
-import { Header, Footer } from './site/Chrome.jsx';
+import { Header, Footer, WRAP, LABEL, DISPLAY, BODY, SMALL, CH, wa } from './site/Chrome.jsx';
+import { Button, Icon } from './ds';
 import { HomePage } from './site/HomePage.jsx';
 import { InsurersPage } from './site/InsurersPage.jsx';
 import { PropertyManagersPage } from './site/PropertyManagersPage.jsx';
@@ -85,42 +86,109 @@ function Blog() {
   );
 }
 
+/**
+ * Two 404 pages, alternating.
+ *
+ * A 404 is the one page nobody designs and everybody eventually sees. These two
+ * carry an illustration and their own apology, and both route the visitor
+ * somewhere useful rather than leaving them at a dead end: the home page, or the
+ * contact block on /about.
+ *
+ * WHY THE VARIANT IS PICKED IN AN EFFECT AND NOT AT RENDER TIME: the site is
+ * prerendered to static HTML and then hydrated. Choosing randomly during render
+ * would make the server pick one variant and the browser pick another, which is
+ * a hydration mismatch. So the prerendered 404.html always contains the first
+ * variant, and the second is swapped in after mount on roughly half of loads.
+ */
+const NOT_FOUND_VARIANTS = [
+  {
+    image: '/assets/illustrations/error-burst-pipe.jpg',
+    alt: 'A cutaway of a burst water pipe under a paved driveway, spraying water into the soil',
+    heading: 'Sorry — this one got away from us.',
+    body:
+      'The page you were looking for has moved or no longer exists. If you came here for help with a burst pipe, a geyser or a leak, that we can still sort out.',
+  },
+  {
+    image: '/assets/illustrations/error-flooded-house.jpg',
+    alt: 'A house with a rooftop solar geyser standing in flood water, with a toolbox floating past',
+    heading: 'Sorry, this page is under water.',
+    body:
+      'It has moved or been taken down. If something at your property is genuinely under water, do not wait on this page — message us and we will get somebody out to you.',
+  },
+];
+
 /** Simple, on-brand 404 rather than the host's default Apache page. */
 function NotFound() {
   const go = useGo();
+  const [variant, setVariant] = React.useState(0);
+
+  React.useEffect(() => {
+    setVariant(Math.random() < 0.5 ? 0 : 1);
+  }, []);
+
+  const v = NOT_FOUND_VARIANTS[variant];
+
   return (
     <main>
-      <div style={{ maxWidth: 720, margin: '0 auto', padding: '96px 40px 120px' }}>
+      <div
+        style={{
+          ...WRAP,
+          padding: '72px 40px 96px',
+          display: 'grid',
+          gridTemplateColumns: '1fr 420px',
+          gap: 56,
+          alignItems: 'center',
+        }}
+      >
+        <div data-hero-text>
+          <div style={{ ...LABEL, marginBottom: 12 }}>Error 404</div>
+          <h1 style={{ ...DISPLAY, margin: '0 0 16px' }}>{v.heading}</h1>
+          <p style={{ ...BODY, fontSize: 17, maxWidth: '58ch', marginBottom: 28 }}>{v.body}</p>
+          <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
+            <Button
+              as="a"
+              size="lg"
+              variant="navy"
+              href="/"
+              onClick={(e) => {
+                e.preventDefault();
+                go('home');
+              }}
+            >
+              Go to the home page
+            </Button>
+            <Button
+              as="a"
+              size="lg"
+              variant="secondary"
+              href="/about"
+              onClick={(e) => {
+                e.preventDefault();
+                go('about');
+              }}
+            >
+              Contact us
+            </Button>
+          </div>
+          <p style={{ ...SMALL, marginTop: 20 }}>
+            Urgent? WhatsApp{' '}
+            <a href={wa('Hi Home Assist, ')} target="_blank" rel="noopener" style={{ color: 'var(--web-blue)', fontWeight: 600 }}>
+              {CH.waHome}
+            </a>{' '}
+            — answered 24 hours a day.
+          </p>
+        </div>
         <div
           style={{
-            font: '700 var(--web-size-label)/1 var(--font-core)',
-            letterSpacing: 'var(--web-label-tracking)',
-            textTransform: 'uppercase',
-            color: 'var(--web-navy)',
-            marginBottom: 12,
+            border: '1px solid var(--web-grey-100)',
+            borderRadius: 4,
+            overflow: 'hidden',
+            lineHeight: 0,
+            boxShadow: 'var(--web-shadow-card)',
           }}
         >
-          Error 404
+          <img src={v.image} alt={v.alt} style={{ width: '100%', height: 'auto', display: 'block' }} />
         </div>
-        <h1 style={{ font: '700 34px/1.15 var(--font-core)', color: 'var(--web-navy)', margin: '0 0 16px' }}>
-          That page has moved or no longer exists.
-        </h1>
-        <p style={{ font: '400 17px/1.6 var(--font-core)', color: 'var(--web-grey-700)', maxWidth: '62ch' }}>
-          If you were looking for help with a burst geyser, a leak or a claim, start from the home page or
-          message us on WhatsApp and someone will pick it up.
-        </p>
-        <p style={{ marginTop: 28 }}>
-          <a
-            href="/"
-            onClick={(e) => {
-              e.preventDefault();
-              go('home');
-            }}
-            style={{ font: '600 17px/1 var(--font-core)', color: 'var(--web-blue)' }}
-          >
-            Go to the home page →
-          </a>
-        </p>
       </div>
     </main>
   );
