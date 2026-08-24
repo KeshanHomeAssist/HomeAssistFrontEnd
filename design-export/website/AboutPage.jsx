@@ -29,7 +29,7 @@ function AboutPage() {
     <Section tint eyebrow="What we stand for" title="Three things we do not compromise on">
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 20 }}>
         <LabelCard icon="shield-check" label="Verification">We check the work, not just the invoice.</LabelCard>
-        <LabelCard icon="clock" label="Speed of payment">Providers are settled in seven days, because delay is priced into every quote.</LabelCard>
+        <LabelCard icon="clock" label="Speed of payment">Providers are settled on agreed terms, not at 60 or 90 days, because delay is priced into every quote.</LabelCard>
         <LabelCard icon="folder-open" label="Evidence">Every job carries a retrievable file.</LabelCard>
       </div>
     </Section>

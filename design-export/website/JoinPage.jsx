@@ -8,7 +8,7 @@ const TRADES = [
 
 const JOIN_FAQ = [
   ['Do I have to be exclusive to Home Assist?', 'No. You do not have to be an exclusive supplier to receive work from us.'],
-  ['How do I get paid?', 'You submit the evidence pack and your invoice through the portal. A valid invoice is settled within seven days, against a 2.5% early-settlement discount.'],
+  ['How do I get paid?', 'You submit the evidence pack and your invoice through the portal. A valid invoice is settled on agreed terms, with an early-settlement discount available.'],
   ['What areas are you recruiting in?', 'Nationwide, with the highest volume in Cape Town, Johannesburg, Pretoria, Durban and Gqeberha. The confirmed area list is being finalised.'],
   ['What if I do not have PIRB registration yet?', 'You can register on the portal, but plumbing work is only allocated to providers who can issue and log a certificate of compliance.'],
   ['Do you charge a joining fee?', 'Registration terms are set out on the portal at sign-up.']
@@ -20,7 +20,11 @@ function JoinPage() {
       <div style={{ ...WRAP, padding: '64px 40px', display: 'grid', gridTemplateColumns: '1.1fr .9fr', gap: 56, alignItems: 'center' }}>
         <div>
           <Eyebrow>For plumbers, electricians and contractors</Eyebrow>
-          <h1 style={{ ...DISPLAY, maxWidth: '18ch', marginBottom: 18 }}>Do good work. Get paid in seven days.</h1>
+          {/* The gap between "Grow" and "your" is a literal non-breaking space (U+00A0),
+              not a normal one. It binds those two words so the headline breaks between
+              the two sentences instead of orphaning "Grow" at the end of line one.
+              It is invisible in an editor — if the break ever goes wrong, that is why. */}
+          <h1 style={{ ...DISPLAY, maxWidth: '18ch', marginBottom: 18 }}>{'Do good work. Grow your business.'}</h1>
           <p style={{ ...BODY, fontSize: 17, maxWidth: '58ch', marginBottom: 26 }}>Home Assist is building a national network of verified plumbers, electricians and building contractors. Register on our portal and start receiving work in your area.</p>
           <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
             <Button as="a" size="lg" variant="navy" href={CH.register} target="_blank" rel="noopener" iconRight={<Icon name="arrow-right" size={17} color="#fff" />}>Register on the portal</Button>
