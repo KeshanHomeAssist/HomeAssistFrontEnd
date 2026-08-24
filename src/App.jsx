@@ -4,6 +4,8 @@ import { Routes, Route, useNavigate, useLocation, useParams, Navigate } from 're
 import { Header, Footer } from './site/Chrome.jsx';
 import { HomePage } from './site/HomePage.jsx';
 import { InsurersPage } from './site/InsurersPage.jsx';
+import { PropertyManagersPage } from './site/PropertyManagersPage.jsx';
+import { ManagingAgentsPage } from './site/ManagingAgentsPage.jsx';
 import { JoinPage } from './site/JoinPage.jsx';
 import { PortalPage } from './site/PortalPage.jsx';
 import { AboutPage } from './site/AboutPage.jsx';
@@ -20,6 +22,12 @@ import { slugify } from './seo.js';
 export const PAGE_PATHS = {
   home: '/',
   insurers: '/insurers',
+  // A/B pair for the property-management audience. Same offer, same CTA; the
+  // variable is the route in. See docs and src/seo.js — both are gated by
+  // Cloudflare Access and marked noindex, and neither is in the nav: traffic
+  // comes from outbound links so the Access log tells you which one converted.
+  propertyManagers: '/property-managers',
+  managingAgents: '/managing-agents',
   join: '/join',
   portal: '/portal',
   about: '/about',
@@ -129,6 +137,8 @@ export default function App() {
       <Routes>
         <Route path="/" element={<HomePage go={go} />} />
         <Route path="/insurers" element={<InsurersPage go={go} />} />
+        <Route path="/property-managers" element={<PropertyManagersPage go={go} />} />
+        <Route path="/managing-agents" element={<ManagingAgentsPage go={go} />} />
         <Route path="/join" element={<JoinPage go={go} />} />
         <Route path="/portal" element={<PortalPage go={go} />} />
         <Route path="/about" element={<AboutPage go={go} />} />

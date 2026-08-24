@@ -39,6 +39,8 @@ const CHROME_EXPORTS = [
 const PAGE_EXPORTS = {
   'HomePage.jsx': ['HomePage'],
   'InsurersPage.jsx': ['InsurersPage'],
+  'PropertyManagersPage.jsx': ['PropertyManagersPage'],
+  'ManagingAgentsPage.jsx': ['ManagingAgentsPage'],
   'JoinPage.jsx': ['JoinPage'],
   'PortalPage.jsx': ['PortalPage'],
   'AboutPage.jsx': ['AboutPage'],

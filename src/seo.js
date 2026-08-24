@@ -96,6 +96,46 @@ export const ROUTES = {
       },
     ],
   },
+  /* A/B pair for managing agents, body corporates and HOAs. Same offer and CTA
+     on both; the variable is the route in — /property-managers leads with the
+     insurer mandate, /managing-agents leads with portfolio economics.
+
+     Both sit behind Cloudflare Access like /insurers, so Googlebot cannot reach
+     them and they stay out of the sitemap. The Access log is the conversion
+     record for the test: same CTA on both pages means the only thing separating
+     them is which argument got the reader to enter an email address. */
+  '/property-managers': {
+    title: 'Independent Oversight of Body Corporate Claims and Spend | Home Assist',
+    description:
+      'Insurer-backed verification of every incident, invoice and certificate on the schemes you manage — without replacing the providers they already use. Free 90-day pilot on one block.',
+    noindex: true,
+    schema: [
+      organization,
+      {
+        '@type': 'Service',
+        name: 'Body corporate claims and utility oversight',
+        provider: { '@id': `${SITE_URL}/#organization` },
+        areaServed: { '@type': 'Country', name: 'South Africa' },
+        serviceType: 'Incident verification, claims administration and utility management for sectional title schemes',
+      },
+    ],
+  },
+  '/managing-agents': {
+    title: 'Claims and Utility Oversight Across Your Whole Portfolio | Home Assist',
+    description:
+      'One route for incidents, claims and utilities across every scheme you manage. Every invoice verified against a pro-forma, every certificate logged, every approval recorded. Free 90-day pilot on one block.',
+    noindex: true,
+    schema: [
+      organization,
+      {
+        '@type': 'Service',
+        name: 'Portfolio claims and utility oversight for managing agents',
+        provider: { '@id': `${SITE_URL}/#organization` },
+        areaServed: { '@type': 'Country', name: 'South Africa' },
+        serviceType: 'Incident verification, claims administration and utility management for sectional title schemes',
+      },
+    ],
+  },
   '/join': {
     title: 'Become a Home Assist Service Provider | Plumbers, Electricians & Contractors',
     description:
