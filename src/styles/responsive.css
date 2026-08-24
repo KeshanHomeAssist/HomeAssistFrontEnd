@@ -68,6 +68,15 @@ img {
     row-gap: 8px !important;
   }
 
+  /* Hero copy comes first on a phone.
+     The property-manager pair mirror each other on desktop — one puts the
+     illustration left of the headline, the other right. Once the grid collapses
+     to one column, DOM order would drop the headline below the image on the
+     mirrored page. This pulls the copy back to the top on both. */
+  #root [data-hero-text] {
+    order: -1;
+  }
+
   /* Display and h1 type scales down so long headlines do not overflow. */
   #root h1 {
     font-size: clamp(26px, 7vw, 34px) !important;

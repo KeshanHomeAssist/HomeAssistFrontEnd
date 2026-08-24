@@ -1,12 +1,20 @@
 const { Button, Icon } = window.HomeAssistDesignSystem_cf0a2b;
 
-/* PAGE A of an A/B test against ManagingAgentsPage.jsx.
-   Same audience, same offer, same CTA. The only variable is the route in:
-   this page leads with the insurer mandate ("your insurer already wants
-   this"); page B leads with portfolio economics.
-   Everything from "Keep the plumber" down is intentionally identical in both
-   files — do not improve one without the other, or the test stops meaning
-   anything. */
+/* PAGE A of the property-management pair, against ManagingAgentsPage.jsx.
+   Both pages sell the same thing and end on the same call to action — a free
+   pilot on one block — but they are deliberately NOT the same page any more.
+
+   This one is built around the INSURER proposition: your insurer already wants
+   this, and a verified claim prices better than an unverified one. The insurer
+   section leads, immediately under the hero, and the layout runs text-left /
+   image-right.
+
+   Page B is built around PORTFOLIO ECONOMICS and mirrors the layout.
+
+   NOTE ON THE TEST: this is now a proposition test, not a controlled A/B.
+   Layout, section order and imagery all differ, so a win tells you which
+   proposition pulled — not which single element did. The call to action is held
+   identical on purpose, so the conversion event stays comparable. */
 
 const PM_PROBLEMS = [
   ['clock', 'Speed', 'Quotes take longer than the water does',
@@ -46,10 +54,6 @@ const PM_PILOT = [
   ['04', 'A report to the trustees', 'What was spent, what it should have cost, what the evidence showed.']
 ];
 
-/* The oversight surface is real but young: it goes in front of pilot schemes as
-   it is built out. The page says exactly that rather than selling it as
-   finished — this audience tests the oversight promise first, and being caught
-   short on it would undo the rest of the page. */
 const PM_OVERSIGHT = [
   ['Who approved what, and when', 'Every authorisation on the block with the name against it and the date it happened. Not a memory of a meeting.'],
   ['What a block costs on average', 'Cost per incident and per provider, for insurance claims and for maintenance, so an outlier looks like an outlier.'],
@@ -77,37 +81,53 @@ function PmChain() {
 
 function PropertyManagersPage() {
   return <main>
-    {/* Hero — route in: the insurer mandate */}
+    {/* Hero — text left, the block itself on the right */}
     <section style={{ background: 'var(--web-navy)' }}>
-      <div style={{ ...WRAP, padding: '72px 40px', display: 'grid', gridTemplateColumns: '1.1fr .9fr', gap: 56, alignItems: 'center' }}>
-        <div>
+      <div style={{ ...WRAP, padding: '68px 40px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 48, alignItems: 'center' }}>
+        <div data-hero-text>
           <Eyebrow onDark>For managing agents, body corporates and home owners associations</Eyebrow>
           <h1 style={{ ...DISPLAY, color: '#fff', maxWidth: '24ch', marginBottom: 18 }}>Independent oversight of every rand spent on the block.</h1>
-          <p style={{ ...BODY, color: 'rgba(255,255,255,.85)', fontSize: 17, maxWidth: '58ch', marginBottom: 26 }}>Home Assist verifies every incident, every invoice and every certificate on the schemes you manage — without replacing the providers they already use. Insurer-backed, because a verified claim prices better than an unverified one.</p>
+          <p style={{ ...BODY, color: 'rgba(255,255,255,.85)', fontSize: 17, maxWidth: '54ch', marginBottom: 26 }}>Home Assist verifies every incident, every invoice and every certificate on the schemes you manage — without replacing the providers they already use. Insurer-backed, because a verified claim prices better than an unverified one.</p>
           <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
             <Button as="a" size="lg" variant="onDark" href={CH.booking} target="_blank" rel="noopener">Book Free Pilot</Button>
             <Button as="a" size="lg" variant="ghost" href={wa('Hi Home Assist, I manage property and would like to discuss the free pilot on one block. ', true)} target="_blank" rel="noopener" style={{ color: '#fff', border: '1px solid rgba(255,255,255,.5)' }} iconLeft={<Icon name="message-circle" size={18} color="#fff" />}>WhatsApp us</Button>
           </div>
         </div>
-        <div style={{ border: '1px solid rgba(255,255,255,.22)', borderRadius: 4, padding: 28 }}>
-          <Eyebrow onDark>The offer in one line</Eyebrow>
-          <p style={{ ...BODY, color: '#fff', fontSize: 17, margin: 0 }}>Give us one block for ninety days. We verify every incident on it at our cost and show the trustees what we found.</p>
-          <div style={{ height: 1, background: 'rgba(255,255,255,.22)', margin: '22px 0' }}></div>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20 }}>
-            <div><div style={{ font: '700 34px/1 var(--font-core)', color: '#fff' }}>1 block</div><div style={{ ...LABEL, color: 'var(--web-blue-300)', marginTop: 6 }}>Free pilot</div></div>
-            <div><div style={{ font: '700 34px/1 var(--font-core)', color: '#fff' }}>90 days</div><div style={{ ...LABEL, color: 'var(--web-blue-300)', marginTop: 6 }}>No change to your providers</div></div>
-          </div>
+        <div style={{ border: '1px solid rgba(255,255,255,.22)', borderRadius: 4, overflow: 'hidden', lineHeight: 0 }}>
+          <img src="/assets/illustrations/cityblock-wide.jpg" alt="A managed apartment block with rooftop solar geysers, a Home Assist van at an electric charging point and a technician arriving with a toolbox" style={{ width: '100%', height: 'auto', display: 'block' }} />
         </div>
       </div>
     </section>
 
-    {/* Audience strip */}
+    {/* The offer, lifted out of the hero into its own strip */}
     <div style={{ background: 'var(--web-grey-050)', borderBottom: '1px solid var(--web-grey-100)' }}>
+      <div style={{ ...WRAP, padding: '26px 40px', display: 'grid', gridTemplateColumns: '2fr 1fr 1fr', gap: 28, alignItems: 'center' }}>
+        <div>
+          <div style={{ ...LABEL, marginBottom: 8 }}>The offer in one line</div>
+          <p style={{ ...BODY, fontSize: 17, margin: 0, maxWidth: '46ch' }}>Give us one block for ninety days. We verify every incident on it at our cost and show the trustees what we found.</p>
+        </div>
+        <div><div style={{ font: '700 32px/1 var(--font-core)', color: 'var(--web-navy)' }}>1 block</div><div style={{ ...LABEL, color: 'var(--web-grey-500)', marginTop: 6 }}>Free pilot</div></div>
+        <div><div style={{ font: '700 32px/1 var(--font-core)', color: 'var(--web-navy)' }}>90 days</div><div style={{ ...LABEL, color: 'var(--web-grey-500)', marginTop: 6 }}>No change to your providers</div></div>
+      </div>
+    </div>
+
+    {/* Audience strip */}
+    <div style={{ background: '#fff', borderBottom: '1px solid var(--web-grey-100)' }}>
       <div style={{ ...WRAP, padding: '22px 40px', display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 24 }}>
         {[['Managing agents', 'One route across every scheme'], ['Body corporates', 'Common property, evidenced'], ['HOAs', 'Approvals and standards held'], ['Trustees', 'Proof to put in front of owners']].map(([l, v]) =>
           <div key={l}><div style={LABEL}>{l}</div><div style={{ ...SMALL, marginTop: 6 }}>{v}</div></div>)}
       </div>
     </div>
+
+    {/* PAGE A LEADS HERE — the insurer proposition, first thing after the hero */}
+    <Section tint eyebrow="Why now" title="Your insurer already wants this."
+      intro="The scheme's building cover is priced on how the book behaves. Unverified claims, cash settlements above benchmark and certificates that were never logged all price into the renewal — and the scheme pays for that whether or not anybody in it saw it happen.">
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 20 }}>
+        <LabelCard icon="trending-up" label="Insurer-backed" title="Oversight the insurer already accepts">Home Assist is backed by an insurer for this exact reason: a verified, evidenced file settles cleaner and prices better than an unverified one. Better pricing is available to schemes that accept the oversight.</LabelCard>
+        <LabelCard icon="clipboard-check" label="Less administration" title="The claim arrives already evidenced">Your team stops assembling files. The photographs, the pro-forma comparison, the certificate and the warranty status arrive attached to the claim, in the form the broker needs them.</LabelCard>
+        <LabelCard icon="lock" label="Named under NDA" title="We will show you the arrangement, not publish it">Which insurer, and the terms behind the pricing, come out under a mutual non-disclosure agreement. That belongs in a meeting, not on a web page.</LabelCard>
+      </div>
+    </Section>
 
     {/* Problem */}
     <Section eyebrow="The problem" title="The money leaves before anybody can check it."
@@ -118,7 +138,6 @@ function PropertyManagersPage() {
       <PmChain />
     </Section>
 
-    {/* The honest framing of the corruption risk. */}
     <Section tint eyebrow="Why it is nobody's fault and still costs money" title="Nobody has to be dishonest for this to cost you money.">
       <div style={{ ...CARD, borderLeft: '3px solid var(--web-blue)', maxWidth: 900 }}>
         <p style={BODY}>Compliance in a block genuinely is harder than in a freestanding house. Space in the roof and the corridors is tight. A replacement unit is physically larger than the one it replaces, so it needs more pipework and more brackets. Safety requirements have tightened. Anything mounted in communal space needs body corporate approval, and in an estate the finish has to match every other house.</p>
@@ -127,32 +146,27 @@ function PropertyManagersPage() {
       </div>
     </Section>
 
-    {/* PAGE A DISTINCT — the insurer route in. */}
-    <Section eyebrow="Why now" title="Your insurer already wants this."
-      intro="The scheme's building cover is priced on how the book behaves. Unverified claims, cash settlements above benchmark and certificates that were never logged all price into the renewal — and the scheme pays for that whether or not anybody in it saw it happen.">
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 20 }}>
-        <LabelCard icon="trending-up" label="Insurer-backed" title="Oversight the insurer already accepts">Home Assist is backed by an insurer for this exact reason: a verified, evidenced file settles cleaner and prices better than an unverified one. Better pricing is available to schemes that accept the oversight.</LabelCard>
-        <LabelCard icon="clipboard-check" label="Less administration" title="The claim arrives already evidenced">Your team stops assembling files. The photographs, the pro-forma comparison, the certificate and the warranty status arrive attached to the claim, in the form the broker needs them.</LabelCard>
-        <LabelCard icon="lock" label="Named under NDA" title="We will show you the arrangement, not publish it">Which insurer, and the terms behind the pricing, come out under a mutual non-disclosure agreement. That belongs in a meeting, not on a web page.</LabelCard>
-      </div>
-    </Section>
-
-    {/* SHARED — keep identical to page B from here down. */}
-    <Section tint eyebrow="How it works" title="Keep the plumber you trust. We verify the work."
+    <Section eyebrow="How it works" title="Keep the plumber you trust. We verify the work."
       intro="The objection we hear first is that a managing agent does not want a panel of strangers on a building they have spent years getting right. Fair. That is not the deal.">
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2,1fr)', gap: 20 }}>
         {PM_VERIFY.map(([ic, l, t, d]) => <LabelCard key={l} icon={ic} label={l} title={t}>{d}</LabelCard>)}
       </div>
     </Section>
 
-    <Section eyebrow="The upside nobody uses" title="A block is one site. That is an advantage a freestanding house never has."
+    {/* One site — image alongside, estate side of the story on this page */}
+    <Section tint eyebrow="The upside nobody uses" title="A block is one site. That is an advantage a freestanding house never has."
       intro="Everything is in one place: one roof, one meter room, one access point, one collection mechanism. That makes things possible in a scheme that are uneconomic anywhere else.">
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2,1fr)', gap: 20 }}>
-        {PM_CONNECTED.map(([ic, l, t, d]) => <LabelCard key={l} icon={ic} label={l} title={t}>{d}</LabelCard>)}
+      <div style={{ display: 'grid', gridTemplateColumns: '340px 1fr', gap: 28, alignItems: 'start' }}>
+        <div style={{ border: '1px solid var(--web-grey-100)', borderRadius: 4, overflow: 'hidden', lineHeight: 0, boxShadow: 'var(--web-shadow-card)' }}>
+          <img src="/assets/illustrations/estate-square.jpg" alt="An estate of matching homes on a hillside, each with a rooftop solar geyser and water tank, served by one Home Assist vehicle at a charging point" style={{ width: '100%', height: 'auto', display: 'block' }} />
+        </div>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2,1fr)', gap: 20 }}>
+          {PM_CONNECTED.map(([ic, l, t, d]) => <LabelCard key={l} icon={ic} label={l} title={t}>{d}</LabelCard>)}
+        </div>
       </div>
     </Section>
 
-    <Section tint eyebrow="Oversight" title="What the trustees can actually see">
+    <Section eyebrow="Oversight" title="What the trustees can actually see">
       <div style={{ ...CARD, maxWidth: 900, marginBottom: 20 }}>
         <div style={{ ...LABEL, marginBottom: 8, color: 'var(--web-blue)' }}>In pilot — early access</div>
         <p style={{ ...BODY, margin: 0 }}>The oversight surface below goes in front of pilot schemes as it is built out. We would rather show you a real screen and tell you what is still coming than sell you a finished product and disappoint you in month two.</p>
@@ -160,7 +174,7 @@ function PropertyManagersPage() {
       <Accordion items={PM_OVERSIGHT} />
     </Section>
 
-    <Section eyebrow="Commercial model" title="A float, not a fee per job">
+    <Section tint eyebrow="Commercial model" title="A float, not a fee per job">
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20, maxWidth: 1000 }}>
         <div style={CARD}>
           <div style={{ ...LABEL, marginBottom: 10 }}>The shape</div>
@@ -177,7 +191,19 @@ function PropertyManagersPage() {
       </div>
     </Section>
 
-    <Section tint eyebrow="Next step" title="The free pilot, in four steps"
+    {/* Shared banner */}
+    <section style={{ background: '#fff' }}>
+      <div style={{ lineHeight: 0 }}>
+        <img src="/assets/illustrations/estate-city-banner.jpg" alt="Houses on an estate and two apartment blocks along one road, served by a single Home Assist vehicle" style={{ width: '100%', height: 'auto', display: 'block' }} />
+      </div>
+      <div style={{ background: 'var(--web-navy)' }}>
+        <div style={{ ...WRAP, padding: '22px 40px' }}>
+          <p style={{ ...BODY, color: '#fff', fontSize: 17, margin: 0, maxWidth: '80ch' }}>Freestanding homes, sectional title and estates — one verification standard across every property on the book, and one insurer relationship behind it.</p>
+        </div>
+      </div>
+    </section>
+
+    <Section eyebrow="Next step" title="The free pilot, in four steps"
       intro="No integration, no provider change, no resolution at a general meeting. One block, ninety days, and a report you can take to the trustees either way.">
       <Steps items={PM_PILOT} />
       <p style={{ ...SMALL, marginTop: 24, maxWidth: '68ch' }}>Before you send us anything, Home Assist provides our standard mutual non-disclosure agreement. If you are not happy with what we come back with, we delete everything you provided, in full.</p>

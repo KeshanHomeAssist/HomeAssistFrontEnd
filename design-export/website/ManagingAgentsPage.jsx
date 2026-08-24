@@ -1,13 +1,21 @@
 const { Button, Icon } = window.HomeAssistDesignSystem_cf0a2b;
 
-/* PAGE B of an A/B test against PropertyManagersPage.jsx.
-   Same audience, same offer, same CTA. The only variable is the route in:
-   this page leads with portfolio economics ("across every block you manage");
-   page A leads with the insurer mandate. The insurer backing is still stated
-   here, but as one card low on the page rather than as the way in.
-   Everything from "Keep the plumber" down is intentionally identical in both
-   files — do not improve one without the other, or the test stops meaning
-   anything. */
+/* PAGE B of the property-management pair, against PropertyManagersPage.jsx.
+   Both pages sell the same thing and end on the same call to action — a free
+   pilot on one block — but they are deliberately NOT the same page.
+
+   This one is built around PORTFOLIO ECONOMICS: a managing agent holding thirty
+   schemes owns the only dataset that can tell a fair price from a comfortable
+   one. The portfolio section leads, immediately under the hero, and the layout
+   is mirrored — image-left / text-right — so the two pages are distinguishable
+   at a glance.
+
+   Page A is built around the INSURER proposition.
+
+   NOTE ON THE TEST: this is a proposition test, not a controlled A/B. Layout,
+   section order and imagery all differ, so a win tells you which proposition
+   pulled — not which single element did. The call to action is held identical on
+   purpose, so the conversion event stays comparable. */
 
 const MA_PROBLEMS = [
   ['clock', 'Speed', 'Quotes take longer than the water does',
@@ -85,37 +93,51 @@ function MaChain() {
 
 function ManagingAgentsPage() {
   return <main>
-    {/* Hero — route in: portfolio economics */}
+    {/* Hero — mirrored: the portfolio on the left, text on the right */}
     <section style={{ background: 'var(--web-navy)' }}>
-      <div style={{ ...WRAP, padding: '72px 40px', display: 'grid', gridTemplateColumns: '1.1fr .9fr', gap: 56, alignItems: 'center' }}>
-        <div>
+      <div style={{ ...WRAP, padding: '68px 40px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 48, alignItems: 'center' }}>
+        <div style={{ border: '1px solid rgba(255,255,255,.22)', borderRadius: 4, overflow: 'hidden', lineHeight: 0 }}>
+          <img src="/assets/illustrations/estate-wide.jpg" alt="An estate of matching homes across the hills, each with a rooftop solar geyser and water tank, with one Home Assist vehicle on the road between them" style={{ width: '100%', height: 'auto', display: 'block' }} />
+        </div>
+        <div data-hero-text>
           <Eyebrow onDark>For managing agents with a portfolio of schemes</Eyebrow>
-          <h1 style={{ ...DISPLAY, color: '#fff', maxWidth: '24ch', marginBottom: 18 }}>Independent oversight of every rand, across every block you manage.</h1>
-          <p style={{ ...BODY, color: 'rgba(255,255,255,.85)', fontSize: 17, maxWidth: '58ch', marginBottom: 26 }}>One route for incidents, claims and utilities across the whole portfolio. Every invoice verified, every certificate logged, every approval recorded — without replacing the providers each scheme already uses.</p>
+          <h1 style={{ ...DISPLAY, color: '#fff', maxWidth: '24ch', marginBottom: 18 }}>Thirty schemes. One standard. One number to compare them on.</h1>
+          <p style={{ ...BODY, color: 'rgba(255,255,255,.85)', fontSize: 17, maxWidth: '54ch', marginBottom: 26 }}>One route for incidents, claims and utilities across the whole portfolio. Every invoice verified, every certificate logged, every approval recorded — without replacing the providers each scheme already uses.</p>
           <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
             <Button as="a" size="lg" variant="onDark" href={CH.booking} target="_blank" rel="noopener">Book Free Pilot</Button>
             <Button as="a" size="lg" variant="ghost" href={wa('Hi Home Assist, I manage a portfolio of schemes and would like to discuss the free pilot on one block. ', true)} target="_blank" rel="noopener" style={{ color: '#fff', border: '1px solid rgba(255,255,255,.5)' }} iconLeft={<Icon name="message-circle" size={18} color="#fff" />}>WhatsApp us</Button>
           </div>
         </div>
-        <div style={{ border: '1px solid rgba(255,255,255,.22)', borderRadius: 4, padding: 28 }}>
-          <Eyebrow onDark>The offer in one line</Eyebrow>
-          <p style={{ ...BODY, color: '#fff', fontSize: 17, margin: 0 }}>Give us one block for ninety days. We verify every incident on it at our cost and show the trustees what we found.</p>
-          <div style={{ height: 1, background: 'rgba(255,255,255,.22)', margin: '22px 0' }}></div>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20 }}>
-            <div><div style={{ font: '700 34px/1 var(--font-core)', color: '#fff' }}>1 block</div><div style={{ ...LABEL, color: 'var(--web-blue-300)', marginTop: 6 }}>Free pilot</div></div>
-            <div><div style={{ font: '700 34px/1 var(--font-core)', color: '#fff' }}>90 days</div><div style={{ ...LABEL, color: 'var(--web-blue-300)', marginTop: 6 }}>No change to your providers</div></div>
-          </div>
-        </div>
       </div>
     </section>
 
-    {/* Audience strip */}
+    {/* Offer strip — same offer, laid out mirrored against page A */}
     <div style={{ background: 'var(--web-grey-050)', borderBottom: '1px solid var(--web-grey-100)' }}>
+      <div style={{ ...WRAP, padding: '26px 40px', display: 'grid', gridTemplateColumns: '1fr 1fr 2fr', gap: 28, alignItems: 'center' }}>
+        <div><div style={{ font: '700 32px/1 var(--font-core)', color: 'var(--web-navy)' }}>1 block</div><div style={{ ...LABEL, color: 'var(--web-grey-500)', marginTop: 6 }}>Free pilot</div></div>
+        <div><div style={{ font: '700 32px/1 var(--font-core)', color: 'var(--web-navy)' }}>90 days</div><div style={{ ...LABEL, color: 'var(--web-grey-500)', marginTop: 6 }}>No change to your providers</div></div>
+        <div>
+          <div style={{ ...LABEL, marginBottom: 8 }}>Start with one</div>
+          <p style={{ ...BODY, fontSize: 17, margin: 0, maxWidth: '46ch' }}>Pick the scheme that worries you most. We verify every incident on it at our cost and show you what we found.</p>
+        </div>
+      </div>
+    </div>
+
+    {/* Audience strip — ordered to put the portfolio holder first */}
+    <div style={{ background: '#fff', borderBottom: '1px solid var(--web-grey-100)' }}>
       <div style={{ ...WRAP, padding: '22px 40px', display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 24 }}>
-        {[['Managing agents', 'One route across every scheme'], ['Body corporates', 'Common property, evidenced'], ['HOAs', 'Approvals and standards held'], ['Trustees', 'Proof to put in front of owners']].map(([l, v]) =>
+        {[['Managing agents', 'Every scheme on one standard'], ['Portfolio owners', 'Compare block against block'], ['Body corporates', 'Common property, evidenced'], ['HOAs', 'Approvals and standards held']].map(([l, v]) =>
           <div key={l}><div style={LABEL}>{l}</div><div style={{ ...SMALL, marginTop: 6 }}>{v}</div></div>)}
       </div>
     </div>
+
+    {/* PAGE B LEADS HERE — portfolio economics, first thing after the hero */}
+    <Section tint eyebrow="At portfolio scale" title="Across every block you manage."
+      intro="A single scheme can only ever see its own invoices. A managing agent holding thirty schemes is sitting on the only dataset in the market that can tell a fair price from a comfortable one — and almost nobody is using it.">
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2,1fr)', gap: 20 }}>
+        {MA_PORTFOLIO.map(([ic, l, t, d]) => <LabelCard key={l} icon={ic} label={l} title={t}>{d}</LabelCard>)}
+      </div>
+    </Section>
 
     {/* Problem */}
     <Section eyebrow="The problem" title="The money leaves before anybody can check it."
@@ -126,7 +148,6 @@ function ManagingAgentsPage() {
       <MaChain />
     </Section>
 
-    {/* The honest framing of the corruption risk. */}
     <Section tint eyebrow="Why it is nobody's fault and still costs money" title="Nobody has to be dishonest for this to cost you money.">
       <div style={{ ...CARD, borderLeft: '3px solid var(--web-blue)', maxWidth: 900 }}>
         <p style={BODY}>Compliance in a block genuinely is harder than in a freestanding house. Space in the roof and the corridors is tight. A replacement unit is physically larger than the one it replaces, so it needs more pipework and more brackets. Safety requirements have tightened. Anything mounted in communal space needs body corporate approval, and in an estate the finish has to match every other house.</p>
@@ -135,30 +156,27 @@ function ManagingAgentsPage() {
       </div>
     </Section>
 
-    {/* PAGE B DISTINCT — the portfolio route in. */}
-    <Section eyebrow="At portfolio scale" title="Across every block you manage."
-      intro="A single scheme can only ever see its own invoices. A managing agent holding thirty schemes is sitting on the only dataset in the market that can tell a fair price from a comfortable one — and almost nobody is using it.">
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2,1fr)', gap: 20 }}>
-        {MA_PORTFOLIO.map(([ic, l, t, d]) => <LabelCard key={l} icon={ic} label={l} title={t}>{d}</LabelCard>)}
-      </div>
-    </Section>
-
-    {/* SHARED — keep identical to page A from here down. */}
-    <Section tint eyebrow="How it works" title="Keep the plumber you trust. We verify the work."
+    <Section eyebrow="How it works" title="Keep the plumber you trust. We verify the work."
       intro="The objection we hear first is that a managing agent does not want a panel of strangers on a building they have spent years getting right. Fair. That is not the deal.">
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2,1fr)', gap: 20 }}>
         {MA_VERIFY.map(([ic, l, t, d]) => <LabelCard key={l} icon={ic} label={l} title={t}>{d}</LabelCard>)}
       </div>
     </Section>
 
-    <Section eyebrow="The upside nobody uses" title="A block is one site. That is an advantage a freestanding house never has."
+    {/* One site — image on the right here, the block itself on this page */}
+    <Section tint eyebrow="The upside nobody uses" title="A block is one site. That is an advantage a freestanding house never has."
       intro="Everything is in one place: one roof, one meter room, one access point, one collection mechanism. That makes things possible in a scheme that are uneconomic anywhere else.">
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2,1fr)', gap: 20 }}>
-        {MA_CONNECTED.map(([ic, l, t, d]) => <LabelCard key={l} icon={ic} label={l} title={t}>{d}</LabelCard>)}
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 340px', gap: 28, alignItems: 'start' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2,1fr)', gap: 20 }}>
+          {MA_CONNECTED.map(([ic, l, t, d]) => <LabelCard key={l} icon={ic} label={l} title={t}>{d}</LabelCard>)}
+        </div>
+        <div style={{ border: '1px solid var(--web-grey-100)', borderRadius: 4, overflow: 'hidden', lineHeight: 0, boxShadow: 'var(--web-shadow-card)' }}>
+          <img src="/assets/illustrations/cityblock-square.jpg" alt="A managed apartment block with rooftop solar geysers and a shared water tank, with a Home Assist technician on site" style={{ width: '100%', height: 'auto', display: 'block' }} />
+        </div>
       </div>
     </Section>
 
-    <Section tint eyebrow="Oversight" title="What the trustees can actually see">
+    <Section eyebrow="Oversight" title="What the trustees can actually see">
       <div style={{ ...CARD, maxWidth: 900, marginBottom: 20 }}>
         <div style={{ ...LABEL, marginBottom: 8, color: 'var(--web-blue)' }}>In pilot — early access</div>
         <p style={{ ...BODY, margin: 0 }}>The oversight surface below goes in front of pilot schemes as it is built out. We would rather show you a real screen and tell you what is still coming than sell you a finished product and disappoint you in month two.</p>
@@ -166,7 +184,7 @@ function ManagingAgentsPage() {
       <Accordion items={MA_OVERSIGHT} />
     </Section>
 
-    <Section eyebrow="Commercial model" title="A float, not a fee per job">
+    <Section tint eyebrow="Commercial model" title="A float, not a fee per job">
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 20 }}>
         <div style={CARD}>
           <div style={{ ...LABEL, marginBottom: 10 }}>The shape</div>
@@ -189,7 +207,19 @@ function ManagingAgentsPage() {
       </div>
     </Section>
 
-    <Section tint eyebrow="Next step" title="The free pilot, in four steps"
+    {/* Shared banner — same image as page A, different line under it */}
+    <section style={{ background: '#fff' }}>
+      <div style={{ lineHeight: 0 }}>
+        <img src="/assets/illustrations/estate-city-banner.jpg" alt="Houses on an estate and two apartment blocks along one road, served by a single Home Assist vehicle" style={{ width: '100%', height: 'auto', display: 'block' }} />
+      </div>
+      <div style={{ background: 'var(--web-navy)' }}>
+        <div style={{ ...WRAP, padding: '22px 40px' }}>
+          <p style={{ ...BODY, color: '#fff', fontSize: 17, margin: 0, maxWidth: '80ch' }}>Every scheme in the portfolio on the same evidence standard — so for the first time the blocks can be compared against each other, not just against last year.</p>
+        </div>
+      </div>
+    </section>
+
+    <Section eyebrow="Next step" title="The free pilot, in four steps"
       intro="No integration, no provider change, no resolution at a general meeting. One block, ninety days, and a report you can take to the trustees either way.">
       <Steps items={MA_PILOT} />
       <p style={{ ...SMALL, marginTop: 24, maxWidth: '68ch' }}>Before you send us anything, Home Assist provides our standard mutual non-disclosure agreement. If you are not happy with what we come back with, we delete everything you provided, in full.</p>
