@@ -57,7 +57,7 @@ function AboutPage() {
       </div>
     </Section>
 
-    <Section tint eyebrow="Contact" title="How to reach us"
+    <Section tint id="contact" eyebrow="Contact" title="How to reach us"
       intro="WhatsApp is the fastest route for anything urgent. The hotline and help desk are attended during business hours and on call after hours.">
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 20, marginBottom: 20 }}>
         <ChannelCard label="WhatsApp" value={CH.waHome} note="The fastest way to reach us. Available 24/7."

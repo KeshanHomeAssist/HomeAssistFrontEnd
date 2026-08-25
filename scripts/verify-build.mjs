@@ -37,6 +37,52 @@ function htmlFiles(dir, out = []) {
 
 const pages = htmlFiles(DIST);
 
+/* ---------- public/_redirects ----------
+
+   Two live incidents on 25 August 2026 came out of this file, so it is checked
+   here rather than trusted.
+
+   1. `/about/ -> /about` took /about and /blog down with ERR_TOO_MANY_REDIRECTS.
+      Cloudflare Pages matches these sources ignoring the trailing slash, so a
+      rule whose source and destination are the same path redirects that path to
+      itself, forever. Only a direct hit shows it - in-app navigation uses the
+      router and never asks the server, so the site looks fine while Google
+      results are dead.
+
+   2. Two rules pointed at blog articles that do not exist, so an old URL with
+      inbound links 301'd straight into a 404.
+
+   Both are cheap to check and invisible without checking. */
+const redirectsFile = join(DIST, '_redirects');
+if (existsSync(redirectsFile)) {
+  const rules = readFileSync(redirectsFile, 'utf8')
+    .split('\n')
+    .map((line, i) => ({ line: i + 1, text: line.trim() }))
+    .filter((r) => r.text.startsWith('/'))
+    .map((r) => {
+      const [from, to, status] = r.text.split(/\s+/);
+      return { ...r, from, to, status };
+    });
+
+  const exists = (path) => {
+    if (path === '/' || path.startsWith('/#')) return true;
+    const clean = path.split('#')[0].split('?')[0].replace(/\/$/, '');
+    return existsSync(join(DIST, clean, 'index.html')) || existsSync(join(DIST, clean));
+  };
+
+  for (const r of rules) {
+    if (r.from.replace(/\/$/, '') === r.to.replace(/\/$/, '')) {
+      errors.push(`_redirects line ${r.line}: "${r.from} -> ${r.to}" redirects a path to itself - Pages ignores the trailing slash when matching, so this is an infinite loop`);
+    }
+    if (r.to.startsWith('/') && !exists(r.to)) {
+      errors.push(`_redirects line ${r.line}: "${r.from}" points at ${r.to}, which is not in this build - a 301 into a 404`);
+    }
+  }
+
+  console.log(`verify: ${rules.length} redirect rules checked`);
+}
+
+
 for (const file of pages) {
   const rel = '/' + relative(DIST, file).replace(/index\.html$/, '').replace(/\/$/, '');
   const label = rel || '/';
