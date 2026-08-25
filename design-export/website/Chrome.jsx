@@ -81,8 +81,19 @@ function whatsappHandoff(form, { biz = false, intro }) {
    pair are reached from outbound links we control — email, LinkedIn, a deck —
    so the Cloudflare Access log stays a clean record of who we sent it to. The
    route still exists and the footer still links to it. */
+/* Header navigation.
+
+   `/property-managers` is in the nav from 25 August 2026: it is the public page
+   for managing agents, body corporates and HOAs, and it carries the internal
+   link that stops it being an orphan page in search.
+
+   `/managing-agents` is deliberately NOT here. It is the same offer with a
+   different proposition, held for paid traffic so the two can be tested against
+   each other in Google Ads. Adding it to the nav would put both pages in front
+   of the same visitors and there would be nothing left to compare. */
 const NAV = [
   { id: 'home', label: 'Home', route: '/' },
+  { id: 'propertyManagers', label: 'Property managers', route: '/property-managers' },
   { id: 'join', label: 'Join us', route: '/join' },
   { id: 'portal', label: 'Portal', route: '/portal' },
   { id: 'blog', label: 'Blog', route: '/blog' },
@@ -157,6 +168,7 @@ function Footer({ go }) {
       </div>
       <div style={col}><div style={head}>For business</div>
         <a href="#/insurers" onClick={e => { e.preventDefault(); go('insurers'); }} style={link}>Insurers and brokers</a>
+        <a href="#/property-managers" onClick={e => { e.preventDefault(); go('propertyManagers'); }} style={link}>Property managers</a>
         <a href="#/join" onClick={e => { e.preventDefault(); go('join'); }} style={link}>Join our network</a>
         <a href="#/portal" onClick={e => { e.preventDefault(); go('portal'); }} style={link}>Portal</a>
         <div style={{ ...head, marginTop: 14, marginBottom: 6 }}>Legal</div>

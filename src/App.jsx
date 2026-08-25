@@ -5,14 +5,15 @@ import { Header, Footer, WRAP, LABEL, DISPLAY, BODY, SMALL, CH, wa } from './sit
 import { Button, Icon } from './ds';
 import { HomePage } from './site/HomePage.jsx';
 import { InsurersPage } from './site/InsurersPage.jsx';
-// Held out of the launch build until each path has a Cloudflare Access
-// application in front of it. Commenting the imports out — rather than only
-// dropping the routes — keeps the commercial copy out of the public JS bundle,
-// which is the exact failure the old cosmetic email gate on /insurers had.
-// To re-enable: uncomment these two imports and the two <Route> lines below,
-// and set INCLUDE_GATED_PROPERTY_PAGES = true in src/seo.js.
-// import { PropertyManagersPage } from './site/PropertyManagersPage.jsx';
-// import { ManagingAgentsPage } from './site/ManagingAgentsPage.jsx';
+// Gated pair, live again from 25 August 2026: one Cloudflare Access application
+// per path, One-time PIN, so the Access log is the conversion record for the A/B.
+// If either application is ever removed, comment these two imports AND the two
+// <Route> lines below back out and set INCLUDE_GATED_PROPERTY_PAGES = false in
+// src/seo.js. Dropping only the routes would leave the commercial copy inside
+// the public JS bundle with nothing routing to it — the exact failure the old
+// cosmetic email gate on /insurers had.
+import { PropertyManagersPage } from './site/PropertyManagersPage.jsx';
+import { ManagingAgentsPage } from './site/ManagingAgentsPage.jsx';
 import { JoinPage } from './site/JoinPage.jsx';
 import { PortalPage } from './site/PortalPage.jsx';
 import { AboutPage } from './site/AboutPage.jsx';
@@ -212,9 +213,9 @@ export default function App() {
       <Routes>
         <Route path="/" element={<HomePage go={go} />} />
         <Route path="/insurers" element={<InsurersPage go={go} />} />
-        {/* Gated pair — see the note beside the imports above.
+        {/* Gated pair — see the note beside the imports above. */}
         <Route path="/property-managers" element={<PropertyManagersPage go={go} />} />
-        <Route path="/managing-agents" element={<ManagingAgentsPage go={go} />} /> */}
+        <Route path="/managing-agents" element={<ManagingAgentsPage go={go} />} />
         <Route path="/join" element={<JoinPage go={go} />} />
         <Route path="/portal" element={<PortalPage go={go} />} />
         <Route path="/about" element={<AboutPage go={go} />} />

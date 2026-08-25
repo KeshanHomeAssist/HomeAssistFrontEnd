@@ -17,7 +17,7 @@ export const SITE_URL = 'https://www.homeassist.co.za';
  * uncommented at the same time, or the page copy travels inside the public JS
  * bundle even though nothing routes to it.
  */
-export const INCLUDE_GATED_PROPERTY_PAGES = false;
+export const INCLUDE_GATED_PROPERTY_PAGES = true;
 
 export const ORG = {
   name: 'Home Assist Technologies (Pty) Ltd',
@@ -81,18 +81,27 @@ const localBusiness = {
  */
 const GATED_PROPERTY_ROUTES = {
   /* A/B pair for managing agents, body corporates and HOAs. Same offer and CTA
-     on both; the variable is the route in — /property-managers leads with the
+     on both; the variable is the proposition — /property-managers leads with the
      insurer mandate, /managing-agents leads with portfolio economics.
 
-     Both sit behind Cloudflare Access like /insurers, so Googlebot cannot reach
-     them and they stay out of the sitemap. The Access log is the conversion
-     record for the test: same CTA on both pages means the only thing separating
-     them is which argument got the reader to enter an email address. */
+     Decided 25 August 2026: public and indexable, NOT behind Cloudflare Access.
+     Neither page carries a fee band or names an insurer, so gating them was a
+     lead-capture decision rather than a confidentiality one, and it cost the
+     search visibility of the terms managing agents actually search for.
+
+     /property-managers is in the header nav; /managing-agents is held for paid
+     traffic so the two propositions can be tested against each other in Google
+     Ads.
+
+     Attribution without the Access log: the two WhatsApp CTAs prefill different
+     opening lines — "I manage property" against "I manage a portfolio of
+     schemes" — so an enquiry still says which page produced it. The calendar
+     button is identical on both, so bookings cannot be attributed. Keep the
+     WhatsApp wording distinct or the test loses its only measure. */
   '/property-managers': {
-    title: 'Independent Oversight of Body Corporate Claims and Spend | Home Assist',
+    title: 'Body Corporate Claims Oversight | Home Assist',
     description:
-      'Insurer-backed verification of every incident, invoice and certificate on the schemes you manage — without replacing the providers they already use. Free 90-day pilot on one block.',
-    noindex: true,
+      'Insurer-backed verification of every incident, invoice and certificate on the schemes you manage — without replacing your existing providers. Free 90-day pilot.',
     schema: [
       organization,
       {
@@ -105,10 +114,9 @@ const GATED_PROPERTY_ROUTES = {
     ],
   },
   '/managing-agents': {
-    title: 'Claims and Utility Oversight Across Your Whole Portfolio | Home Assist',
+    title: 'Managing Agent Claims Oversight | Home Assist',
     description:
-      'One route for incidents, claims and utilities across every scheme you manage. Every invoice verified against a pro-forma, every certificate logged, every approval recorded. Free 90-day pilot on one block.',
-    noindex: true,
+      'One route for incidents, claims and utilities across every scheme you manage. Every invoice verified against a pro-forma, every approval recorded.',
     schema: [
       organization,
       {
