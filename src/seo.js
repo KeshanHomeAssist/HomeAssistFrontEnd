@@ -89,10 +89,6 @@ const GATED_PROPERTY_ROUTES = {
      lead-capture decision rather than a confidentiality one, and it cost the
      search visibility of the terms managing agents actually search for.
 
-     /property-managers is in the header nav; /managing-agents is held for paid
-     traffic so the two propositions can be tested against each other in Google
-     Ads.
-
      Attribution without the Access log: the two WhatsApp CTAs prefill different
      opening lines — "I manage property" against "I manage a portfolio of
      schemes" — so an enquiry still says which page produced it. The calendar
@@ -158,6 +154,21 @@ export const ROUTES = {
     ],
   },
   ...(INCLUDE_GATED_PROPERTY_PAGES ? GATED_PROPERTY_ROUTES : {}),
+  '/leak-detection': {
+    title: 'Leak Detection in South Africa | Home Assist',
+    description:
+      'Hidden water leaks found without breaking open walls, floors or paving. Thermal, tracer gas and acoustic detection, pinpointed to within about a metre.',
+    schema: [
+      organization,
+      {
+        '@type': 'Service',
+        name: 'Water leak detection and burst pipe repair',
+        provider: { '@id': `${SITE_URL}/#organization` },
+        areaServed: { '@type': 'Country', name: 'South Africa' },
+        serviceType: 'Non-invasive water leak detection, burst pipe repair and resultant damage repair',
+      },
+    ],
+  },
   '/join': {
     title: 'Become a Home Assist Service Provider | Plumbers, Electricians & Contractors',
     description:

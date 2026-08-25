@@ -92,7 +92,18 @@ function whatsappHandoff(form, { biz = false, intro }) {
    each other in Google Ads. Adding it to the nav would put both pages in front
    of the same visitors and there would be nothing left to compare. */
 const NAV = [
-  { id: 'home', label: 'Home', route: '/' },
+  {
+    id: 'home', label: 'Home', route: '/',
+    /* Service pages hang off Home rather than getting their own top-level slot.
+       Keeps the nav to six items on a phone, and gives the services somewhere to
+       grow without another rethink. `children` are rendered as a dropdown; the
+       first child is the home page itself, so Home stays reachable on touch,
+       where there is no hover and the parent has to be the toggle. */
+    children: [
+      { id: 'home', label: 'Home page', route: '/' },
+      { id: 'leakDetection', label: 'Leak detection', route: '/leak-detection' }
+    ]
+  },
   { id: 'propertyManagers', label: 'Property managers', route: '/property-managers' },
   { id: 'join', label: 'Join us', route: '/join' },
   { id: 'portal', label: 'Portal', route: '/portal' },
@@ -126,6 +137,45 @@ function Section({ eyebrow, title, intro, children, tint, id, narrow }) {
   </section>;
 }
 
+/* One navigation item, with or without a dropdown.
+
+   Click, not hover: hover menus do not exist on a touch screen, and this nav is
+   read on a phone more than anything else. Escape closes it, a click anywhere
+   outside closes it, and the parent shows as active when any of its children is
+   the current page. */
+function NavItem({ item, page, go, linkStyle }) {
+  const [open, setOpen] = React.useState(false);
+  const ref = React.useRef(null);
+  const childIds = (item.children || []).map(c => c.id);
+  const active = page === item.id || childIds.indexOf(page) !== -1;
+
+  React.useEffect(() => {
+    if (!open) return;
+    const onDown = e => { if (ref.current && !ref.current.contains(e.target)) setOpen(false); };
+    const onKey = e => { if (e.key === 'Escape') setOpen(false); };
+    document.addEventListener('mousedown', onDown);
+    document.addEventListener('keydown', onKey);
+    return () => { document.removeEventListener('mousedown', onDown); document.removeEventListener('keydown', onKey); };
+  }, [open]);
+
+  if (!item.children) {
+    return <a href={'#' + item.route} onClick={e => { e.preventDefault(); go(item.id); }} style={linkStyle(active)}>{item.label}</a>;
+  }
+
+  return <div ref={ref} style={{ position: 'relative' }}>
+    <button type="button" aria-haspopup="true" aria-expanded={open} onClick={() => setOpen(!open)}
+      style={{ ...linkStyle(active), background: 'none', border: 0, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 6, padding: 0, minHeight: 'var(--web-tap-min)' }}>
+      {item.label}
+      <Icon name={open ? 'chevron-up' : 'chevron-down'} size={15} color={active ? 'var(--web-navy)' : 'var(--web-grey-500)'} />
+    </button>
+    {open ? <div style={{ position: 'absolute', top: 'calc(100% + 8px)', left: 0, zIndex: 30, minWidth: 220, background: '#fff', border: '1px solid var(--web-grey-100)', borderRadius: 4, boxShadow: '0 8px 24px rgba(24,45,85,.12)', padding: 6, display: 'flex', flexDirection: 'column' }}>
+      {item.children.map(c => <a key={c.route} href={'#' + c.route}
+        onClick={e => { e.preventDefault(); setOpen(false); go(c.id); }}
+        style={{ font: (page === c.id ? '600' : '400') + ' var(--web-size-body)/1.2 var(--font-core)', color: page === c.id ? 'var(--web-navy)' : 'var(--web-grey-700)', textDecoration: 'none', padding: '12px 14px', borderRadius: 3, display: 'block', minHeight: 'var(--web-tap-min)' }}>{c.label}</a>)}
+    </div> : null}
+  </div>;
+}
+
 function Header({ page, go }) {
   return <header style={{ position: 'sticky', top: 0, zIndex: 20, background: '#fff', borderBottom: '1px solid var(--web-grey-100)', height: 'var(--web-header-height)' }}>
     <div style={{ ...WRAP, height: '100%', display: 'flex', alignItems: 'center', gap: 28 }}>
@@ -133,8 +183,8 @@ function Header({ page, go }) {
         <img src="../../assets/logo/homeassist-logo-horizontal.png" alt="Home Assist" style={{ height: 30, width: 'auto', display: 'block' }} />
       </a>
       <nav style={{ marginLeft: 'auto', display: 'flex', gap: 22, alignItems: 'center' }}>
-        {NAV.map(n => <a key={n.id} href={'#' + n.route} onClick={e => { e.preventDefault(); go(n.id); }}
-          style={{ font: (page === n.id ? '600' : '400') + ' var(--web-size-body)/1 var(--font-core)', color: page === n.id ? 'var(--web-navy)' : 'var(--web-grey-700)', textDecoration: 'none', paddingBottom: 3, borderBottom: page === n.id ? '2px solid var(--web-blue)' : '2px solid transparent' }}>{n.label}</a>)}
+        {NAV.map(n => <NavItem key={n.id + n.route} item={n} page={page} go={go}
+          linkStyle={active => ({ font: (active ? '600' : '400') + ' var(--web-size-body)/1 var(--font-core)', color: active ? 'var(--web-navy)' : 'var(--web-grey-700)', textDecoration: 'none', paddingBottom: 3, borderBottom: active ? '2px solid var(--web-blue)' : '2px solid transparent' })} />)}
       </nav>
       {/* Two contact buttons rather than one. On a phone these are the two
           things an emergency visitor actually wants, and putting the hotline

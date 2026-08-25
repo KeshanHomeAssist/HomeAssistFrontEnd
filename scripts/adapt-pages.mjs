@@ -41,6 +41,7 @@ const PAGE_EXPORTS = {
   'InsurersPage.jsx': ['InsurersPage'],
   'PropertyManagersPage.jsx': ['PropertyManagersPage'],
   'ManagingAgentsPage.jsx': ['ManagingAgentsPage'],
+  'LeakDetectionPage.jsx': ['LeakDetectionPage'],
   'JoinPage.jsx': ['JoinPage'],
   'PortalPage.jsx': ['PortalPage'],
   'AboutPage.jsx': ['AboutPage'],

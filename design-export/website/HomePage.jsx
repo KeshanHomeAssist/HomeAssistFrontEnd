@@ -208,12 +208,13 @@ function HomePage({ go }) {
         </div>
         <div style={CARD}>
           <div style={{ ...LABEL, marginBottom: 10 }}>How leak detection works</div>
-          <p style={BODY}>We start with the non-invasive methods: an isolation test on the meter, then acoustic listening and thermal imaging or gas tracer work to narrow the position of the leak.</p>
-          <p style={{ ...BODY, margin: 0 }}>Once the leak is pinpointed, we open only what has to be opened, repair the pipe, pressure test the line and make good.</p>
+          <p style={BODY}>Nothing gets opened first. An isolation test on the meter confirms water is being lost, then a visual inspection reads what the water is already showing. Thermal, tracer gas or acoustic equipment narrows the position — which one depends on the environment and on what the technician is trained on.</p>
+          <p style={BODY}>A second confirming test pins the leak to within about a metre, normally in about an hour. Only then is anything opened: the pipe is repaired and pressure tested, and the damage the water caused is repaired after a short try-out period.</p>
+          <a href="#/leak-detection" onClick={e => { e.preventDefault(); go('leakDetection'); }} style={{ font: '600 var(--web-size-body)/1.4 var(--font-core)', color: 'var(--web-blue)', textDecoration: 'none' }}>How we find a leak, in full →</a>
         </div>
         <div style={{ ...CARD, background: 'var(--web-blue-050)', border: '1px solid var(--web-blue-100)' }}>
           <div style={{ ...LABEL, marginBottom: 10 }}>What it costs</div>
-          <CostReveal context="leak_detection" lines={['Leak Detection is completed first to pin point the leak, the pipe repair and the subsequent resulting repairs will happen there after. We typically see cost of the finding the leak and repairing the leak in the R 2000 ex vat to R 6,200 ex vatrange and resultant repairs ranges from R5,000 to R21,000 ex vat. Note the repair scope is only known once the leak is found.']}>
+          <CostReveal context="leak_detection" lines={['Leak detection is done first, to pinpoint the leak. The pipe repair and then the resultant damage repair follow. Finding and repairing the leak typically runs R2,000 to R6,200 ex VAT, and resultant repairs R5,000 to R21,000 ex VAT. The repair scope genuinely cannot be quoted until the leak has been found.']}>
             <Button as="a" variant="navy" fullWidth href={wa('Hi Home Assist, I think I have a hidden water leak. ')} target="_blank" rel="noopener" iconLeft={<Icon name="message-circle" size={17} color="#fff" />}>Send us the details</Button>
           </CostReveal>
         </div>

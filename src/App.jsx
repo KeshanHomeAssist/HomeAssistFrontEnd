@@ -14,6 +14,7 @@ import { InsurersPage } from './site/InsurersPage.jsx';
 // cosmetic email gate on /insurers had.
 import { PropertyManagersPage } from './site/PropertyManagersPage.jsx';
 import { ManagingAgentsPage } from './site/ManagingAgentsPage.jsx';
+import { LeakDetectionPage } from './site/LeakDetectionPage.jsx';
 import { JoinPage } from './site/JoinPage.jsx';
 import { PortalPage } from './site/PortalPage.jsx';
 import { AboutPage } from './site/AboutPage.jsx';
@@ -37,6 +38,7 @@ export const PAGE_PATHS = {
   // comes from outbound links so the Access log tells you which one converted.
   propertyManagers: '/property-managers',
   managingAgents: '/managing-agents',
+  leakDetection: '/leak-detection',
   join: '/join',
   portal: '/portal',
   about: '/about',
@@ -64,7 +66,7 @@ function activePage(pathname) {
  * Every route is prerendered with its own <title>, which is what a crawler and a
  * first-time visitor see. But moving between pages in the router never touches
  * the document title, so anyone clicking through the site carried the title of
- * the page they arrived on - wrong in the browser tab, wrong in a bookmark, and
+ * the page they arrived on — wrong in the browser tab, wrong in a bookmark, and
  * wrong in the page_title GA4 records for every page view after the first.
  *
  * The titles come from the same `ROUTES` table the prerender reads, so there is
@@ -250,6 +252,7 @@ export default function App() {
         {/* Gated pair — see the note beside the imports above. */}
         <Route path="/property-managers" element={<PropertyManagersPage go={go} />} />
         <Route path="/managing-agents" element={<ManagingAgentsPage go={go} />} />
+        <Route path="/leak-detection" element={<LeakDetectionPage go={go} />} />
         <Route path="/join" element={<JoinPage go={go} />} />
         <Route path="/portal" element={<PortalPage go={go} />} />
         <Route path="/about" element={<AboutPage go={go} />} />
