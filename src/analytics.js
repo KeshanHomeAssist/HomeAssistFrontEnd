@@ -21,6 +21,20 @@
 
 export const GA_ID = 'G-FL8J3DD2DX';
 
+/**
+ * One path per page, whatever the URL had.
+ *
+ * Cloudflare Pages serves both `/about` and `/about/` with a 200 - the rules that
+ * used to normalise them were the cause of the 25 August redirect loop and had to
+ * go. Left alone, GA4 then reports the same page twice, splitting its views,
+ * clicks and conversions across two rows. Stripping the trailing slash here keeps
+ * one page to one row. The canonical tags already keep Google straight.
+ */
+function normalisePath(pathname) {
+  if (!pathname || pathname === '/') return '/';
+  return pathname.replace(/[/]+$/, '') || '/';
+}
+
 function send(name, params) {
   if (typeof window === 'undefined' || typeof window.gtag !== 'function') return;
   window.gtag('event', name, params);
@@ -48,7 +62,7 @@ function outboundEvent(href) {
 export function useAnalytics(React, pathname) {
   React.useEffect(() => {
     send('page_view', {
-      page_path: pathname,
+      page_path: normalisePath(pathname),
       page_location: typeof window !== 'undefined' ? window.location.href : undefined,
       page_title: typeof document !== 'undefined' ? document.title : undefined,
     });
@@ -63,7 +77,7 @@ export function useAnalytics(React, pathname) {
       const name = outboundEvent(link.getAttribute('href'));
       if (!name) return;
       send(name, {
-        page_path: window.location.pathname,
+        page_path: normalisePath(window.location.pathname),
         link_text: (link.textContent || '').trim().slice(0, 100),
         link_url: link.getAttribute('href'),
       });
