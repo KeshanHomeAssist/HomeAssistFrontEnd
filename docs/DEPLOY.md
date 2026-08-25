@@ -3,6 +3,34 @@
 Runbook for getting this repo onto xneelo, behind Cloudflare, without taking the
 live WordPress site down before you mean to.
 
+---
+
+## Decision, 25 August 2026: production is Cloudflare Pages, not xneelo
+
+`www.homeassist.co.za` is served by the same Pages project that serves staging.
+The xneelo hosting account keeps the WordPress install, untouched and
+unreachable, as the rollback.
+
+What that changes in this runbook:
+
+- **Sections 3 and 5 (SFTP upload) do not apply.** A push to `main` is the
+  deploy. `deploy/deploy.sh` and `deploy/.env.deploy` are dormant, not deleted —
+  they are what you need if you ever move to xneelo.
+- **`public/.htaccess` is dormant too.** Pages reads `public/_headers` and
+  `public/_redirects`. The redirect map lives in `_redirects`; `.htaccess` keeps
+  its copy so the xneelo route stays viable.
+- **Apex → www is a Cloudflare Redirect Rule**, not the `.htaccess` canonical
+  host rule: a `_redirects` file cannot match on hostname.
+- **Rollback is a DNS record**, not a restore. Write down the current
+  `www` A record before you change it.
+- **Both `www` and `staging` then serve `main`.** Until staging is repointed at a
+  branch alias, every push to `main` goes straight to the public site.
+
+The ordered go-live sequence is in the project doc
+`claude/website/10-cutover-runbook.md`.
+
+---
+
 Read `CUTOVER.md` before you point the root domain here — the current site has
 pages this one does not replace.
 

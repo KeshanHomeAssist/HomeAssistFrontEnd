@@ -9,6 +9,16 @@
 
 export const SITE_URL = 'https://www.homeassist.co.za';
 
+/**
+ * The /property-managers and /managing-agents pair ships only once a Cloudflare
+ * Access application exists in front of each path. Until then it is held out of
+ * the build entirely: prerendered HTML, metadata and sitemap all key off this
+ * flag. See docs/CUTOVER.md — the routes and imports in src/App.jsx have to be
+ * uncommented at the same time, or the page copy travels inside the public JS
+ * bundle even though nothing routes to it.
+ */
+export const INCLUDE_GATED_PROPERTY_PAGES = false;
+
 export const ORG = {
   name: 'Home Assist Technologies (Pty) Ltd',
   shortName: 'Home Assist',
@@ -69,33 +79,7 @@ const localBusiness = {
  * Static routes. `title` and `description` go straight into <head>;
  * `schema` is emitted as one application/ld+json block per route.
  */
-export const ROUTES = {
-  '/': {
-    title: 'Burst Geyser Replacement, Leak Detection & Plumbers | Home Assist South Africa',
-    description:
-      'Burst geyser replacement, leak detection, plumbing and electrical work across South Africa. Vetted, PIRB-qualified technicians and a certificate of compliance on every job.',
-    schema: [localBusiness],
-  },
-  '/insurers': {
-    title: 'Property Claims Management for Insurers, UMAs and Brokers | Home Assist',
-    description:
-      'Turnkey property claims management for South African insurers, UMAs and brokers. Surge FNOL capacity, incident verification, pro-forma costing and COC collection — built to bring the loss ratio down.',
-    // Behind Cloudflare Access — Googlebot cannot answer a one-time PIN, so the
-    // page is unreachable to crawlers. Keeping it in the sitemap would just
-    // report a soft error in Search Console. Remove this if the page is split
-    // into a public overview plus a gated commercial section.
-    noindex: true,
-    schema: [
-      organization,
-      {
-        '@type': 'Service',
-        name: 'Property claims management',
-        provider: { '@id': `${SITE_URL}/#organization` },
-        areaServed: { '@type': 'Country', name: 'South Africa' },
-        serviceType: 'Insurance claims administration and incident verification',
-      },
-    ],
-  },
+const GATED_PROPERTY_ROUTES = {
   /* A/B pair for managing agents, body corporates and HOAs. Same offer and CTA
      on both; the variable is the route in — /property-managers leads with the
      insurer mandate, /managing-agents leads with portfolio economics.
@@ -136,6 +120,36 @@ export const ROUTES = {
       },
     ],
   },
+};
+
+export const ROUTES = {
+  '/': {
+    title: 'Burst Geyser Replacement, Leak Detection & Plumbers | Home Assist South Africa',
+    description:
+      'Burst geyser replacement, leak detection, plumbing and electrical work across South Africa. Vetted, PIRB-qualified technicians and a certificate of compliance on every job.',
+    schema: [localBusiness],
+  },
+  '/insurers': {
+    title: 'Property Claims Management for Insurers, UMAs and Brokers | Home Assist',
+    description:
+      'Turnkey property claims management for South African insurers, UMAs and brokers. Surge FNOL capacity, incident verification, pro-forma costing and COC collection — built to bring the loss ratio down.',
+    // Behind Cloudflare Access — Googlebot cannot answer a one-time PIN, so the
+    // page is unreachable to crawlers. Keeping it in the sitemap would just
+    // report a soft error in Search Console. Remove this if the page is split
+    // into a public overview plus a gated commercial section.
+    noindex: true,
+    schema: [
+      organization,
+      {
+        '@type': 'Service',
+        name: 'Property claims management',
+        provider: { '@id': `${SITE_URL}/#organization` },
+        areaServed: { '@type': 'Country', name: 'South Africa' },
+        serviceType: 'Insurance claims administration and incident verification',
+      },
+    ],
+  },
+  ...(INCLUDE_GATED_PROPERTY_PAGES ? GATED_PROPERTY_ROUTES : {}),
   '/join': {
     title: 'Become a Home Assist Service Provider | Plumbers, Electricians & Contractors',
     description:
@@ -174,6 +188,12 @@ export const ROUTES = {
   '/terms': {
     title: 'General Terms of Use | Home Assist Technologies',
     description: 'The general terms of use governing the Home Assist website and services.',
+    schema: [organization],
+  },
+  '/complaints': {
+    title: 'Complaints Policy | Home Assist Technologies',
+    description:
+      'How to lodge a complaint with Home Assist, what happens next, the PIRB independent audit route for compliance disputes, and the one-year workmanship warranty process.',
     schema: [organization],
   },
   '/privacy-policy': {

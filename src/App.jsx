@@ -5,13 +5,19 @@ import { Header, Footer, WRAP, LABEL, DISPLAY, BODY, SMALL, CH, wa } from './sit
 import { Button, Icon } from './ds';
 import { HomePage } from './site/HomePage.jsx';
 import { InsurersPage } from './site/InsurersPage.jsx';
-import { PropertyManagersPage } from './site/PropertyManagersPage.jsx';
-import { ManagingAgentsPage } from './site/ManagingAgentsPage.jsx';
+// Held out of the launch build until each path has a Cloudflare Access
+// application in front of it. Commenting the imports out — rather than only
+// dropping the routes — keeps the commercial copy out of the public JS bundle,
+// which is the exact failure the old cosmetic email gate on /insurers had.
+// To re-enable: uncomment these two imports and the two <Route> lines below,
+// and set INCLUDE_GATED_PROPERTY_PAGES = true in src/seo.js.
+// import { PropertyManagersPage } from './site/PropertyManagersPage.jsx';
+// import { ManagingAgentsPage } from './site/ManagingAgentsPage.jsx';
 import { JoinPage } from './site/JoinPage.jsx';
 import { PortalPage } from './site/PortalPage.jsx';
 import { AboutPage } from './site/AboutPage.jsx';
 import { BlogPage, POSTS } from './site/BlogPage.jsx';
-import { TermsPage, PrivacyPage } from './site/LegalPage.jsx';
+import { TermsPage, PrivacyPage, ComplaintsPage } from './site/LegalPage.jsx';
 import { slugify } from './seo.js';
 
 /**
@@ -35,6 +41,7 @@ export const PAGE_PATHS = {
   blog: '/blog',
   terms: '/terms',
   privacy: '/privacy-policy',
+  complaints: '/complaints',
 };
 
 const PATH_PAGES = Object.fromEntries(
@@ -205,8 +212,9 @@ export default function App() {
       <Routes>
         <Route path="/" element={<HomePage go={go} />} />
         <Route path="/insurers" element={<InsurersPage go={go} />} />
+        {/* Gated pair — see the note beside the imports above.
         <Route path="/property-managers" element={<PropertyManagersPage go={go} />} />
-        <Route path="/managing-agents" element={<ManagingAgentsPage go={go} />} />
+        <Route path="/managing-agents" element={<ManagingAgentsPage go={go} />} /> */}
         <Route path="/join" element={<JoinPage go={go} />} />
         <Route path="/portal" element={<PortalPage go={go} />} />
         <Route path="/about" element={<AboutPage go={go} />} />
@@ -214,6 +222,7 @@ export default function App() {
         <Route path="/blog/:slug" element={<Blog />} />
         <Route path="/terms" element={<TermsPage go={go} />} />
         <Route path="/privacy-policy" element={<PrivacyPage go={go} />} />
+        <Route path="/complaints" element={<ComplaintsPage go={go} />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
       <Footer go={go} />

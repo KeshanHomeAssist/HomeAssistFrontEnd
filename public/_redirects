@@ -1,0 +1,126 @@
+# Cloudflare Pages redirect map — the WordPress URLs this site retires.
+#
+# This is the Pages equivalent of the .htaccess block in docs/CUTOVER.md.
+# Pages never reads .htaccess, so if you change one, change the other, or
+# staging stops predicting production.
+#
+# Two differences from the .htaccess version, both deliberate:
+#
+# 1. Every source appears twice, with and without the trailing slash.
+#    WordPress published trailing-slash URLs, but old links, quotes and pasted
+#    addresses turn up both ways and a Pages rule matches the path literally.
+#
+# 2. The 410 Gone list is not here. _redirects only emits 3xx statuses, so the
+#    retired transactional and orphan URLs — /cart-2/, /checkout/, /jobs/,
+#    /platform-learn-more/, /sample-page-2/, /elementor-4445/, /top-bar-header/,
+#    /home-alternative/, /journey/, /sustainability/, /resources/, /technology/,
+#    /staff-leave-request-form/, /meter-inquiry-form-step-3/ — simply match
+#    nothing and get the branded 404.html with a 404 status. Google drops a 404
+#    as readily as a 410, only slower, and nobody arrives at those URLs with
+#    intent. If you want the faster signal, a Cloudflare Snippet on those paths
+#    can return 410; it is not worth a Worker on its own.
+#
+# The apex domain is NOT handled here — a _redirects file cannot match on
+# hostname. homeassist.co.za -> www is a Cloudflare Redirect Rule. See the
+# runbook.
+
+/about/                                                     /about  301
+/our-story/                                                 /about  301
+/our-story                                                  /about  301
+/leadership/                                                /about  301
+/leadership                                                 /about  301
+/why-us/                                                    /about  301
+/why-us                                                     /about  301
+/me/                                                        /  301
+/me                                                         /  301
+/customer-tech/                                             /  301
+/customer-tech                                              /  301
+/services/                                                  /  301
+/services                                                   /  301
+/geysers/                                                   /  301
+/geysers                                                    /  301
+/geyser-replacement/                                        /  301
+/geyser-replacement                                         /  301
+/leak-detection/                                            /  301
+/leak-detection                                             /  301
+/burst-pipe-repair/                                         /  301
+/burst-pipe-repair                                          /  301
+/emergency-plumbing-work/                                   /  301
+/emergency-plumbing-work                                    /  301
+/electrical-water-heater-warranty/                          /  301
+/electrical-water-heater-warranty                           /  301
+/insurer-landing-page/                                      /insurers  301
+/insurer-landing-page                                       /insurers  301
+/insurance-get-started/                                     /insurers  301
+/insurance-get-started                                      /insurers  301
+/insurance-tech/                                            /insurers  301
+/insurance-tech                                             /insurers  301
+/broker-technology-page/                                    /insurers  301
+/broker-technology-page                                     /insurers  301
+/insurance-partners/                                        /insurers  301
+/insurance-partners                                         /insurers  301
+/geyser-manufacturing-partners/                             /insurers  301
+/geyser-manufacturing-partners                              /insurers  301
+/plumber-home/                                              /join  301
+/plumber-home                                               /join  301
+/plumber-get-started/                                       /join  301
+/plumber-get-started                                        /join  301
+/plumber-tech/                                              /join  301
+/plumber-tech                                               /join  301
+/get-started/                                               /join  301
+/get-started                                                /join  301
+/my-account/                                                /portal  301
+/my-account                                                 /portal  301
+/job-dashboard/                                             /portal  301
+/job-dashboard                                              /portal  301
+/contact/                                                   /about  301
+/contact                                                    /about  301
+/contact-page/                                              /about  301
+/contact-page                                               /about  301
+/email-us/                                                  /about  301
+/email-us                                                   /about  301
+/faq/                                                       /#faq  301
+/faq                                                        /#faq  301
+/legal/                                                     /terms  301
+/legal                                                      /terms  301
+/privacy-policy-3/                                          /privacy-policy  301
+/privacy-policy-3                                           /privacy-policy  301
+/blog/                                                      /blog  301
+/what-does-homeassist-do/                                   /blog  301
+/what-does-homeassist-do                                    /blog  301
+/subscription-plans-for-smart-water-and-electrical-meters/  /blog  301
+/subscription-plans-for-smart-water-and-electrical-meters   /blog  301
+/blog-smart-water-meters-save-money/                        /blog  301
+/blog-smart-water-meters-save-money                         /blog  301
+/video-burst-geyser-explained/                              /blog/what-to-do-in-the-first-ten-minutes-after-your-geyser-bursts  301
+/video-burst-geyser-explained                               /blog/what-to-do-in-the-first-ten-minutes-after-your-geyser-bursts  301
+/gap-warranty-after-sales-support/                          /blog/how-to-tell-if-your-geyser-is-still-under-warranty  301
+/gap-warranty-after-sales-support                           /blog/how-to-tell-if-your-geyser-is-still-under-warranty  301
+/anode-infographic/                                         /blog  301
+/anode-infographic                                          /blog  301
+/home-assist-fighting-covid-19/                             /blog  301
+/home-assist-fighting-covid-19                              /blog  301
+/covid-safety/                                              /blog  301
+/covid-safety                                               /blog  301
+/smart-meters/                                              /  301
+/smart-meters                                               /  301
+/meter-hardware/                                            /  301
+/meter-hardware                                             /  301
+/watermeterinfo/                                            /  301
+/watermeterinfo                                             /  301
+/installation/                                              /  301
+/installation                                               /  301
+/pricing/                                                   /  301
+/pricing                                                    /  301
+/smart-digital-water-meter-tscs/                            /terms  301
+/smart-digital-water-meter-tscs                             /terms  301
+/prepaid-water-meter-tscs/                                  /terms  301
+/prepaid-water-meter-tscs                                   /terms  301
+/shop/                                                      /  301
+/shop                                                       /  301
+/product/smart-meter/                                       /  301
+/product/smart-meter                                        /  301
+/product/pipe-betterment/                                   /  301
+/product/pipe-betterment                                    /  301
+/careers/                                                   /about  301
+/careers                                                    /about  301

@@ -23,12 +23,11 @@ currently earning.
   do not redirect applicants there.
 - **`/staff-leave-request-form/`** — an internal HR form that should never have
   been publicly reachable.
-- **`/complaints/`** — the complaints policy and PIRB audit process page.
-  Confirmed retired. It now redirects to `/about`, so anyone following an old
-  link still lands on contact details rather than a dead end. If a published
-  complaints procedure later turns out to be a regulatory requirement, a short
-  `/complaints` page in this build is a small job — the copy is recoverable from
-  the WordPress backup.
+- ~~**`/complaints/`**~~ — **reinstated 25 August 2026.** Version 3 of the
+  Complaints Policy is now a real page at `/complaints`, in the Legal section
+  alongside Terms and Privacy, indexable and in the sitemap. The redirect to
+  `/about` has been removed. Clause 17 of the Terms of Use obliges the customer
+  to follow the Complaints Policy, so it has to be published somewhere.
 
 The redirect map in section 3 reflects all of these decisions. Nothing in it is
 conditional any more.
@@ -105,7 +104,6 @@ Redirect 301 /job-dashboard/                        /portal
 Redirect 301 /contact/                              /about
 Redirect 301 /contact-page/                         /about
 Redirect 301 /email-us/                             /about
-Redirect 301 /complaints/                           /about
 Redirect 301 /faq/                                  /#faq
 Redirect 301 /legal/                                /terms
 Redirect 301 /privacy-policy-3/                     /privacy-policy
@@ -155,9 +153,27 @@ Redirect 410 /staff-leave-request-form/
 Redirect 410 /meter-inquiry-form-step-3/
 ```
 
-If you are serving from Cloudflare Pages rather than xneelo, the same rules go in
-a `public/_redirects` file instead (`/old-path /new-path 301`, one per line).
-`.htaccess` does nothing on Pages.
+**Production is Cloudflare Pages as of 25 August 2026, so the live map is
+`public/_redirects`, not the block above.** `.htaccess` does nothing on Pages.
+The `.htaccess` version stays here because it is what you need if the site ever
+moves to xneelo — change one, change the other.
+
+Three differences in the `_redirects` version, all deliberate:
+
+- Every source appears twice, with and without a trailing slash. WordPress
+  published trailing-slash URLs; old links and pasted addresses turn up both
+  ways, and a Pages rule matches the path literally.
+- **The 410 list is gone.** `_redirects` only emits 3xx. Those URLs match
+  nothing and get the branded `404.html` with a 404 status, which Google drops
+  as readily as a 410, only slower. Nobody arrives at `/cart-2/` with intent.
+- Apex → www is a Cloudflare Redirect Rule, because a `_redirects` file cannot
+  match on hostname.
+
+Also note: **`/property-managers` and `/managing-agents` are held out of the
+launch build** until each has a Cloudflare Access application. The switch is
+`INCLUDE_GATED_PROPERTY_PAGES` in `src/seo.js` plus the two commented imports
+and routes in `src/App.jsx` — both, or the copy ships inside the public JS
+bundle with nothing routing to it.
 
 ---
 

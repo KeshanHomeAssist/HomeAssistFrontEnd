@@ -22,6 +22,7 @@ function LegalNav({ go, current }) {
       <span style={{ ...LABEL, color: 'var(--web-grey-500)' }}>Legal</span>
       <a href="#/terms" onClick={e => { e.preventDefault(); go('terms'); }} style={item('terms')}>Terms of Use</a>
       <a href="#/privacy-policy" onClick={e => { e.preventDefault(); go('privacy'); }} style={item('privacy')}>Privacy Policy</a>
+      <a href="#/complaints" onClick={e => { e.preventDefault(); go('complaints'); }} style={item('complaints')}>Complaints</a>
     </div>
   </div>;
 }
@@ -146,34 +147,221 @@ function TermsPage({ go }) {
     <section style={{ background: '#fff' }}>
       <div style={{ ...LEGAL_WRAP, padding: '48px 40px 56px' }}>
 
-        <div style={{ border: '1px solid var(--web-blue-100)', background: 'var(--web-blue-050)', borderRadius: 4, padding: 18, marginBottom: 32 }}>
-          <div style={{ ...LABEL, marginBottom: 8 }}>Content status</div>
-          <p style={{ ...LEGAL_P, margin: 0 }}>The clauses below are the published Terms of Use as retrieved from homeassist.co.za/legal. The full signed clause set (payment, cancellation, warranty, indemnity, dispute resolution, governing law) was not retrievable — paste the complete legal text over this page before publishing. <Confirm>full clause set</Confirm></p>
-        </div>
-
         <h2 style={{ ...LEGAL_H2, marginTop: 0 }}>1. Acceptance of Terms</h2>
-        <p style={LEGAL_P}>Welcome to HomeAssist. The following Terms and Conditions and the Privacy Policy (together the “Terms”) apply to any person that makes use of the Plumbing Services and the Incident Management Services (as defined below) (together the “Services”).</p>
-        <p style={LEGAL_P}>The Terms constitute a legally binding agreement between you and HomeAssist Technology Solutions Proprietary Limited which is a company incorporated under the laws of South Africa. In these Terms, “we”, “us” or “our” refers to Home Assist Technologies Proprietary Limited and “you” or “your” refers to the person or entity that wishes to use any of the services.</p>
-        <p style={LEGAL_P}>We reserve the right to modify the Terms or policies relating to the Services at any time, effective upon posting an updated version of the Terms on www.homeassist.co.za. Continued use of the Service or Software after any such changes shall constitute your consent to such changes.</p>
-        <p style={LEGAL_P}>Any policy referred to in these Terms shall be incorporated in the Terms by reference.</p>
+        <p style={LEGAL_P}>Welcome to HomeAssist. The following Terms and Conditions and the Privacy Policy (together the “Terms”) apply to any person that makes use of the Plumbing Services and the Incident Management Services (as defined below)(together the “Services”).</p>
+        <p style={LEGAL_P}>The Terms constitute a legally binding agreement between you and HomeAssist Technology Solutions Proprietary Limited which is a company incorporated under the laws of South Africa.</p>
+        <p style={LEGAL_P}>In these Terms, “we” “us” or “our” refers to Home Assist Technologies Proprietary Limited and “you” or “your” refers to the person or entity that wishes to use any of the services.</p>
+        <p style={LEGAL_P}>We reserve the right to modify the Terms or policies relating to the Services at any time, effective upon posting an updated version of the Terms on <a href="https://www.homeassist.co.za" style={{ color: 'var(--web-blue)' }}>www.homeassist.co.za</a>. Continued use of the Service or Software after any such changes shall constitute your consent to such changes. Any policy referred to in these Terms shall be incorporated in the Terms by reference.</p>
 
-        <h2 style={LEGAL_H2}>2. The Services</h2>
-        <p style={LEGAL_P}>We provide a communications platform that enables the connection of individuals who require plumbing and related services in relation to an insurance claim with service providers who provide plumbing and related services (“Incident Management Services”).</p>
-        <p style={LEGAL_P}>We check the backgrounds of service providers via third party background check services; however, we do not guarantee or warrant, and make no representations regarding, the reliability, quality or suitability of our plumbing service providers.</p>
-        <p style={LEGAL_P}>When interacting with the plumbing service providers you should exercise caution and common sense to protect your personal safety and property, just as you would when interacting with other persons whom you don’t know.</p>
-        <p style={LEGAL_P}>By using the Services, you agree to hold us free from any liability or damage that might arise out of the Service provided to you. Neither us nor our affiliates or licensors are responsible for the conduct, whether online or offline, of any user of the Service.</p>
+        <h2 style={LEGAL_H2}>2. Home Assist is a Platform</h2>
+        <p style={LEGAL_P}>We provide a communications platform that enables the connection of individuals who require plumbing and related services in relation to an insurance claim with service providers who provide plumbing and related services (“Incident Management Services”). We check the backgrounds of service providers via third party background check services; however, we do not guarantee or warrant, and make no representations regarding, the reliability, quality or suitability of our plumbing service providers. When interacting with the plumbing service providers you should exercise caution and common sense to protect your personal safety and property, just as you would when interacting with other persons whom you don’t know. By using the Services, you agree to hold us free from any liability or damage that might arise out of the Service provided to you. Neither us nor our affiliates or licensors are responsible for the conduct, whether online or offline, of any user of the Service. We and our affiliates and/or licensors will not be liable for any claim, injury and/or damage arising in connection with your use of the Services.</p>
 
-        <h2 style={LEGAL_H2}>3. The Plumbing Services</h2>
-        <p style={LEGAL_P}>The Service Provider will provide the Plumbing Services using reasonable skill and care and will be of a quality that keeps to generally accepted industry standards.</p>
-        <p style={LEGAL_P}>The Plumbing Services includes removing all non dangerous materials, including your existing parts or equipment and all waste and packaging no longer needed on the premises for recycling (where applicable). The Service Provider will inform you when they plan not to remove any materials/equipment within the premises.</p>
-        <p style={LEGAL_P}>We accept no legal responsibility for any structural issues that arise at the premises after the additional services. <Confirm>remainder of clause 3</Confirm></p>
+        <h2 style={LEGAL_H2}>3. Plumbing Services</h2>
+        <p style={LEGAL_P}>Where we describe Service Providers as “vetted”, we are confirming only that we have carried out certain checks as specified on our Website at the time you make a booking and that those checks did not reveal any cause for concern. You acknowledge that in carrying out these checks we are reliant on information supplied by third parties. We cannot guarantee that that information is accurate.</p>
+        <p style={LEGAL_P}>The supply of Services:</p>
+        <ul style={LEGAL_UL}>
+          <li>Your order is an offer that is only accepted when we send you an email, whatsapp message, sms or call you on behalf of one of the appointed Service Providers confirming your order.</li>
+          <li>You agree to treat Service Providers lawfully and courteously. You agree to provide a safe and appropriate working environment for Service Providers in compliance with all applicable laws and regulations and that you will provide reasonable co-operation to Service Providers to enable them to supply Services.</li>
+          <li>You agree to communicate any complaints to us and not the Service Provider. You agree to comply with our complaints and other policies on our Website, as may be amended from time to time.</li>
+          <li>You acknowledge that we, in our sole discretion, may assign a different Plumbing Service Provider to perform the Plumbing Services where the initially assigned Plumbing Service is unavailable due to illness, vacation, inadequate service or is no longer a recognised HomeAssist Plumbing Service Provider.</li>
+        </ul>
 
-        <h2 style={LEGAL_H2}>4. Privacy</h2>
-        <p style={LEGAL_P}>Our collection and use of your personal information is governed by our <a href="#/privacy-policy" onClick={e => { e.preventDefault(); go('privacy'); }} style={{ color: 'var(--web-blue)' }}>Privacy Policy</a>, which forms part of these Terms.</p>
+        <h2 style={LEGAL_H2}>4. Disclaimer</h2>
+        <p style={LEGAL_P}>WE ARE NOT A PLUMBING SERVICE PROVIDER. WE DO NOT PROVIDE OR OFFER THE PLUMBING SERVICES OR ACT IN ANY WAY AS A PLUMBING SERVICE PROVIDER. WE HAVE NO RESPONSIBILITY OR LIABILITY FOR ANY PLUMBING SERVICES PROVIDED TO YOU BY A TECHNICIAN. YOU ACKNOWLEDGE THAT YOUR ABILITY TO OBTAIN THE PLUMBING SERVICES THROUGH THE USE OF OUR INCIDENT MANAGEMENT SERVICES DOES NOT ESTABLISH US AS A PROVIDER OF PLUMBING SERVICES. ANY LIABILITY ARISING OUT OF THE PLUMBING SERVICE WILL BE SOLELY THE RESPONSIBILITY OF THE PLUMBING SERVICE PROVIDER.</p>
+
+        <h2 style={LEGAL_H2}>5. Use of the Plumbing Services</h2>
+        <p style={LEGAL_P}>Where we describe Service Providers as “vetted”, we are confirming only that we have carried out certain checks as specified on our Website at the time you make a booking and that those checks did not reveal any cause for concern. You acknowledge that in carrying out these checks we are reliant on information supplied by third parties. We cannot guarantee that that information is accurate.</p>
+        <p style={LEGAL_P}>The supply of Services:</p>
+        <ul style={LEGAL_UL}>
+          <li>Your order is an offer that is only accepted when we send you an email, whatsapp message, sms or call you on behalf of one of the appointed Service Providers confirming your order.</li>
+          <li>You agree to treat Service Providers lawfully and courteously. You agree to provide a safe and appropriate working environment for Service Providers in compliance with all applicable laws and regulations and that you will provide reasonable co-operation to Service Providers to enable them to supply Services.</li>
+          <li>You agree to communicate any complaints to us and not the Service Provider. You agree to comply with our complaints and other policies on our Website, as may be amended from time to time.</li>
+          <li>You acknowledge that we, in our sole discretion, may assign a different Plumbing Service Provider to perform the Plumbing Services where the initially assigned Plumbing Service is unavailable due to illness, vacation, inadequate service or is no longer a recognised HomeAssist Plumbing Service Provider.</li>
+        </ul>
+
+        <h2 style={LEGAL_H2}>6. What’s included in the Plumbing Service</h2>
+        <p style={LEGAL_P}>The Plumbing Service Provider will only perform the Plumbing Services which are expressly instructed by the Insurer, Manufacturer, or by you as the case may be, in accordance with these Terms. For the sake of clarity we do not offer private work at this point in time and any private work agreed to between yourself and the Service Provider, save for the Additional Work defined in clause 7 below.</p>
+
+        <h2 style={LEGAL_H2}>7. What’s not included in all Plumbing Services</h2>
+        <p style={LEGAL_P}>The Plumbing Service does not include the cost of any extra work required to make your system compliant that may need to be done in order to complete the Plumbing Services (“Additional Work”). If extra work is required the Service Provider will explain what is needed and why. The Service Provider will also confirm if they are able to provide the Additional Work.</p>
+        <p style={LEGAL_P}>If the Service Provider is able to provide the Additional Work, they will provide you with a written quote. The Service Provider will only commence work once you have accepted the quote for Additional Work and have made payment in accordance with the Payment Policy outlined below.</p>
+        <p style={LEGAL_P}>You hereby acknowledge that where Additional Work is required, the Service Provider will be unable to finish the Plumbing Services. If you do not agree to the extra work being carried out either by us, or another organisation, this agreement will be cancelled and you will only be responsible for our costs incurred up to the date of cancellation.</p>
+
+        <h2 style={LEGAL_H2}>8. Gaining access to your premises</h2>
+        <p style={LEGAL_P}>You need to give the Service Provider reasonable access for the Plumbing Services to be performed. The Service Provider will only provide the Plumbing Services if there is someone aged 18 or over at the Property.</p>
+        <p style={LEGAL_P}>If the Service provider cannot gain access, they will not be able to carry out the Plumbing Services and you may be charged an aborted site fee by the Service Provider.</p>
+        <p style={LEGAL_P}>The Service Provider will need to make several visits to your premises and waste valuable time if you do not provide access, and it may affect the Service Provider’s ability and/or legal responsibility to complete the Plumbing Services. If you refuse reasonable access, if the Service Provider cannot gain access, or if the Service Provider cannot arrange another suitable appointment with you, the Service Provider may refuse to further attend to the Plumbing Services required.</p>
+
+        <h2 style={LEGAL_H2}>9. Inspection</h2>
+        <p style={LEGAL_P}>Once you have given the Service Provider access to your premises they will conduct a careful examination of what needs to be done (the “First Inspection”). Once the First Inspection is complete the Service Provider will report back to you on the following information, to the extent relevant:</p>
+        <ul style={LEGAL_UL}>
+          <li>Whether or not your current geyser is compliant with SANS standards and/or IOPSA Standards;</li>
+          <li>Whether or not components of your geyser are in warranty or not;</li>
+          <li>The current temperature of your water heating system;</li>
+          <li>If the trap door, or other circumstances, prevent the Service Provider from removing the geyser from your premises;</li>
+          <li>Establish if there is any health and safety risk in accordance with clause 10 below;</li>
+          <li>Where the leak is concealed, an estimation of the amount of damage etc required in order to access the leak;</li>
+          <li>The extent of corrosion on the pipes;</li>
+          <li>If a pipe reroute is required;</li>
+          <li>Whether any kind of consent form is required to be signed in order for us to work on the premises; and</li>
+          <li>Remind you to pay the excess</li>
+        </ul>
+
+        <h2 style={LEGAL_H2}>10. Health &amp; Safety</h2>
+        <p style={LEGAL_P}>The Service Provider will not begin or continue with the Plumbing Services where the Service Provider reasonably considers that there is a health and safety risk, including but not limited to the presence of:</p>
+        <ul style={LEGAL_UL}>
+          <li>dangerous or hazardous materials;</li>
+          <li>Infestations; or</li>
+          <li>harassment of Service Providers or their staff (including verbal and/or physical abuse).</li>
+        </ul>
+        <p style={{ ...LEGAL_P, marginTop: 14 }}>The Service Provider will not start work again until there is no longer a health and safety risk and may (at our sole discretion) cancel this agreement.</p>
+
+        <h2 style={LEGAL_H2}>11. Warranty</h2>
+        <h3 style={LEGAL_H3}>11.1. Workmanship Conditional Warranty</h3>
+        <p style={LEGAL_P}>There is a one (1) year workmanship warranty on the Services performed by the Service Provider.</p>
+        <p style={LEGAL_P}>11.2 Poor functioning products must be reported within 1 month from the installation</p>
+        <p style={LEGAL_P}>11.3 Should a different service provider other than the service provider who signed off the job will void the workmanship warranty within the 1 year period, Home Assist reserves the right to make review this void decision in the case where the home owner / client providers additional evindence</p>
+        <p style={LEGAL_P}>11.4. Manufacturer Warranty — relates to the manufacturers warranty of the products that are installed. Home Assist commits to storing product details to log a warranty with the manufacture</p>
+        <p style={LEGAL_P}>11.5 Home Assist commits to install products inline with manufacture guidelines, notwithstanding clause 11.3, Home Assist will endeavor to bring the installation up to the manufacture standards in order to re-instate the warranty.</p>
+
+        <h2 style={LEGAL_H2}>12. Payments</h2>
+        <h3 style={LEGAL_H3}>12.1. Excess</h3>
+        <p style={LEGAL_P}>The message sent to you, referred to in clause 5, will show how much excess or fixed fee you’ve agreed to pay when the Service Provider performs the Plumbing Services. You are liable to pay this amount prior to the Service Provider performing the Plumbing Services.</p>
+        <h3 style={LEGAL_H3}>12.2. Cash Settlement</h3>
+        <p style={LEGAL_P}>We require full payment upfront.</p>
+        <h3 style={LEGAL_H3}>12.3. Additional Work required for compliance</h3>
+
+        <h2 style={LEGAL_H2}>13. Spare Parts</h2>
+        <p style={LEGAL_P}>If our Service Provider does not carry the parts needed on the day of your appointment, we will try to get hold of the items as soon as we can. If not, we will do all we reasonably can to find and install parts from our approved suppliers. We may use other approved parts or parts that have been reconditioned by the original manufacturer or approved third parties.</p>
+
+        <h2 style={LEGAL_H2}>14. Replacement Parts</h2>
+        <p style={LEGAL_P}>We will try to provide replacement parts with similar functionality but not necessarily the same features or an identical make and model or type of fitting. If we can’t get hold of the parts we may need to cancel your agreement (or part of it).</p>
+
+        <h2 style={LEGAL_H2}>15. Care and skill</h2>
+        <p style={LEGAL_P}>The Service Provider will provide the Plumbing Services using reasonable skill and care and will be of a quality that keeps to generally accepted industry standards</p>
+
+        <h2 style={LEGAL_H2}>16. Removing waste</h2>
+        <p style={LEGAL_P}>The Plumbing Services includes removing all non dangerous materials, including your existing parts or equipment and all waste and packaging no longer needed on the premises for recycling (where applicable). The Service Provider will inform you when they plan not to remove any materials/equipment within the premises. We accept no legal responsibility for any structural issues that arise at the premises after the additional services or warranty services are complete, unless these issues arise as a direct result of our negligence.</p>
+
+        <h2 style={LEGAL_H2}>17. Complaints</h2>
+        <p style={LEGAL_P}>You agree to handle any complaint in accordance with our Complaints Policy.</p>
+
+        <h2 style={LEGAL_H2}>18. General</h2>
+        <h3 style={LEGAL_H3}>18.1. Functioning of our Website</h3>
+        <ul style={LEGAL_UL}>
+          <li>We cannot guarantee that the HomeAssist Website (<a href="https://www.homeassist.co.za" style={{ color: 'var(--web-blue)' }}>www.homeassist.co.za</a>) will be uninterrupted or error-free.</li>
+          <li>We are entitled, without notice and without liability, to suspend the Website for repair, maintenance, improvement or other technical reason.</li>
+        </ul>
+        <h3 style={LEGAL_H3}>18.2. Liability</h3>
+        <ul style={LEGAL_UL}>
+          <li>Nothing in this agreement in any way limits or excludes our liability for negligence causing death or personal injury or for fraudulent misrepresentation or for anything that may not legally be excluded or limited.</li>
+          <li>You must give us a reasonable opportunity to remedy any matter for which we are potentially liable before you incur any costs remedying the matter yourself.</li>
+        </ul>
+        <p style={{ ...LEGAL_P, marginTop: 14 }}>We shall not be liable for any loss or damage caused by us or our employees or agents in circumstances where:</p>
+        <ul style={LEGAL_UL}>
+          <li>There is no breach of a legal duty of care owed to you by us or by any of our employees or agents;</li>
+          <li>Such loss or damage was not reasonably foreseeable by both parties;</li>
+          <li>Such loss or damage is caused by you, for example by not complying with this agreement; or</li>
+          <li>You will be liable for any reasonably foreseeable loss or damage we suffer arising from your breach of this agreement or misuse of our Website (subject of course to our obligation to mitigate any losses).</li>
+        </ul>
+
+        <h2 style={LEGAL_H2}>19. Promotions</h2>
+        <p style={LEGAL_P}>From time to time we will run promotions. For each promotion there will be specific Terms and Conditions.</p>
+
+        <h2 style={LEGAL_H2}>20. Intellectual Property Ownership</h2>
+        <p style={LEGAL_P}>We alone shall own all right, title and interest, including all related intellectual property rights, in and to the software and Services. To the extent you provide any suggestions, ideas, enhancement requests, feedback, recommendations or other information regarding the Service or software, you hereby assign to us all right, title and interest thereto. These Terms are not a sale and does not convey to you any rights of ownership in or related to the software or the Service, or any intellectual property rights owned by Us. Our name, logo, and the product names associated with the software and Services are trademarks of Ours and no right or license is granted to use them.</p>
+
+        <h2 style={LEGAL_H2}>21. Governing Law</h2>
+        <p style={LEGAL_P}>Your agreement is bound by the laws of South Africa.</p>
+
+        <p style={{ ...LEGAL_P, marginTop: 32 }}>Our collection and use of your personal information is governed by our <a href="#/privacy-policy" onClick={e => { e.preventDefault(); go('privacy'); }} style={{ color: 'var(--web-blue)' }}>Privacy Policy</a>, which forms part of these Terms.</p>
       </div>
     </section>
     <LegalFoot go={go} />
   </React.Fragment>;
 }
 
-Object.assign(window, { PrivacyPage, TermsPage });
+function ComplaintsPage({ go }) {
+  const chan = { border: '1px solid var(--web-grey-100)', borderRadius: 4, padding: 20, background: 'var(--web-grey-050)' };
+  return <React.Fragment>
+    <LegalHero label="Legal" title="Complaints Policy" updated="Home Assist Technologies (Pty) Ltd · Version 3" />
+    <LegalNav go={go} current="complaints" />
+    <section style={{ background: '#fff' }}>
+      <div style={{ ...LEGAL_WRAP, padding: '48px 40px 56px' }}>
+
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 16, marginBottom: 36 }}>
+          <div style={chan}>
+            <div style={{ ...LABEL, marginBottom: 6 }}>Hotline</div>
+            <a href={'tel:' + CH.phoneTel} style={{ font: '700 20px/1.2 var(--font-core)', color: 'var(--web-navy)', textDecoration: 'none' }}>{CH.phone}</a>
+          </div>
+          <div style={chan}>
+            <div style={{ ...LABEL, marginBottom: 6 }}>Email</div>
+            <a href={mailtoLink(CH.complaints, 'Complaint [Claim Number]')} style={{ font: '600 15px/1.4 var(--font-core)', color: 'var(--web-blue)', textDecoration: 'none', wordBreak: 'break-all' }}>{CH.complaints}</a>
+            <p style={{ ...SMALL, color: 'var(--web-grey-500)', margin: '6px 0 0' }}>Copy {CH.help}. Subject line: Complaint [Claim Number]</p>
+          </div>
+          <div style={chan}>
+            <div style={{ ...LABEL, marginBottom: 6 }}>We reply within</div>
+            <div style={{ font: '700 20px/1.2 var(--font-core)', color: 'var(--web-navy)' }}>24 hours</div>
+            <p style={{ ...SMALL, color: 'var(--web-grey-500)', margin: '6px 0 0' }}>Written confirmation of receipt. Resolution within one week.</p>
+          </div>
+        </div>
+
+        <h2 style={{ ...LEGAL_H2, marginTop: 0 }}>1. Purpose</h2>
+        <p style={LEGAL_P}>Our mission at Home Assist is to provide the best possible customer service. We take all complaints seriously and strive to resolve them as quickly as possible. This Complaints Policy sets out what you should do if you have a complaint and what you can expect from us.</p>
+
+        <h2 style={LEGAL_H2}>2. Scope</h2>
+        <p style={LEGAL_P}>This policy is applicable to all Home Assist registered Service Providers, Technicians, homeowners, suppliers, brokers and insurers.</p>
+
+        <h2 style={LEGAL_H2}>3. How to contact us</h2>
+        <p style={LEGAL_P}>If you wish to submit a complaint about the service of a technician, please contact us on our hotline number <a href={'tel:' + CH.phoneTel} style={{ color: 'var(--web-blue)' }}>{CH.phone}</a>.</p>
+        <p style={LEGAL_P}>Alternatively you can submit your complaint by email to <a href={mailtoLink(CH.complaints, 'Complaint [Claim Number]')} style={{ color: 'var(--web-blue)' }}>{CH.complaints}</a>, copying <a href={'mailto:' + CH.help} style={{ color: 'var(--web-blue)' }}>{CH.help}</a>, with the subject line <strong>Complaint [Claim Number]</strong>.</p>
+
+        <h2 style={LEGAL_H2}>4. Complaints procedure</h2>
+        <p style={LEGAL_P}>This procedure will be followed in all instances of complaints except for those relating to the compliance of the work performed, as set out in clause 5.</p>
+        <ul style={LEGAL_UL}>
+          <li>4.1 When we receive your complaint, we will send you written confirmation that we have received it. If you do not receive written confirmation from our offices within 24 hours, please follow up.</li>
+          <li>4.2 As soon as the complaint is received by our offices we begin our investigation. This is likely to involve examining the claim record to establish the sequence of relevant events and related correspondence, and interviewing the relevant persons for clarification on the issue.</li>
+          <li>4.3 At all times Management is included in correspondence.</li>
+          <li>4.4 We will then revert to you and all other parties involved in the complaint by means of a resolution. This resolution will set out our findings and will include documentary evidence where applicable.</li>
+        </ul>
+
+        <h2 style={LEGAL_H2}>5. PIRB independent audit</h2>
+        <p style={LEGAL_P}>In instances where the complaint relates to the compliance of the work performed with the national plumbing standards and/or by-laws, we will request that the Plumbing Industry Registration Board (“PIRB”), our regulatory body, conduct an independent audit of the work performed by the Service Provider.</p>
+        <p style={LEGAL_P}>Upon completion of their independent audit, where a compliance issue has been found, PIRB will issue a rectification notice to the Service Provider for the transgression to be addressed within a stipulated period.</p>
+        <p style={LEGAL_P}>If the Service Provider fails to address the transgression and does not lodge a formal dispute with PIRB, the Service Provider will be requested to appear before a Review Committee hearing, which could result in his or her licence being suspended.</p>
+
+        <h2 style={LEGAL_H2}>6. Workmanship warranty process</h2>
+        <ul style={LEGAL_UL}>
+          <li>6.1 The client or the plumber should report that they are not happy with the installation as soon as possible. Failure to do so could result in the workmanship warranty becoming invalid.</li>
+          <li>6.2 Home Assist records the report on a workmanship warranty form. Once the problem is clear, a workmanship warranty case is logged and provided to the Service Provider in writing and telephonically.</li>
+          <li>6.3 The Service Provider must return within 24 hours of notification to photograph the problem and report the solution or way forward to Home Assist.</li>
+          <li>6.4 Home Assist will reach an agreement with the client and the Service Provider to implement a remedy for the installation defect, or provide communication around the problem reported.</li>
+          <li>6.5 Home Assist will provide the terms and conditions of the one-year workmanship warranty, which include the following.
+            <ul style={{ ...LEGAL_UL, marginTop: 8 }}>
+              <li>6.5.1 If the customer does not want the same Service Provider back, they must first give Home Assist the opportunity to appoint a third-party Service Provider or an independent auditor (PIRB) to visit the home.</li>
+              <li>6.5.2 Where a PIRB auditor is sent out, Home Assist requires a list of the allegations of installation non-compliance from the client. Home Assist staff will assist in this regard.</li>
+              <li>6.5.3 Where the client does not allow Home Assist to return in any form and then takes steps to remedy the problem on their own, the workmanship warranty will no longer be in effect and neither the Service Provider nor Home Assist can be held responsible for any further costs or repairs incurred by the client.</li>
+              <li>6.5.4 As a courtesy, Home Assist will consider compensation prior to the event if proper evidence is provided in the form of photographs. It is important to document all issues photographically and email them to Home Assist as the issues are found.</li>
+            </ul>
+          </li>
+          <li>6.6 Where a third-party Service Provider is appointed by Home Assist, that Service Provider must, within 24 hours of notification, photograph and report on the problem from site and supply a written itemised quote for repairs.</li>
+          <li>6.7 Where a third-party Service Provider fulfils repairs, including compliance-related upgrades, these costs are for the original Service Provider’s account.</li>
+          <li>6.8 The initial Service Provider will cancel the certificate of compliance, as a new certificate comes into effect. Work already done may be used as an offset for repairs and remedies.</li>
+          <li>6.9 Home Assist reserves the right to take further legal action against any party who makes misrepresentations before, during or after the workmanship warranty process.</li>
+        </ul>
+
+        <h2 style={LEGAL_H2}>7. Turnaround times</h2>
+        <ul style={LEGAL_UL}>
+          <li>7.1 Service Providers are required to attend to any complaint received by Home Assist, whether verbally or by email, in respect of any job performed, and must revert with an outcome and solution within one business day from the time we forward the complaint.</li>
+          <li>7.2 On our end, we commit to providing you with a resolution to your complaint within one week of submission. We believe most complaints can be resolved long before this, but this gives us sufficient time to conduct a proper investigation and obtain follow-up information where necessary.</li>
+        </ul>
+
+        <p style={{ ...SMALL, color: 'var(--web-grey-500)', marginTop: 32 }}>We may record calls to help improve our service to you.</p>
+        <p style={{ ...SMALL, color: 'var(--web-grey-500)', marginTop: 8 }}>Home Assist is a trading name of Home Assist Technologies Proprietary Limited, registered in South Africa (No. 2016/243716/07). Registered office: {CH.address}.</p>
+      </div>
+    </section>
+    <LegalFoot go={go} />
+  </React.Fragment>;
+}
+
+Object.assign(window, { PrivacyPage, TermsPage, ComplaintsPage });

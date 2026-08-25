@@ -162,6 +162,7 @@ function Footer({ go }) {
         <div style={{ ...head, marginTop: 14, marginBottom: 6 }}>Legal</div>
         <a href="#/terms" onClick={e => { e.preventDefault(); go('terms'); }} style={link}>Terms of Use</a>
         <a href="#/privacy-policy" onClick={e => { e.preventDefault(); go('privacy'); }} style={link}>Privacy Policy</a>
+        <a href="#/complaints" onClick={e => { e.preventDefault(); go('complaints'); }} style={link}>Complaints Policy</a>
       </div>
       <div style={col}><div style={head}>Contact</div>
         <div><div style={{ ...head, marginBottom: 2 }}>WhatsApp</div><a href={wa('Hi Home Assist, ')} style={link}>{CH.waHome}</a></div>
