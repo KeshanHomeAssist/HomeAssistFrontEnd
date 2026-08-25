@@ -27,10 +27,13 @@ function AboutPage() {
     </Section>
 
     <Section tint eyebrow="What we stand for" title="Three things we do not compromise on">
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 20 }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 20, alignItems: 'stretch' }}>
         <LabelCard icon="shield-check" label="Verification">We check the work, not just the invoice.</LabelCard>
-        <LabelCard icon="clock" label="Speed of payment">Providers are settled on agreed terms, not at 60 or 90 days, because delay is priced into every quote.</LabelCard>
+        <LabelCard icon="clock" label="Speed of payment">Providers are settled as soon as our principals pay Home Assist, so it is in our own interest to negotiate the fastest terms we can get.</LabelCard>
         <LabelCard icon="folder-open" label="Evidence">Every job carries a retrievable file.</LabelCard>
+        <div style={{ border: '1px solid var(--web-grey-100)', borderRadius: 4, overflow: 'hidden', lineHeight: 0, boxShadow: 'var(--web-shadow-card)', alignSelf: 'start' }}>
+          <img src="/assets/illustrations/mural-scene-14-plans.jpg" alt="A Home Assist technician and a site manager reviewing building plans in front of a structure under construction" style={{ width: '100%', height: 'auto', display: 'block' }} />
+        </div>
       </div>
     </Section>
 
@@ -39,6 +42,9 @@ function AboutPage() {
         <div style={CARD}>
           <div style={{ font: '700 21px/1.2 var(--font-core)', color: 'var(--web-navy)' }}>Keshan Patel</div>
           <div style={{ ...SMALL, marginTop: 6 }}>Founder and Chief Executive</div>
+          <p style={{ ...BODY, margin: '12px 0 0' }}>The platform is designed system-first, to embed efficiency for every stakeholder. Lower running costs for a service provider means a more sustainable business, and that means Home Assist keeps long-term partners to grow with.</p>
+          <p style={{ ...BODY, margin: '12px 0 16px' }}>If you think somebody here could be working better, email me directly.</p>
+          <Button as="a" variant="secondary" href={mailtoLink(CH.biz, 'Better business')}>Email Keshan</Button>
         </div>
         {[
           ['Leonie Moses', 'Customer Success Team Leader', CH.leonie, 'Website inquiry for Service',
