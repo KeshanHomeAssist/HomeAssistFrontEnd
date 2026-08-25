@@ -155,6 +155,11 @@ function InsurersBody() {
       </div>
     </Section>
 
+    {/* Cluster-home banner, sitting straight above the closing call to action */}
+    <section style={{ background: '#fff', lineHeight: 0 }}>
+      <img src="/assets/illustrations/cluster-home-banner.jpg" alt="An estate of homes with rooftop solar geysers alongside two apartment blocks on the same road, served by a single Home Assist vehicle" style={{ width: '100%', height: 'auto', display: 'block' }} />
+    </section>
+
     <NavyBand eyebrow="Next step" title="Send us a sample of settled claims. We will verify them and show you what we find.">
       <Button as="a" size="lg" variant="onDark" href={CH.booking} target="_blank" rel="noopener">Book a sample review</Button>
       <Button as="a" size="lg" variant="ghost" href={wa('Hi Home Assist, we would like to discuss a sample claim review. ', true)} target="_blank" rel="noopener" style={{ color: '#fff', border: '1px solid rgba(255,255,255,.5)' }}>WhatsApp us</Button>

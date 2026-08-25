@@ -98,6 +98,11 @@ function HomePage({ go }) {
             <Button as="a" size="lg" variant="navy" href={wa('Hi Home Assist, I need help with: ')} target="_blank" rel="noopener"
               iconLeft={<Icon name="message-circle" size={19} color="#fff" />}>WhatsApp us now</Button>
             <Button as="a" size="lg" variant="secondary" href={'tel:' + CH.phoneTel} iconLeft={<Icon name="phone" size={17} color="var(--web-navy)" />}>Call {CH.phone}</Button>
+            {/* Jumps to the request form further down the page. Plain anchor to
+                #request, so it still works with JavaScript disabled and the
+                browser handles the scroll. */}
+            <Button as="a" size="lg" variant="secondary" href="#request"
+              iconLeft={<Icon name="clipboard-check" size={17} color="var(--web-navy)" />}>Service Request</Button>
           </div>
           <p style={SMALL}>Available 24/7 · Nationwide network · Every job verified</p>
         </div>
@@ -217,24 +222,33 @@ function HomePage({ go }) {
 
     {/* Trades */}
     <Section id="trades" tint eyebrow="Other trades" title="Electricians, gas and building contractors">
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 20 }}>
-        <div style={CARD}>
-          <Icon name="zap" size={20} color="var(--web-blue)" style={{ marginBottom: 12 }} />
-          <h3 style={H3}>Electricians</h3>
-          <p style={BODY}>No power, a distribution board that keeps tripping, fault finding, rewiring, and the electrical certificate of compliance a property sale requires.</p>
-          <p style={{ ...BODY, margin: 0 }}>Home Assist electricians are registered persons with the <a href="https://ecasa.co.za/" target="_blank" rel="noopener">Electrical Contractors Board</a> where issued certificates are registered and logged</p>
+      {/* Each trade card now opens with an illustration strip where the icon
+          used to be. Fixed strip height with object-fit: cover, so three source
+          images of different proportions still line up across the row. */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 20, alignItems: 'start' }}>
+        <div style={{ ...CARD, padding: 0, overflow: 'hidden' }}>
+          <img src="/assets/illustrations/trade-electrical.jpg" alt="A house with rooftop solar, an inverter and battery, and a Home Assist van at an electric vehicle charging point" style={{ width: '100%', height: 168, objectFit: 'cover', display: 'block' }} />
+          <div style={{ padding: 24 }}>
+            <h3 style={H3}>Electricians</h3>
+            <p style={BODY}>No power, a distribution board that keeps tripping, fault finding, rewiring, and the electrical certificate of compliance a property sale requires.</p>
+            <p style={{ ...BODY, margin: 0 }}>Home Assist electricians are registered persons with the <a href="https://ecasa.co.za/" target="_blank" rel="noopener">Electrical Contractors Board</a> where issued certificates are registered and logged</p>
+          </div>
         </div>
-        <div style={CARD}>
-          <Icon name="hard-hat" size={20} color="var(--web-blue)" style={{ marginBottom: 12 }} />
-          <h3 style={H3}>Building contractors</h3>
-          <p style={BODY}>Ceiling replacement after a leak, waterproofing, making good after water damage, and general repairs.</p>
-          <p style={{ ...BODY, margin: 0 }}>The same SANS standard applies: a registered entity will need a registration with <a href="https://www.cidb.org.za/" target="_blank" rel="noopener">Construction Industry Registration Development</a> Board and as a minimum requirement <a href="https://www.nhbrc.org.za/" target="_blank" rel="noopener">National Home Builders Registration Council</a>, a scoped quote, photographic evidence before and after.</p>
+        <div style={{ ...CARD, padding: 0, overflow: 'hidden' }}>
+          <img src="/assets/illustrations/trade-building.jpg" alt="A Home Assist bricklayer building a wall beside a cement mixer and stacks of brick and block" style={{ width: '100%', height: 168, objectFit: 'cover', display: 'block' }} />
+          <div style={{ padding: 24 }}>
+            <h3 style={H3}>Building contractors</h3>
+            <p style={BODY}>Ceiling replacement after a leak, waterproofing, making good after water damage, and general repairs.</p>
+            <p style={{ ...BODY, margin: 0 }}>The same SANS standard applies: a registered entity will need a registration with <a href="https://www.cidb.org.za/" target="_blank" rel="noopener">Construction Industry Registration Development</a> Board and as a minimum requirement <a href="https://www.nhbrc.org.za/" target="_blank" rel="noopener">National Home Builders Registration Council</a>, a scoped quote, photographic evidence before and after.</p>
+          </div>
         </div>
-        <div style={CARD}>
-          <Icon name="flame" size={20} color="var(--web-blue)" style={{ marginBottom: 12 }} />
-          <h3 style={H3}>Gas geyser installers and repairers</h3>
-          <p style={BODY}>Gas geysers and other gas equipment, including HVAC, which we also handle.</p>
-          <p style={{ ...BODY, margin: 0 }}>Gas installers must be registered with the <a href="https://lpgas.co.za/" target="_blank" rel="noopener">LPGSA</a>, and a gas certificate of conformity is issued on completion.</p>
+        <div style={{ ...CARD, padding: 0, overflow: 'hidden' }}>
+          <img src="/assets/illustrations/trade-gas-geyser.jpg" alt="A Home Assist technician servicing a wall-mounted gas water heater in a tiled bathroom" style={{ width: '100%', height: 168, objectFit: 'cover', display: 'block' }} />
+          <div style={{ padding: 24 }}>
+            <h3 style={H3}>Gas geyser installers and repairers</h3>
+            <p style={BODY}>Gas geysers and other gas equipment, including HVAC, which we also handle.</p>
+            <p style={{ ...BODY, margin: 0 }}>Gas installers must be registered with the <a href="https://lpgas.co.za/" target="_blank" rel="noopener">LPGSA</a>, and a gas certificate of conformity is issued on completion.</p>
+          </div>
         </div>
       </div>
     </Section>
@@ -306,7 +320,7 @@ function RequestForm() {
       </div>
     </div>
   </Section>;
-  return <Section tint eyebrow="Service request" title="Tell us what you need"
+  return <Section id="request" tint eyebrow="Service request" title="Tell us what you need"
     intro="We will match you with an artisan and come back to you on WhatsApp.">
     <form onSubmit={e => { e.preventDefault(); setWaLink(whatsappHandoff(e.currentTarget, { intro: 'New service request from the Home Assist website.' })); setSent(true); }} style={{ ...CARD, padding: 32, maxWidth: 900 }}>
       <div style={row}>

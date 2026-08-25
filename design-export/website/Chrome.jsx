@@ -77,9 +77,12 @@ function whatsappHandoff(form, { biz = false, intro }) {
   return url;
 }
 
+/* /insurers is deliberately NOT in the nav. That page and the property-manager
+   pair are reached from outbound links we control — email, LinkedIn, a deck —
+   so the Cloudflare Access log stays a clean record of who we sent it to. The
+   route still exists and the footer still links to it. */
 const NAV = [
   { id: 'home', label: 'Home', route: '/' },
-  { id: 'insurers', label: 'For Insurers', route: '/insurers' },
   { id: 'join', label: 'Join us', route: '/join' },
   { id: 'portal', label: 'Portal', route: '/portal' },
   { id: 'blog', label: 'Blog', route: '/blog' },
@@ -122,8 +125,18 @@ function Header({ page, go }) {
         {NAV.map(n => <a key={n.id} href={'#' + n.route} onClick={e => { e.preventDefault(); go(n.id); }}
           style={{ font: (page === n.id ? '600' : '400') + ' var(--web-size-body)/1 var(--font-core)', color: page === n.id ? 'var(--web-navy)' : 'var(--web-grey-700)', textDecoration: 'none', paddingBottom: 3, borderBottom: page === n.id ? '2px solid var(--web-blue)' : '2px solid transparent' }}>{n.label}</a>)}
       </nav>
-      <Button as="a" variant="navy" href={wa('Hi Home Assist, I need help with: ')} target="_blank" rel="noopener"
-        iconLeft={<Icon name="message-circle" size={17} color="#fff" />}>WhatsApp Us</Button>
+      {/* Two contact buttons rather than one. On a phone these are the two
+          things an emergency visitor actually wants, and putting the hotline
+          number in the button label rather than behind the word "Call" means the
+          number itself is in the page text — which is what a search engine or an
+          AI assistant reads out when somebody asks how to reach us. Both are
+          size="sm" so the pair fits where the single button used to sit. */}
+      <div style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap' }}>
+        <Button as="a" size="sm" variant="navy" href={wa('Hi Home Assist, I need help with: ')} target="_blank" rel="noopener"
+          iconLeft={<Icon name="message-circle" size={15} color="#fff" />}>WhatsApp</Button>
+        <Button as="a" size="sm" variant="secondary" href={'tel:' + CH.phoneTel}
+          iconLeft={<Icon name="phone" size={15} color="var(--web-navy)" />}>{CH.phone}</Button>
+      </div>
     </div>
   </header>;
 }

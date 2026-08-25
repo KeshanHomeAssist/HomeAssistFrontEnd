@@ -27,13 +27,10 @@ function AboutPage() {
     </Section>
 
     <Section tint eyebrow="What we stand for" title="Three things we do not compromise on">
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 20, alignItems: 'stretch' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 20 }}>
         <LabelCard icon="shield-check" label="Verification">We check the work, not just the invoice.</LabelCard>
         <LabelCard icon="clock" label="Speed of payment">Providers are settled as soon as our principals pay Home Assist, so it is in our own interest to negotiate the fastest terms we can get.</LabelCard>
         <LabelCard icon="folder-open" label="Evidence">Every job carries a retrievable file.</LabelCard>
-        <div style={{ border: '1px solid var(--web-grey-100)', borderRadius: 4, overflow: 'hidden', lineHeight: 0, boxShadow: 'var(--web-shadow-card)', alignSelf: 'start' }}>
-          <img src="/assets/illustrations/mural-scene-14-plans.jpg" alt="A Home Assist technician and a site manager reviewing building plans in front of a structure under construction" style={{ width: '100%', height: 'auto', display: 'block' }} />
-        </div>
       </div>
     </Section>
 
@@ -88,7 +85,8 @@ function AboutPage() {
           <p style={{ ...BODY, margin: '0 0 16px' }}>WhatsApp has opened with your message filled in. Send it and we will come back to you. If it did not open, use the button below.</p>
           <Button as="a" variant="navy" href={waLink || wa('Hi Home Assist, ')} target="_blank" rel="noopener">Open WhatsApp with my message</Button>
         </div>
-        : <form onSubmit={e => { e.preventDefault(); setWaLink(whatsappHandoff(e.currentTarget, { intro: 'New message from the Home Assist website.' })); setSent(true); }} style={{ ...CARD, padding: 32, maxWidth: 760 }}>
+        : <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0,760px) 300px', gap: 24, alignItems: 'stretch' }}>
+          <form onSubmit={e => { e.preventDefault(); setWaLink(whatsappHandoff(e.currentTarget, { intro: 'New message from the Home Assist website.' })); setSent(true); }} style={{ ...CARD, padding: 32 }}>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20, marginBottom: 20 }}>
             <FieldRow label="Name"><input style={INPUT} required /></FieldRow>
             <FieldRow label="Email"><input style={INPUT} type="email" required /></FieldRow>
@@ -104,7 +102,14 @@ function AboutPage() {
             <span>I agree that Home Assist may contact me about this message.</span>
           </label>
           <Button size="lg" variant="navy" iconLeft={<Icon name="message-circle" size={18} color="#fff" />}>Send on WhatsApp</Button>
-        </form>}
+          </form>
+          {/* Illustration beside the form. object-fit: cover with a stretched
+              grid row so it matches the form's height instead of floating at
+              its own aspect ratio. */}
+          <div style={{ border: '1px solid var(--web-grey-100)', borderRadius: 4, overflow: 'hidden', lineHeight: 0, boxShadow: 'var(--web-shadow-card)' }}>
+            <img src="/assets/illustrations/mural-scene-14-plans.jpg" alt="A Home Assist technician and a site manager reviewing building plans in front of a structure under construction" style={{ width: '100%', height: '100%', minHeight: 260, objectFit: 'cover', display: 'block' }} />
+          </div>
+        </div>}
     </Section>
 
     <Section tint eyebrow="Where we are" title="Pinelands, Cape Town">

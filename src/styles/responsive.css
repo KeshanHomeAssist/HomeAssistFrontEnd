@@ -77,6 +77,21 @@ img {
     order: -1;
   }
 
+  /* Buttons stop pushing the page sideways.
+     The design-system Button is an inline-flex with `white-space: nowrap` and a
+     fixed height, so a long label — "Send my request on WhatsApp" — cannot
+     shrink and forces the whole document wider than the viewport. On a phone we
+     let the label wrap and the height grow instead. This was the 35px of
+     horizontal overflow on the home page. */
+  #root button,
+  #root a[class],
+  #root form button {
+    max-width: 100%;
+    white-space: normal !important;
+    height: auto !important;
+    min-height: var(--web-tap-min);
+  }
+
   /* Display and h1 type scales down so long headlines do not overflow. */
   #root h1 {
     font-size: clamp(26px, 7vw, 34px) !important;
