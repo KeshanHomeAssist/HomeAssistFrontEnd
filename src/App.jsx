@@ -19,7 +19,8 @@ import { PortalPage } from './site/PortalPage.jsx';
 import { AboutPage } from './site/AboutPage.jsx';
 import { BlogPage, POSTS } from './site/BlogPage.jsx';
 import { TermsPage, PrivacyPage, ComplaintsPage } from './site/LegalPage.jsx';
-import { slugify } from './seo.js';
+import { slugify, ROUTES, articleMeta } from './seo.js';
+import { useAnalytics } from './analytics.js';
 
 /**
  * The design prototype navigated with a `go('insurers')` callback against
@@ -55,6 +56,33 @@ export const POST_SLUGS = POSTS.map(([, title]) => slugify(title));
 function activePage(pathname) {
   if (pathname.startsWith('/blog')) return 'blog';
   return PATH_PAGES[pathname] || null;
+}
+
+/**
+ * Keeps <title> correct after client-side navigation.
+ *
+ * Every route is prerendered with its own <title>, which is what a crawler and a
+ * first-time visitor see. But moving between pages in the router never touches
+ * the document title, so anyone clicking through the site carried the title of
+ * the page they arrived on - wrong in the browser tab, wrong in a bookmark, and
+ * wrong in the page_title GA4 records for every page view after the first.
+ *
+ * The titles come from the same `ROUTES` table the prerender reads, so there is
+ * one source of truth rather than two that drift.
+ */
+function useDocumentTitle(pathname) {
+  React.useEffect(() => {
+    if (typeof document === 'undefined') return;
+    let title = ROUTES[pathname]?.title;
+
+    if (!title && pathname.startsWith('/blog/')) {
+      const slug = pathname.slice('/blog/'.length);
+      const post = POSTS.find((p) => slugify(p[1]) === slug);
+      if (post) title = articleMeta(post).title;
+    }
+
+    if (title) document.title = title;
+  }, [pathname]);
 }
 
 function useGo() {
@@ -206,6 +234,12 @@ export default function App() {
   const location = useLocation();
   const go = useGo();
   const page = activePage(location.pathname);
+
+  // Fix the tab title before the page view is sent, so page_title is right.
+  useDocumentTitle(location.pathname);
+
+  // GA4: one page_view per route, and an event for every outbound CTA click.
+  useAnalytics(React, location.pathname);
 
   return (
     <>
