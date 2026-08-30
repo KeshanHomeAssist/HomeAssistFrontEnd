@@ -233,7 +233,7 @@ const GR_BRANDS = [
     logo: '/assets/logo/logo-xstream.png',
     covers: 'Electric and solar',
     note: 'Made only in the Western Cape.',
-    body: 'Solar ready, like Kwikot and Ariston, and the only fibre cylinder on the market — a different material to the steel and copper everything else is built from. Made only in the Western Cape, which is where most of our geyser work sits.'
+    body: 'Solar ready, like Kwikot and Ariston, and the only fibre cylinder on the market — a different material to the steel and copper everything else is built from. Made in the province where most of our geyser work sits, which can mean a shorter lead time.'
   }
 ];
 
