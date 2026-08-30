@@ -368,9 +368,16 @@ function GeyserReplacementsPage({ go }) {
           <p style={{ ...SMALL, color: 'rgba(255,255,255,.75)', marginTop: 14 }}>Not replacing yet? <a href="#warranty" style={{ color: '#fff', fontWeight: 600 }}>Check whether your geyser is still under warranty</a> — free, and it may mean you do not need to buy anything.</p>
         </div>
         <div style={{ border: '1px solid rgba(255,255,255,.22)', borderRadius: 4, overflow: 'hidden', lineHeight: 0 }}>
-          <img src="/assets/illustrations/geyser-hero-shower.gif"
-            alt="A rain shower head running at strong, even pressure in a steam-filled, sunlit bathroom"
-            style={{ width: '100%', height: 'auto', display: 'block' }} />
+          {/* Autoplaying muted video instead of a GIF: same looping animation at ~30-56KB
+              instead of multiple MB. Rendered via dangerouslySetInnerHTML because React 18's
+              server render drops the muted attribute, which would block autoplay in the
+              prerendered HTML before hydration. */}
+          <div
+            role="img"
+            aria-label="Illustration of a rain shower head streaming hot water in a steam-filled, sunlit bathroom"
+            dangerouslySetInnerHTML={{
+              __html: '<video autoplay muted loop playsinline preload="metadata" poster="/assets/illustrations/geyser-hero-shower-2-poster.jpg" style="width:100%;height:auto;display:block"><source src="/assets/illustrations/geyser-hero-shower-2.webm" type="video/webm"><source src="/assets/illustrations/geyser-hero-shower-2.mp4" type="video/mp4"></video>'
+            }} />
         </div>
       </div>
     </section>
