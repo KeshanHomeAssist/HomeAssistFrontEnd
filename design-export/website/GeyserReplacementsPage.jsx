@@ -466,9 +466,9 @@ function GeyserReplacementsPage({ go }) {
             <div className="ha-gr-rule" style={{ width: 72, height: 4, background: 'var(--web-blue)', marginBottom: 22 }}></div>
             <p style={{ ...BODY, maxWidth: '64ch', fontSize: 17, margin: 0 }}>Nothing is gated and nothing is compulsory. Every answer is one less thing to establish on the phone, and knowing the position and the access up front is what lets us arrive with the right unit, the right brackets and the right size team — and replace on the same day.</p>
           </div>
-          <img className="ha-gr-float" src="/assets/illustrations/geyser-cylinder-burst.png"
-            alt="An electric hot water cylinder on its mounting feet, showing the element cover plate and thermostat access"
-            style={{ width: '100%', maxWidth: 240, height: 'auto', display: 'block', justifySelf: 'end' }} />
+          <img className="ha-gr-float" src="/assets/illustrations/geyser-cylinder-spec.png"
+            alt="An electric hot water cylinder on its mounting feet, showing the element cover plate, thermostat access and rating label"
+            style={{ width: '100%', maxWidth: 280, height: 'auto', display: 'block', justifySelf: 'end' }} />
         </div>
 
         <div className="ha-gr-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 340px', gap: 40, alignItems: 'start', marginTop: 32 }}>

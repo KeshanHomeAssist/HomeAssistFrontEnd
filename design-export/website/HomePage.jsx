@@ -153,8 +153,12 @@ function HomePage({ go }) {
         <div style={CARD}>
           <div style={{ ...LABEL, marginBottom: 10 }}>What a replacement includes</div>
           <p style={BODY}>A new geyser installed to SANS 10254, will include a new drip tray, vacuum breakers, a safety valve, a pressure control valve, overflow and drain pipes, and a SANS or PIRB certificate of compliance issued and logged.</p>
-          <div style={{ ...LABEL, margin: '18px 0 10px' }}>How long it takes</div>
-          <p style={{ ...BODY, margin: 0 }}>Most like-for-like replacements are completed within 3 - 5 hours normally with a single visit on the same day. High volumes of work in winter sometime means next day service</p>
+          <Button variant="secondary" fullWidth onClick={() => go('geyserReplacements')} iconLeft={<Icon name="clipboard-check" size={17} color="var(--web-navy)" />}>Build your spec</Button>
+
+          <div style={{ ...LABEL, margin: '22px 0 10px' }}>How long it takes</div>
+          <p style={BODY}>Most like-for-like replacements are completed within 3 - 5 hours, normally in a single visit on the same day. High volumes of work in winter sometimes mean next-day service.</p>
+          <p style={BODY}>Before any of that, the first step costs you nothing: we check whether your existing geyser is still under manufacturer warranty. If it is, the replacement may cost you nothing either.</p>
+          <Button variant="navy" fullWidth onClick={() => go('geyserReplacements')} iconLeft={<Icon name="camera" size={17} color="#fff" />}>Check my warranty first</Button>
         </div>
         <div style={{ ...CARD, background: 'var(--web-blue-050)', border: '1px solid var(--web-blue-100)' }}>
           <div style={{ ...LABEL, marginBottom: 10 }}>What it costs</div>
@@ -163,8 +167,6 @@ function HomePage({ go }) {
           </CostReveal>
           <div style={{ marginTop: 16 }}>
             <img src="../../assets/illustrations/geyser-cylinder-burst.png" alt="An electric hot water cylinder on its mounting feet, showing the element cover plate and thermostat access" style={{ width: '100%', height: 'auto', display: 'block' }} />
-            <Button variant="secondary" fullWidth onClick={() => go('geyserReplacements')} iconLeft={<Icon name="clipboard-check" size={17} color="var(--web-navy)" />}>Build your spec</Button>
-            <Button variant="ghost" fullWidth onClick={() => go('geyserReplacements')} style={{ marginTop: 8 }} iconLeft={<Icon name="camera" size={17} color="var(--web-navy)" />}>Check my warranty</Button>
           </div>
         </div>
       </div>
