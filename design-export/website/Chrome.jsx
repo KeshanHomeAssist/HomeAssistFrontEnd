@@ -101,6 +101,7 @@ const NAV = [
        where there is no hover and the parent has to be the toggle. */
     children: [
       { id: 'home', label: 'Home page', route: '/' },
+      { id: 'geyserReplacements', label: 'Geyser replacements', route: '/geyser-replacements' },
       { id: 'leakDetection', label: 'Leak detection', route: '/leak-detection' }
     ]
   },

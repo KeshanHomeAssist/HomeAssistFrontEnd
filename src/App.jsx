@@ -15,6 +15,7 @@ import { InsurersPage } from './site/InsurersPage.jsx';
 import { PropertyManagersPage } from './site/PropertyManagersPage.jsx';
 import { ManagingAgentsPage } from './site/ManagingAgentsPage.jsx';
 import { LeakDetectionPage } from './site/LeakDetectionPage.jsx';
+import { GeyserReplacementsPage } from './site/GeyserReplacementsPage.jsx';
 import { JoinPage } from './site/JoinPage.jsx';
 import { PortalPage } from './site/PortalPage.jsx';
 import { AboutPage } from './site/AboutPage.jsx';
@@ -38,6 +39,7 @@ export const PAGE_PATHS = {
   // comes from outbound links so the Access log tells you which one converted.
   propertyManagers: '/property-managers',
   managingAgents: '/managing-agents',
+  geyserReplacements: '/geyser-replacements',
   leakDetection: '/leak-detection',
   join: '/join',
   portal: '/portal',
@@ -252,6 +254,7 @@ export default function App() {
         {/* Gated pair — see the note beside the imports above. */}
         <Route path="/property-managers" element={<PropertyManagersPage go={go} />} />
         <Route path="/managing-agents" element={<ManagingAgentsPage go={go} />} />
+        <Route path="/geyser-replacements" element={<GeyserReplacementsPage go={go} />} />
         <Route path="/leak-detection" element={<LeakDetectionPage go={go} />} />
         <Route path="/join" element={<JoinPage go={go} />} />
         <Route path="/portal" element={<PortalPage go={go} />} />

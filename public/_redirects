@@ -74,10 +74,10 @@
 /customer-tech                                              /  301
 /services/                                                  /  301
 /services                                                   /  301
-/geysers/                                                   /  301
-/geysers                                                    /  301
-/geyser-replacement/                                        /  301
-/geyser-replacement                                         /  301
+/geysers/                                                   /geyser-replacements  301
+/geysers                                                    /geyser-replacements  301
+/geyser-replacement/                                        /geyser-replacements  301
+/geyser-replacement                                         /geyser-replacements  301
 /burst-pipe-repair/                                         /  301
 /burst-pipe-repair                                          /  301
 /emergency-plumbing-work/                                   /  301
@@ -94,8 +94,8 @@
 /broker-technology-page                                     /  301
 /insurance-partners/                                        /  301
 /insurance-partners                                         /  301
-/geyser-manufacturing-partners/                             /  301
-/geyser-manufacturing-partners                              /  301
+/geyser-manufacturing-partners/                             /geyser-replacements  301
+/geyser-manufacturing-partners                              /geyser-replacements  301
 /plumber-home/                                              /join  301
 /plumber-home                                               /join  301
 /plumber-get-started/                                       /join  301

@@ -169,27 +169,31 @@ function HomePage({ go }) {
         </div>
       </div>
 
-      {/* Warranty differentiator */}
-      <div style={{ marginTop: 32, background: '#fff', border: '1px solid var(--web-grey-100)', borderLeft: '3px solid var(--web-blue)', borderRadius: 4, padding: '28px 32px', display: 'grid', gridTemplateColumns: '1fr 300px', gap: 32, alignItems: 'center', boxShadow: 'var(--web-shadow-card)' }}>
+      {/* The warranty check lives on /geyser-replacements now.
+
+         It was the loudest block in this section and it was competing with the
+         geyser page for the same search intent while the detail — what the plate
+         looks like, which fields matter, the fallback for people who will not use
+         WhatsApp — had nowhere to go on a home page. It is the first interactive
+         block on the service page instead, and this is the pointer to it. Any old
+         link to the home page anchor is redirected in public/_redirects. */}
+      <div style={{ marginTop: 32, background: '#fff', border: '1px solid var(--web-grey-100)', borderLeft: '3px solid var(--web-blue)', borderRadius: 4, padding: '26px 30px', display: 'grid', gridTemplateColumns: '1fr 220px', gap: 28, alignItems: 'center', boxShadow: 'var(--web-shadow-card)' }}>
         <div>
           <div style={{ ...LABEL, marginBottom: 10 }}>Before you replace anything</div>
           <h3 style={{ ...H2, fontSize: 21 }}>Is your geyser still under warranty?</h3>
-          <p style={{ ...BODY, maxWidth: '64ch' }}>We check the manufacturer warranty on the existing unit before we quote a replacement. A geyser still under warranty may be repaired or replaced by the manufacturer at no cost to you. Send us a photograph of the serial number plate and we will decode it and tell you.</p>
-          <p style={{ ...BODY }}>If you are claiming, or your insurer has settled in cash and asked you to appoint your own plumber, we can verify the quote and the work.</p>
-          <Button as="a" variant="navy" size="lg" href={wa('Hi Home Assist, here is a photo of my geyser serial plate. Is it still under warranty?')} target="_blank" rel="noopener" iconLeft={<Icon name="camera" size={18} color="#fff" />}>Send us the serial plate</Button>
+          <p style={{ ...BODY, maxWidth: '64ch' }}>Most geysers carry a five-year manufacturer warranty. If yours is still covered, the replacement may cost you nothing. We decode the plate on the side of your cylinder and check it for you at no charge.</p>
+          <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
+            <Button variant="navy" size="lg" onClick={() => go('geyserReplacements')} iconLeft={<Icon name="camera" size={18} color="#fff" />}>Check my geyser warranty</Button>
+            <Button variant="secondary" size="lg" onClick={() => go('geyserReplacements')}>Build a replacement spec</Button>
+          </div>
         </div>
-        <div>
-          <div style={{ position: 'relative', borderRadius: 4, overflow: 'hidden', border: '1px solid var(--web-grey-100)', background: 'var(--web-navy-900)' }}>
-            <img src="../../assets/illustrations/serial-plate-electrolux.jpg" alt="Geyser serial number plate showing model and date code" style={{ display: 'block', width: '100%', height: 168, objectFit: 'cover' }} />
-            <div className="ha-scan"></div>
-            <div style={{ position: 'absolute', left: 10, bottom: 8, ...LABEL, fontSize: 10, color: '#fff', background: 'rgba(11,29,58,.72)', padding: '3px 6px', borderRadius: 2 }}>Decoding serial</div>
-          </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginTop: 12 }}>
-            <img src="../../assets/illustrations/geyser-kwikot.png" alt="Replacement geyser" style={{ width: 108, height: 'auto', display: 'block' }} />
-            <p style={{ ...SMALL, margin: 0 }}>Photograph the plate on the unit and send it to WhatsApp {CH.waHome}.</p>
-          </div>
+        <div style={{ position: 'relative', borderRadius: 4, overflow: 'hidden', border: '1px solid var(--web-grey-100)', background: 'var(--web-navy-900)' }}>
+          <img src="../../assets/illustrations/serial-plate-electrolux.jpg" alt="Geyser serial number plate showing model and date code" style={{ display: 'block', width: '100%', height: 132, objectFit: 'cover' }} />
+          <div className="ha-scan"></div>
+          <div style={{ position: 'absolute', left: 10, bottom: 8, ...LABEL, fontSize: 10, color: '#fff', background: 'rgba(11,29,58,.72)', padding: '3px 6px', borderRadius: 2 }}>Decoding serial</div>
         </div>
       </div>
+
     </Section>
 
     {/* Leaks */}

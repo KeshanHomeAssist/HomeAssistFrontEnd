@@ -42,6 +42,7 @@ const PAGE_EXPORTS = {
   'PropertyManagersPage.jsx': ['PropertyManagersPage'],
   'ManagingAgentsPage.jsx': ['ManagingAgentsPage'],
   'LeakDetectionPage.jsx': ['LeakDetectionPage'],
+  'GeyserReplacementsPage.jsx': ['GeyserReplacementsPage'],
   'JoinPage.jsx': ['JoinPage'],
   'PortalPage.jsx': ['PortalPage'],
   'AboutPage.jsx': ['AboutPage'],

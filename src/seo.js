@@ -154,6 +154,53 @@ export const ROUTES = {
     ],
   },
   ...(INCLUDE_GATED_PROPERTY_PAGES ? GATED_PROPERTY_ROUTES : {}),
+  '/geyser-replacements': {
+    title: 'Geyser Replacement South Africa | Home Assist',
+    description:
+      'Burst or failed geyser? Build your replacement spec in six questions. Free warranty check on your existing unit, and a certificate of compliance on every job.',
+    schema: [
+      organization,
+      {
+        '@type': 'Service',
+        name: 'Geyser replacement and installation',
+        provider: { '@id': `${SITE_URL}/#organization` },
+        areaServed: { '@type': 'Country', name: 'South Africa' },
+        serviceType:
+          'Electric, solar, heat pump and gas geyser replacement, installation and certificate of compliance',
+      },
+      {
+        '@type': 'FAQPage',
+        '@id': `${SITE_URL}/geyser-replacements#faq`,
+        mainEntity: [
+          {
+            '@type': 'Question',
+            name: 'How long does a geyser replacement take?',
+            acceptedAnswer: { '@type': 'Answer', text: 'A standard replacement is normally done in one visit of about three to four hours, and can often be done the same day. What turns one visit into two is arriving without the right cylinder or without access, so establishing the system type, the position and the access up front is what makes same-day replacement possible.' },
+          },
+          {
+            '@type': 'Question',
+            name: 'Is my geyser still under warranty?',
+            acceptedAnswer: { '@type': 'Answer', text: 'Most geysers carry a five-year manufacturer warranty, and a unit still inside it may be repaired or replaced by the manufacturer at no cost. Send Home Assist a photograph of the plate on the side of the cylinder and we decode the manufacturer and date code and tell you, at no charge.' },
+          },
+          {
+            '@type': 'Question',
+            name: 'What is a certificate of compliance and do I need one for a geyser?',
+            acceptedAnswer: { '@type': 'Answer', text: 'It is the document a registered plumber issues on completion, confirming the installation meets the national standard. Your insurer can ask for it when you claim, and without one you have no evidence the work was done properly. Home Assist issues and logs a PIRB certificate of compliance on every geyser installation.' },
+          },
+          {
+            '@type': 'Question',
+            name: 'What size geyser do I need?',
+            acceptedAnswer: { '@type': 'Answer', text: 'The standard allowance is roughly 35 to 50 litres of hot water per person, though household habits matter more than the arithmetic. If everyone showers at the same time, size up. Around 70% of the South African market runs a 150 litre cylinder.' },
+          },
+          {
+            '@type': 'Question',
+            name: 'Why does the warranty matter more than the price of the geyser?',
+            acceptedAnswer: { '@type': 'Answer', text: 'A five-year warranty is only worth what the manufacturer will honour. The most common reason a geyser warranty is voided is that the original installer did not install the cylinder to the manufacturer\'s diagram and to the national standard, so the homeowner buys a second geyser before the first one\'s warranty has expired.' },
+          },
+        ],
+      },
+    ],
+  },
   '/leak-detection': {
     title: 'Leak Detection in South Africa | Home Assist',
     description:

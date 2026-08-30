@@ -78,3 +78,47 @@ a:hover {
   outline: 2px solid var(--web-blue);
   outline-offset: 2px;
 }
+
+/* ---------------------------------------------------------------------------
+   Geyser replacements configurator.
+
+   The running specification is a sticky right-hand column on a desktop. On a
+   phone the responsive layer collapses every grid to one column, which would
+   drop the panel below all six questions where nobody would ever see it update.
+   So on small screens it moves above the questions instead and stops being
+   sticky.
+
+   NOT BUILT: the brief asks for a collapsed sticky bar pinned to the bottom of
+   the viewport on mobile, expanding to the full breakdown on tap. That is a
+   better answer than this one and it is still outstanding, along with the rest
+   of the mobile design work noted in docs.
+   --------------------------------------------------------------------------- */
+@media (max-width: 1000px) {
+  #root .ha-gr-panel {
+    position: static !important;
+    order: -1;
+  }
+}
+
+/* Grid blowout. A grid item defaults to `min-width: auto`, which means it
+   refuses to shrink below its widest unbreakable content — so one long label in
+   one card pushed the whole document 121px wider than a 390px screen, and the
+   page scrolled sideways. Measured, not guessed. Scoped to this page because
+   the rest of the site has not been checked for what min-width: 0 would do to
+   it. */
+#root .ha-gr [style*="grid-template-columns"] > * {
+  min-width: 0;
+}
+
+/* The design-system Button renders with inline styles and no class, so the
+   `#root a[class]` rule in responsive.css never matched a Button used as a
+   link, and a long CTA label could not wrap. */
+@media (max-width: 720px) {
+  #root .ha-gr a,
+  #root .ha-gr button {
+    max-width: 100%;
+    white-space: normal !important;
+    height: auto !important;
+    min-height: var(--web-tap-min);
+  }
+}
