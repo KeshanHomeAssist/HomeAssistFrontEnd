@@ -368,8 +368,8 @@ function GeyserReplacementsPage({ go }) {
           <p style={{ ...SMALL, color: 'rgba(255,255,255,.75)', marginTop: 14 }}>Not replacing yet? <a href="#warranty" style={{ color: '#fff', fontWeight: 600 }}>Check whether your geyser is still under warranty</a> — free, and it may mean you do not need to buy anything.</p>
         </div>
         <div style={{ border: '1px solid rgba(255,255,255,.22)', borderRadius: 4, overflow: 'hidden', lineHeight: 0 }}>
-          <img src="/assets/illustrations/geyser-hero-3-shower.jpg"
-            alt="A rain shower head running at strong, even pressure in a sunlit bathroom"
+          <img src="/assets/illustrations/geyser-hero-shower.gif"
+            alt="A rain shower head running at strong, even pressure in a steam-filled, sunlit bathroom"
             style={{ width: '100%', height: 'auto', display: 'block' }} />
         </div>
       </div>
