@@ -23,6 +23,12 @@ deploy/.env.deploy
 # in the Claude Design export, which is the source of truth for artwork.
 design-export/asset-library/
 
+# Build tarballs. Cloud sessions cannot build inside the iCloud-synced folder
+# (vite cannot clear dist/), so the source is packed to ha-src.tgz, staged, and
+# built in the container instead. The archive is a transient artefact and one
+# was committed by accident on 30 August 2026 at 5.8MB.
+*.tgz
+
 # Vite writes a temporary compiled config beside vite.config.js while it builds
 # and normally removes it. A build interrupted part-way leaves one behind, and
 # one was committed on 30 August 2026 before this rule existed.
