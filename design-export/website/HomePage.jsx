@@ -146,7 +146,7 @@ function HomePage({ go }) {
               the list as the sixth thing to read. It is the action the whole
               section exists to produce, so it is a button. */}
           <div style={{ marginTop: 16 }}>
-            <Button as="a" variant="navy" fullWidth size="lg" href={wa('Hi Home Assist, my geyser has burst. ')} target="_blank" rel="noopener" iconLeft={<Icon name="message-circle" size={18} color="#fff" />}>Message us on WhatsApp</Button>
+            <Button as="a" variant="navy" size="lg" href={wa('Hi Home Assist, my geyser has burst. ')} target="_blank" rel="noopener" iconLeft={<Icon name="message-circle" size={18} color="#fff" />}>Message us on WhatsApp</Button>
             <p style={{ ...SMALL, marginTop: 8, textAlign: 'center' }}>Or call <a href={'tel:' + CH.phoneTel} style={{ fontWeight: 600 }}>{CH.phone}</a> — answered 24 hours a day.</p>
           </div>
         </div>

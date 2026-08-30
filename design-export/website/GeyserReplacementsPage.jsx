@@ -452,9 +452,9 @@ function GeyserReplacementsPage({ go }) {
           </div>
           <p style={{ ...SMALL, color: 'rgba(255,255,255,.75)', marginTop: 14 }}>Not replacing yet? <a href="#warranty" style={{ color: '#fff', fontWeight: 600 }}>Check whether your geyser is still under warranty</a> — free, and it may mean you do not need to buy anything.</p>
         </div>
-        <div style={{ border: '1px solid rgba(255,255,255,.22)', borderRadius: 4, padding: 28, display: 'flex', gap: 24, alignItems: 'center' }}>
-          <img src="/assets/illustrations/geyser-cylinder-render.png" alt="An electric hot water cylinder, showing the element cover, thermostat access and mounting feet" style={{ width: 168, height: 'auto', display: 'block', flex: '0 0 auto' }} />
-          <div>
+        <div style={{ border: '1px solid rgba(255,255,255,.22)', borderRadius: 4, padding: 28, display: 'flex', gap: 24, alignItems: 'center', flexWrap: 'wrap' }}>
+          <img src="/assets/illustrations/geyser-cylinder-render.png" alt="An electric hot water cylinder, showing the element cover, thermostat access and mounting feet" style={{ width: 168, maxWidth: '100%', height: 'auto', display: 'block', flex: '0 1 auto' }} />
+          <div style={{ minWidth: 0, flex: '1 1 180px' }}>
             <div style={{ ...LABEL, color: 'var(--web-blue-300)', marginBottom: 10 }}>Every installation includes</div>
             {['Pressure control valve', 'Vacuum breakers, hot and cold', 'Drip tray and piped overflow', 'Isolator within one metre', 'Certificate of compliance'].map(function (t) {
               return <div key={t} style={{ display: 'flex', gap: 8, alignItems: 'center', marginBottom: 7 }}>

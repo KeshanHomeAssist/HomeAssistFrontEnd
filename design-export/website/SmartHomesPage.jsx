@@ -91,7 +91,7 @@ const SH_DEVICES = [
     notThis: 'It fits electric and thermosyphon solar thermal geysers — not pumped solar thermal, and not gas. It wants Wi-Fi within 10 metres, though it carries a backup connection so losing the house Wi-Fi does not leave it stranded.',
     range: 'The HotBot is the geyser device. Plentify makes other devices in the same family, and some of those do involve photovoltaic work.',
     price: 'R849 to R950 for the hardware, indicative. Plentify also sells it as R849 once for activation and installation.',
-    monthly: 'R149 per month on Plentify\u2019s subscription, R99 per month for additional units. 60-day free trial.',
+    monthly: 'R149 per month on Plentify’s subscription, R99 per month for additional units. 60-day free trial.',
     fitting: 'A plumber only, because it sits at the cylinder. If a model in the range needs photovoltaic work, that step needs a PV installer electrician as well.',
     logo: '/assets/illustrations/logo-plentify-white.png',
     href: 'https://plentify.io/non-solar-households/'
@@ -143,15 +143,15 @@ const SH_TABLE = [
 
 const SH_FAQ = [
   ['Which one should I actually buy?',
-   'It depends what you are trying to fix. If the bill is the problem and you have roof space, the Elon takes the water heating off the grid and is the biggest single change of the three. If you want the geyser to stop heating water nobody is going to use, and you want to see what it is doing, the HotBot is the one built for that. If you want the cheapest useful thing that will still work when the Wi-Fi is down, the distribution board breaker does that and nothing else. They are not three versions of the same product and it is worth being clear which problem you are solving.'],
+   'It depends what you are trying to fix. If the bill is the problem and you have roof space, the Elon takes the water heating off the grid and is the biggest single change of the three. If you want the geyser to stop heating water nobody is going to use, and you want to see what it is doing, the HotBot is the one built for that. If you want the simplest and cheapest useful thing, and no plumbing work at all, the distribution board unit does that. They are not three versions of the same product and it is worth being clear which problem you are solving.'],
   ['Can I have more than one?',
    'Yes, and the combination people ask for most is a PV supply plus a schedule — the Elon deciding where the energy comes from and a controller deciding when the element runs. Tell us what you already have and we will say plainly whether adding the second one is worth it on your setup.'],
-  ['Does a control device have to be at the geyser?',
-   'The devices that read cylinder temperature do, because that is where the sensor has to sit. The electrical point must be within one metre of the cylinder, and a dedicated breaker on the distribution board must isolate the geyser completely. A supply-side controller like the distribution board breaker sits at the board instead, which is why it is reachable when something goes wrong.'],
+  ['Who has to install it, and will I need a certificate of compliance?',
+   'The two devices that sit at the cylinder are plumbing work, provided the geyser already has an isolator — a plumber, no electrician, and no certificate of compliance charge. The distribution board unit is electrical work and needs an electrician. Wherever an electrician is involved, expect a certificate of compliance to be charged for, because anyone who touches your board has to issue one. Connecting photovoltaic panels is a third trade again: a PV installer electrician, certified through the PV Green Card scheme, which Home Assist can arrange for you.'],
   ['Will this void my geyser warranty?',
    'Not if it is installed to the manufacturer’s specification by a registered plumber and, where electrical work is involved, a qualified electrician. Work that is not is exactly how warranties get voided — which is the same argument we make about the installation itself on the geyser replacements page.'],
   ['Do the savings figures hold up?',
-   'They are the manufacturers’ own published figures and we have quoted them as such rather than as our own. Both depend heavily on your tariff, your household’s hot water habits and, for the Elon, on your roof and your panel array. Treat them as the best case that a well-matched installation reaches, not as a number to budget against.'],
+   'They are the manufacturers’ own published figures and we have quoted them as such rather than as our own. Every one of them depends on what you pay for electricity, whether you already have solar PV, whether the geyser is on a schedule at all, and whether the household changes how it showers. Our own worked example is two people on a 150 litre cylinder with a simple twice-daily scheduler, saving in the region of R300 a month at September 2026 tariffs. Treat a published figure as the best case a well-matched installation reaches, not as a number to budget against.'],
   ['Can you fit one to a geyser you did not install?',
    'Yes. We will check the existing installation first, because fitting a controller to a cylinder that has no working pressure control or no vacuum breakers is putting a schedule on a problem rather than fixing it.']
 ];
@@ -262,7 +262,12 @@ function SmartHomesPage({ go }) {
           </div>;
         })}
       </div>
-      <p style={{ ...SMALL, marginTop: 16, maxWidth: '80ch' }}>Savings figures on this page are the manufacturers&rsquo; own published claims and are labelled as such. What any of them saves in your house depends on your tariff, your household&rsquo;s hot water habits and, for the Elon, on your roof and panel array.</p>
+      <div style={{ ...CARD, marginTop: 20, background: 'var(--web-grey-050)' }}>
+        <div style={{ ...LABEL, marginBottom: 10 }}>Before you compare the prices</div>
+        <p style={{ ...BODY, fontSize: 14 }}>Hardware prices above are <strong>indicative ranges for the unit only</strong>, and they move with stock and with the exchange rate. Installation is quoted separately once we know what your board and your cylinder look like.</p>
+        <p style={{ ...BODY, fontSize: 14 }}><strong>Where an electrician is required, expect a certificate of compliance to be charged for as well.</strong> That is not us adding a line — an electrician who touches your distribution board has to issue one, and it is the document that protects you afterwards. A device fitted by a plumber alone, at a cylinder that already has an isolator, does not attract that cost.</p>
+        <p style={{ ...BODY, fontSize: 14, margin: 0 }}>Savings figures are the manufacturers&rsquo; own published claims and are labelled as such. What any of them saves in your house depends on your tariff, your household&rsquo;s habits and, for the Elon, on your roof and panel array.</p>
+      </div>
     </Section>
 
     {/* Comparison */}
@@ -294,19 +299,66 @@ function SmartHomesPage({ go }) {
       <p style={{ ...SMALL, marginTop: 14, maxWidth: '76ch' }}>Elon 100 and HotBot rows are from the manufacturers&rsquo; published product information, read in August 2026. Distribution board breaker rows are held until the specification is confirmed rather than filled in with a guess.</p>
     </Section>
 
-    {/* Compliance */}
-    <Section tint eyebrow="Installation" title="Where a control device is allowed to sit">
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20 }}>
+    {/* Running cost — moved here from /geyser-replacements on 30 August 2026.
+        It belongs on the page that sells the answer to it, and the honest
+        version of this section is mostly caveats, which is why it did not
+        belong in the middle of a configurator.
+
+        The worked example is Keshan's, September 2026: two people, a 150 litre
+        cylinder, a simple scheduler running an hour in the morning and an hour
+        in the evening, saving in the region of R300 a month. It is stated as
+        one worked example rather than as a range every household will hit,
+        because the four variables beside it genuinely decide the answer. */}
+    <Section eyebrow="Running cost" title="What it actually saves, and what that depends on"
+      intro="Anybody who quotes you a single savings figure without asking these four questions is guessing. Here is the honest version.">
+
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 16 }}>
+        {[
+          ['zap', 'What you pay for electricity', 'The same saving is worth far more in a municipality at R4.50 a unit than at R2.50. This is the biggest single variable and it is the one nobody in this conversation controls.'],
+          ['sun', 'Whether you have solar PV', 'A house already generating its own power in the middle of the day is solving a different problem, and a scheduler that heats at noon may save very little on top of it.'],
+          ['clock', 'Whether it is on a schedule', 'An uncontrolled cylinder reheats whenever it cools, all day and all night. Almost all of the saving on this page comes from stopping that.'],
+          ['users', 'Whether the household changes anything', 'Shorter showers, staggered showers, a lower thermostat setting. The device makes the change easy. It does not make it for you.']
+        ].map(function (row) {
+          return <div key={row[1]} style={CARD}>
+            <Icon name={row[0]} size={20} color="var(--web-blue)" />
+            <div style={{ ...LABEL, margin: '12px 0 8px' }}>{row[1]}</div>
+            <p style={{ ...BODY, margin: 0, fontSize: 14 }}>{row[2]}</p>
+          </div>;
+        })}
+      </div>
+
+      <div style={{ ...CARD, marginTop: 20, background: 'var(--web-blue-050)', border: '1px solid var(--web-blue-100)' }}>
+        <div style={{ ...LABEL, marginBottom: 10 }}>One worked example</div>
+        <p style={{ ...BODY, fontSize: 16, maxWidth: '70ch' }}>Two people, a 150 litre cylinder, and a simple scheduler set to come on for an hour in the morning and an hour in the evening. At September 2026 tariffs that saves in the region of <strong>R300 a month</strong>.</p>
+        <p style={{ ...BODY, fontSize: 15, maxWidth: '70ch', margin: 0 }}>Change any one of the four things above and that number moves. A larger household saves more in rand and less in percentage. A house with solar PV may save very little on top of what it already generates. A household that does not change how it showers gets the scheduling saving and not the rest. We would rather tell you that than quote a range you will not reach.</p>
+      </div>
+
+      <p style={{ ...SMALL, marginTop: 14, maxWidth: '76ch' }}>Tell us your household size, your cylinder and roughly what you pay for a unit of electricity, and we will work through your own numbers with you rather than repeat this one.</p>
+    </Section>
+
+    {/* Installation and compliance */}
+    <Section tint eyebrow="Installation" title="Who is allowed to fit it, and what that costs">
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 20 }}>
         <div style={CARD}>
-          <div style={{ ...LABEL, marginBottom: 10 }}>At the cylinder</div>
-          <p style={BODY}>A device that reads the water temperature has to be at the geyser, because that is where the sensor sits. The electrical point must be within one metre of the cylinder.</p>
-          <p style={{ ...BODY, margin: 0 }}>A dedicated breaker on the distribution board must isolate the geyser completely, whatever else is fitted.</p>
+          <div style={{ ...LABEL, marginBottom: 10 }}>A plumber only</div>
+          <p style={{ ...BODY, fontSize: 14 }}>Both of the devices that sit at the cylinder are plumbing work, provided your geyser already has an isolator. No electrician, and no certificate of compliance charge.</p>
+          <p style={{ ...BODY, fontSize: 14, margin: 0 }}>The electrical point has to be within one metre of the cylinder, and a dedicated breaker on the board has to isolate the geyser completely — which a compliant installation already has.</p>
+        </div>
+        <div style={CARD}>
+          <div style={{ ...LABEL, marginBottom: 10 }}>An electrician</div>
+          <p style={{ ...BODY, fontSize: 14 }}>The distribution board unit is electrical work, so an electrician fits it. Anything that touches your board is.</p>
+          <p style={{ ...BODY, fontSize: 14, margin: 0 }}>Where an electrician is involved, expect a <strong>certificate of compliance to be charged for</strong>. It is a real document with a real cost, and it is what protects you if something goes wrong later.</p>
         </div>
         <div style={{ ...CARD, background: 'var(--web-blue-050)', border: '1px solid var(--web-blue-100)' }}>
-          <div style={{ ...LABEL, marginBottom: 10 }}>We check the geyser first</div>
-          <p style={BODY}>Before we fit any of these we look at the installation it is going onto. A schedule on a cylinder with no working pressure control or no vacuum breakers is a schedule on a problem.</p>
-          <p style={{ ...BODY, margin: 0 }}>If something is missing we will tell you what it is and what it costs to put right, separately from the device you came for.</p>
+          <div style={{ ...LABEL, marginBottom: 10 }}>Adding solar panels</div>
+          <p style={{ ...BODY, fontSize: 14 }}>Connecting photovoltaic panels is its own trade. It needs a PV installer electrician, and that work is certified through the PV Green Card scheme.</p>
+          <p style={{ ...BODY, fontSize: 14 }}>Home Assist can arrange that step rather than leaving you to find somebody.</p>
+          <p style={{ ...BODY, fontSize: 14, margin: 0 }}><a href="https://pvgreencard.co.za/app/directory/" target="_blank" rel="noopener noreferrer" style={{ fontWeight: 600 }}>PV Green Card installer directory</a></p>
         </div>
+      </div>
+      <div style={{ ...CARD, marginTop: 20 }}>
+        <div style={{ ...LABEL, marginBottom: 10 }}>We check the geyser first</div>
+        <p style={{ ...BODY, margin: 0, maxWidth: '76ch' }}>Before we fit any of these we look at the installation it is going onto. A schedule on a cylinder with no working pressure control or no vacuum breakers is a schedule on a problem. If something is missing we tell you what it is and what it costs to put right, separately from the device you came for.</p>
       </div>
     </Section>
 
