@@ -136,12 +136,19 @@ function HomePage({ go }) {
         <div style={CARD}>
           <div style={{ ...LABEL, marginBottom: 10 }}>What to do first</div>
           <ol style={{ margin: 0, padding: 0, listStyle: 'none' }}>
-            {['Close the main water supply at the meter.', 'Switch the geyser off at the distribution board.', 'Open a hot tap to relieve the pressure.', 'Move what you can out of the way of the water.', 'Take photographs before anything is moved.', 'Message Home Assist on WhatsApp.'].map((s, i) =>
+            {['Close the main water supply at the meter.', 'Switch the geyser off at the distribution board.', 'Open a hot tap to relieve the pressure.', 'Move what you can out of the way of the water.', 'Take photographs before anything is moved.'].map((s, i) =>
               <li key={s} style={{ display: 'flex', gap: 14, padding: '10px 0', borderBottom: '1px solid var(--web-grey-100)' }}>
                 <span style={{ ...LABEL, color: 'var(--web-blue)', width: 22 }}>{String(i + 1).padStart(2, '0')}</span>
                 <span style={{ ...BODY, margin: 0 }}>{s}</span>
               </li>)}
           </ol>
+          {/* Step six used to be "Message Home Assist on WhatsApp", sitting in
+              the list as the sixth thing to read. It is the action the whole
+              section exists to produce, so it is a button. */}
+          <div style={{ marginTop: 16 }}>
+            <Button as="a" variant="navy" fullWidth size="lg" href={wa('Hi Home Assist, my geyser has burst. ')} target="_blank" rel="noopener" iconLeft={<Icon name="message-circle" size={18} color="#fff" />}>Message us on WhatsApp</Button>
+            <p style={{ ...SMALL, marginTop: 8, textAlign: 'center' }}>Or call <a href={'tel:' + CH.phoneTel} style={{ fontWeight: 600 }}>{CH.phone}</a> — answered 24 hours a day.</p>
+          </div>
         </div>
         <div style={CARD}>
           <div style={{ ...LABEL, marginBottom: 10 }}>What a replacement includes</div>
@@ -169,28 +176,20 @@ function HomePage({ go }) {
         </div>
       </div>
 
-      {/* The warranty check lives on /geyser-replacements now.
-
-         It was the loudest block in this section and it was competing with the
-         geyser page for the same search intent while the detail — what the plate
-         looks like, which fields matter, the fallback for people who will not use
-         WhatsApp — had nowhere to go on a home page. It is the first interactive
-         block on the service page instead, and this is the pointer to it. Any old
-         link to the home page anchor is redirected in public/_redirects. */}
-      <div style={{ marginTop: 32, background: '#fff', border: '1px solid var(--web-grey-100)', borderLeft: '3px solid var(--web-blue)', borderRadius: 4, padding: '26px 30px', display: 'grid', gridTemplateColumns: '1fr 220px', gap: 28, alignItems: 'center', boxShadow: 'var(--web-shadow-card)' }}>
+      {/* The warranty and serial-plate check is gone from this page entirely —
+          it is the first interactive block on /geyser-replacements, where the
+          annotated plate photograph, the field list and the non-WhatsApp
+          fallback all have room. What belongs here is the route to it. */}
+      <div style={{ marginTop: 32, background: '#fff', border: '1px solid var(--web-grey-100)', borderLeft: '3px solid var(--web-blue)', borderRadius: 4, padding: '26px 30px', display: 'grid', gridTemplateColumns: '200px 1fr', gap: 32, alignItems: 'center', boxShadow: 'var(--web-shadow-card)' }}>
+        <img src="../../assets/illustrations/geyser-cylinder-burst.png" alt="An electric hot water cylinder on its mounting feet, showing the element cover, thermostat access and rating label" style={{ width: '100%', height: 'auto', display: 'block' }} />
         <div>
-          <div style={{ ...LABEL, marginBottom: 10 }}>Before you replace anything</div>
-          <h3 style={{ ...H2, fontSize: 21 }}>Is your geyser still under warranty?</h3>
-          <p style={{ ...BODY, maxWidth: '64ch' }}>Most geysers carry a five-year manufacturer warranty. If yours is still covered, the replacement may cost you nothing. We decode the plate on the side of your cylinder and check it for you at no charge.</p>
+          <div style={{ ...LABEL, marginBottom: 10 }}>Replacing it</div>
+          <h3 style={{ ...H2, fontSize: 21 }}>Build your replacement specification in five questions</h3>
+          <p style={{ ...BODY, maxWidth: '64ch' }}>System type, position, access, capacity and brand — answered before we load the van, which is what makes a same-day replacement possible. Check whether your existing geyser is still under manufacturer warranty at the same time, at no charge.</p>
           <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
-            <Button variant="navy" size="lg" onClick={() => go('geyserReplacements')} iconLeft={<Icon name="camera" size={18} color="#fff" />}>Check my geyser warranty</Button>
-            <Button variant="secondary" size="lg" onClick={() => go('geyserReplacements')}>Build a replacement spec</Button>
+            <Button variant="navy" size="lg" onClick={() => go('geyserReplacements')} iconLeft={<Icon name="clipboard-check" size={18} color="#fff" />}>Geyser replacements</Button>
+            <Button variant="secondary" size="lg" onClick={() => go('geyserReplacements')} iconLeft={<Icon name="camera" size={18} color="var(--web-navy)" />}>Check my warranty</Button>
           </div>
-        </div>
-        <div style={{ position: 'relative', borderRadius: 4, overflow: 'hidden', border: '1px solid var(--web-grey-100)', background: 'var(--web-navy-900)' }}>
-          <img src="../../assets/illustrations/serial-plate-electrolux.jpg" alt="Geyser serial number plate showing model and date code" style={{ display: 'block', width: '100%', height: 132, objectFit: 'cover' }} />
-          <div className="ha-scan"></div>
-          <div style={{ position: 'absolute', left: 10, bottom: 8, ...LABEL, fontSize: 10, color: '#fff', background: 'rgba(11,29,58,.72)', padding: '3px 6px', borderRadius: 2 }}>Decoding serial</div>
         </div>
       </div>
 
@@ -214,7 +213,7 @@ function HomePage({ go }) {
           <div style={{ ...LABEL, marginBottom: 10 }}>How leak detection works</div>
           <p style={BODY}>Nothing gets opened first. An isolation test on the meter confirms water is being lost, then a visual inspection reads what the water is already showing. Thermal, tracer gas or acoustic equipment narrows the position — which one depends on the environment and on what the technician is trained on.</p>
           <p style={BODY}>A second confirming test pins the leak to within about a metre, normally in about an hour. Only then is anything opened: the pipe is repaired and pressure tested, and the damage the water caused is repaired after a short try-out period.</p>
-          <a href="#/leak-detection" onClick={e => { e.preventDefault(); go('leakDetection'); }} style={{ font: '600 var(--web-size-body)/1.4 var(--font-core)', color: 'var(--web-blue)', textDecoration: 'none' }}>How we find a leak, in full →</a>
+          <Button variant="secondary" size="lg" onClick={() => go('leakDetection')} iconLeft={<Icon name="search" size={18} color="var(--web-navy)" />}>How we find a leak, in full</Button>
         </div>
         <div style={{ ...CARD, background: 'var(--web-blue-050)', border: '1px solid var(--web-blue-100)' }}>
           <div style={{ ...LABEL, marginBottom: 10 }}>What it costs</div>

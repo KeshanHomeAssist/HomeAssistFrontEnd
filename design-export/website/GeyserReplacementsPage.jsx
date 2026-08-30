@@ -38,6 +38,94 @@ const { Button, Icon } = window.HomeAssistDesignSystem_cf0a2b;
 
 const GR_STORAGE_KEY = 'ha-geyser-config-v1';
 
+/* The three panels of the sizing-and-pressure graphic, split apart so each one
+   can carry a note that ties it back to the question on this page it answers.
+   As one wide image the text was baked in at a size nothing could reflow; as
+   three slides each panel gets its own headline in real HTML. */
+const GR_SLIDES = [
+  {
+    image: '/assets/illustrations/geyser-slide-1-size.jpg',
+    label: 'Capacity',
+    title: 'Size decides whether there is enough hot water',
+    body: 'Roughly 35 to 50 litres per person is the standard allowance, and around 70% of the market runs a 150 litre cylinder. Step 3 below asks how many people shower, which is the same question asked the useful way round.',
+    alt: 'Geyser size guide. A 30 litre cylinder suits one person, 50 litres one to two people, 80 litres two to three, 100 litres three to four, 150 litres four to five, and 200, 250 and 400 litre cylinders serve larger households.'
+  },
+  {
+    image: '/assets/illustrations/geyser-slide-2-pressure.jpg',
+    label: 'Pressure',
+    title: 'Pressure decides how it feels, and how long it lasts',
+    body: '100 to 200 kPa gives weak flow and cold showers. 400 to 600 kPa is the working range. Above 600 kPa shortens the life of the tank. The control valve that sets it is one of the five compliance parts above — matched to the cylinder, not to whatever was in the van.',
+    alt: 'Pressure control guide. Low pressure of 100 to 200 kPa gives weak flow and cold showers. Optimal pressure of 400 to 600 kPa gives strong comfortable flow and a longer geyser lifespan. Above 600 kPa can damage the geyser, waste water and reduce its life.'
+  },
+  {
+    image: '/assets/illustrations/geyser-slide-3-shower.jpg',
+    label: 'The result',
+    title: 'Right size, right pressure, and you stop thinking about it',
+    body: 'This is what the whole specification is for. A cylinder sized to the household, a valve matched to the cylinder, and a certificate of compliance saying so — which is also what your insurer asks for.',
+    alt: 'A rain shower head running at strong, even pressure.'
+  }
+];
+
+/* Rotating carousel. Auto-advances, and stops on hover, on keyboard focus and
+   for anyone who has asked their system to reduce motion — an image that keeps
+   moving under a reader is worse than one that never moved. Index starts at 0
+   on the server and on first paint, so the prerendered HTML and the hydrated
+   page agree. */
+function GrCarousel() {
+  const [i, setI] = React.useState(0);
+  const [paused, setPaused] = React.useState(false);
+  const count = GR_SLIDES.length;
+
+  React.useEffect(function () {
+    if (paused) return;
+    if (typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const t = setTimeout(function () { setI(function (v) { return (v + 1) % count; }); }, 6500);
+    return function () { clearTimeout(t); };
+  }, [i, paused, count]);
+
+  const go = function (next) { setI(((next % count) + count) % count); };
+  const slide = GR_SLIDES[i];
+
+  const arrow = {
+    cursor: 'pointer', background: '#fff', border: '1px solid var(--web-grey-300)', borderRadius: 4,
+    width: 44, height: 44, minHeight: 'var(--web-tap-min)', display: 'flex', alignItems: 'center', justifyContent: 'center'
+  };
+
+  return <div role="group" aria-roledescription="carousel" aria-label="Sizing and pressure"
+    onMouseEnter={function () { setPaused(true); }} onMouseLeave={function () { setPaused(false); }}
+    onFocus={function () { setPaused(true); }} onBlur={function () { setPaused(false); }}>
+
+    <div style={{ ...CARD, padding: 0, overflow: 'hidden', display: 'grid', gridTemplateColumns: '420px 1fr', alignItems: 'stretch' }}>
+      <div style={{ background: 'var(--web-grey-050)', borderRight: '1px solid var(--web-grey-100)', display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: 300 }}>
+        <img src={slide.image} alt={slide.alt} style={{ width: '100%', height: 'auto', display: 'block' }} />
+      </div>
+      <div style={{ padding: 32, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+        <div style={{ ...LABEL, color: 'var(--web-blue)', marginBottom: 10 }}>{String(i + 1).padStart(2, '0')} &middot; {slide.label}</div>
+        <h3 style={{ ...H2, fontSize: 22, marginBottom: 12, maxWidth: '24ch' }}>{slide.title}</h3>
+        <p aria-live="polite" style={{ ...BODY, maxWidth: '54ch', margin: 0 }}>{slide.body}</p>
+
+        <div style={{ display: 'flex', gap: 10, alignItems: 'center', marginTop: 24, flexWrap: 'wrap' }}>
+          <button type="button" onClick={function () { go(i - 1); }} aria-label="Previous slide" style={arrow}>
+            <Icon name="chevron-left" size={18} color="var(--web-navy)" />
+          </button>
+          <button type="button" onClick={function () { go(i + 1); }} aria-label="Next slide" style={arrow}>
+            <Icon name="chevron-right" size={18} color="var(--web-navy)" />
+          </button>
+          <div style={{ display: 'flex', gap: 8, marginLeft: 8 }}>
+            {GR_SLIDES.map(function (sl, k) {
+              return <button key={sl.label} type="button" onClick={function () { go(k); }}
+                aria-label={'Show slide ' + (k + 1) + ': ' + sl.label} aria-current={k === i}
+                style={{ cursor: 'pointer', width: 32, height: 44, minHeight: 'var(--web-tap-min)', padding: 0, background: 'none', border: 0, display: 'flex', alignItems: 'center' }}>
+                <span style={{ display: 'block', width: '100%', height: 3, background: k === i ? 'var(--web-blue)' : 'var(--web-grey-300)' }}></span>
+              </button>;
+            })}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>;
+}
+
 function grTrack(name, params) {
   if (typeof window === 'undefined') return;
   window.dataLayer = window.dataLayer || [];
@@ -218,8 +306,6 @@ function GeyserReplacementsPage({ go }) {
   const [showDiagnostic, setShowDiagnostic] = React.useState(false);
   const [sent, setSent] = React.useState(false);
   const [manualLink, setManualLink] = React.useState('');
-  const [tariff, setTariff] = React.useState(3.2);
-  const [runHousehold, setRunHousehold] = React.useState(4);
   const [ready, setReady] = React.useState(false);
 
   const capacityIndex = GR_CAPACITIES.indexOf(capacity);
@@ -334,15 +420,6 @@ function GeyserReplacementsPage({ go }) {
     } catch (e) { return ''; }
   };
 
-  /* Roughly 2 kWh a day of standing loss plus about 1.4 kWh per person, over a
-     30.4 day month. A four-person household lands near 230 kWh, which is the
-     right order of magnitude for a 150 litre cylinder and matches what people
-     actually see on a municipal bill. Scheduling saves in the region of a
-     quarter — enough to be worth doing, and not a number anybody has to defend
-     against their own statement. */
-  const monthlyCost = Math.round((2.0 + runHousehold * 1.4) * 30.4 * tariff);
-  const scheduledSaving = Math.round(monthlyCost * 0.25);
-
   const summaryPanel = <div>
     <div style={{ ...LABEL, marginBottom: 12 }}>Your specification</div>
     <GrSummaryLine label="System type" value={spec.systemType} />
@@ -363,10 +440,17 @@ function GeyserReplacementsPage({ go }) {
           <Eyebrow onDark>Geyser replacements</Eyebrow>
           <h1 style={{ ...DISPLAY, color: '#fff', maxWidth: '20ch', marginBottom: 18 }}>A compliant, safe and functional hot water system — installed and certified.</h1>
           <p style={{ ...BODY, color: 'rgba(255,255,255,.85)', fontSize: 17, maxWidth: '54ch', marginBottom: 26 }}>Home Assist only does geyser replacements that leave the home compliant. Every installation is issued with a certificate of compliance. Start with the warranty check — it is free, and it may mean you do not need to buy anything at all.</p>
+          {/* Contact first. Somebody arriving here with no hot water wants a
+              person, not a form — the configurator is the second button, not
+              the first, and the free warranty check is offered underneath. */}
           <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
-            <Button as="a" size="lg" variant="onDark" href="#warranty" iconLeft={<Icon name="camera" size={18} color="#fff" />}>Check my geyser warranty</Button>
-            <Button as="a" size="lg" variant="ghost" href="#configurator" style={{ color: '#fff', border: '1px solid rgba(255,255,255,.5)' }} iconLeft={<Icon name="clipboard-check" size={18} color="#fff" />}>Build your replacement spec</Button>
+            <Button as="a" size="lg" variant="onDark" target="_blank" rel="noopener"
+              href={wa('Hi Home Assist, I need a geyser replacement. ')}
+              iconLeft={<Icon name="message-circle" size={18} color="#fff" />}>WhatsApp us</Button>
+            <Button as="a" size="lg" variant="ghost" href={'tel:' + CH.phoneTel} style={{ color: '#fff', border: '1px solid rgba(255,255,255,.5)' }} iconLeft={<Icon name="phone" size={18} color="#fff" />}>Call {CH.phone}</Button>
+            <Button as="a" size="lg" variant="ghost" href="#configurator" style={{ color: '#fff', border: '1px solid rgba(255,255,255,.5)' }} iconLeft={<Icon name="clipboard-check" size={18} color="#fff" />}>Build your spec</Button>
           </div>
+          <p style={{ ...SMALL, color: 'rgba(255,255,255,.75)', marginTop: 14 }}>Not replacing yet? <a href="#warranty" style={{ color: '#fff', fontWeight: 600 }}>Check whether your geyser is still under warranty</a> — free, and it may mean you do not need to buy anything.</p>
         </div>
         <div style={{ border: '1px solid rgba(255,255,255,.22)', borderRadius: 4, padding: 28, display: 'flex', gap: 24, alignItems: 'center' }}>
           <img src="/assets/illustrations/geyser-cylinder-render.png" alt="An electric hot water cylinder, showing the element cover, thermostat access and mounting feet" style={{ width: 168, height: 'auto', display: 'block', flex: '0 0 auto' }} />
@@ -655,63 +739,26 @@ function GeyserReplacementsPage({ go }) {
       </div>
     </section>
 
-    {/* Sizing and pressure, as one picture */}
+    {/* Sizing and pressure, as a carousel */}
     <Section tint eyebrow="Sizing and pressure" title="How the two decisions fit together"
-      intro="Capacity decides whether there is enough hot water. Pressure decides what it feels like at the shower head, and how long the cylinder lasts. They are separate choices and both are made on the day of the install.">
-      <div style={{ ...CARD, padding: 0, overflow: 'hidden' }}>
-        <img src="/assets/illustrations/geyser-sizing-pressure-guide.jpg"
-          alt="A three-step guide. Step one, geyser size: 30 litres suits one person, 50 litres one to two people, 80 litres two to three, 100 litres three to four, 150 litres four to five, and 200, 250 and 400 litre cylinders serve larger households. Step two, pressure control: 100 to 200 kPa gives weak flow and cold showers, 400 to 600 kPa is optimal for strong flow and a longer geyser lifespan, and above 600 kPa can damage the geyser, waste water and shorten its life. Step three, the correct pressure gives a strong, consistent shower."
-          style={{ width: '100%', height: 'auto', display: 'block' }} />
-      </div>
-      <p style={{ ...SMALL, marginTop: 12 }}>Sizing is a guide, not a rule — a household that staggers its showers will be comfortable a size down, and one that showers all at once will not.</p>
+      intro="Capacity decides whether there is enough hot water. Pressure decides what it feels like at the shower head, and how long the cylinder lasts. Two separate choices, both made on the day of the install.">
+      <GrCarousel />
     </Section>
 
-    {/* Running costs */}
-    <Section eyebrow="Running cost" title="What your geyser actually costs to run"
-      intro="The geyser is typically the single largest electricity consumer in a South African home, which is the whole argument for controlling it rather than leaving it on.">
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20 }}>
-        <div style={CARD}>
-          <div style={{ ...LABEL, marginBottom: 10 }}>The arithmetic</div>
-          <p style={BODY}>Around 70% of the market runs a 150 litre cylinder with a 3 kW element — roughly 13 amps at 230 volts. A full reheat works out at approximately R20 to R30 depending on your local tariff.</p>
-          <p style={{ ...BODY, margin: 0 }}>Scheduling and correct sizing can save a household a few hundred rand a month. An oversized or badly controlled cylinder does the opposite, quietly, every day.</p>
+    {/* Running costs moved to /smart-homes on 30 August 2026. It was a large
+        two-column block in the middle of a configurator, and what it actually
+        argues for — a scheduler, a PV supply, a controller — is all on that
+        page. What stays here is the one line that gets somebody there. */}
+    <section style={{ background: 'var(--web-navy)' }}>
+      <div style={{ ...WRAP, padding: '44px 40px', display: 'flex', gap: 32, alignItems: 'center', flexWrap: 'wrap' }}>
+        <div style={{ flex: '1 1 460px' }}>
+          <Eyebrow onDark>Running cost</Eyebrow>
+          <h2 style={{ ...H2, color: '#fff', fontSize: 22, margin: 0, maxWidth: '34ch' }}>The geyser is usually the largest single item on a South African electricity bill.</h2>
+          <p style={{ ...BODY, color: 'rgba(255,255,255,.85)', maxWidth: '58ch', margin: '10px 0 0' }}>What it costs you, and what a scheduler or a solar supply actually saves, is a separate decision from which cylinder to fit.</p>
         </div>
-        <div style={{ ...CARD, background: '#fff' }}>
-          <div style={{ ...LABEL, marginBottom: 12 }}>Estimate your monthly geyser cost</div>
-          <FieldRow label="People in the household">
-            <input type="range" min="1" max="6" step="1" value={runHousehold} aria-label="People in the household"
-              onChange={function (e) { setRunHousehold(Number(e.target.value)); }}
-              style={{ width: '100%', minHeight: 'var(--web-tap-min)', accentColor: 'var(--web-blue)' }} />
-            <span style={{ ...SMALL }}>{runHousehold} {runHousehold === 1 ? 'person' : 'people'}</span>
-          </FieldRow>
-          <div style={{ height: 12 }}></div>
-          <FieldRow label="Your tariff, rand per kWh" hint="Check a recent municipal bill. Most South African households are between R2.50 and R4.50.">
-            <input type="range" min="2" max="5" step="0.1" value={tariff} aria-label="Electricity tariff in rand per kilowatt hour"
-              onChange={function (e) { setTariff(Number(e.target.value)); }}
-              style={{ width: '100%', minHeight: 'var(--web-tap-min)', accentColor: 'var(--web-blue)' }} />
-            <span style={{ ...SMALL }}>R{tariff.toFixed(2)} per kWh</span>
-          </FieldRow>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, marginTop: 18, paddingTop: 18, borderTop: '1px solid var(--web-grey-100)' }}>
-            <div>
-              <div style={{ ...LABEL, marginBottom: 6 }}>Estimated monthly</div>
-              <div style={{ font: '700 24px/1 var(--font-core)', color: 'var(--web-navy)' }}>R{monthlyCost}</div>
-            </div>
-            <div>
-              <div style={{ ...LABEL, marginBottom: 6 }}>Possible saving on a schedule</div>
-              <div style={{ font: '700 24px/1 var(--font-core)', color: 'var(--web-blue)' }}>R{scheduledSaving}</div>
-            </div>
-          </div>
-          <p style={{ ...SMALL, marginTop: 12 }}>Estimates for a 150 litre, 3 kW cylinder on typical usage, at the tariff you set. Your own municipal bill is the only accurate number, and an old or poorly insulated cylinder will run higher than this.</p>
-        </div>
+        <Button size="lg" variant="onDark" onClick={function () { go('smartHomes'); }} iconLeft={<Icon name="smartphone" size={18} color="#fff" />}>What it costs to run</Button>
       </div>
-
-      <div style={{ ...CARD, marginTop: 20, background: 'var(--web-blue-050)', border: '1px solid var(--web-blue-100)', display: 'flex', gap: 24, alignItems: 'center', flexWrap: 'wrap' }}>
-        <div style={{ flex: '1 1 380px' }}>
-          <div style={{ ...LABEL, marginBottom: 8 }}>Controlling what it costs</div>
-          <p style={{ ...BODY, margin: 0, fontSize: 15 }}>Scheduling the element, taking it off the grid with photovoltaic panels, or simply switching it at the distribution board are three different answers to the same bill. They are a separate decision from replacing the cylinder, so they live on their own page.</p>
-        </div>
-        <Button variant="navy" size="lg" onClick={function () { go('smartHomes'); }} iconLeft={<Icon name="smartphone" size={18} color="#fff" />}>Smart geyser control</Button>
-      </div>
-    </Section>
+    </section>
 
     {/* Step 5 — the specification and contact details */}
     <Section tint eyebrow="Your replacement" title="Your specification, and where to send it" id="send"
