@@ -38,108 +38,6 @@ const { Button, Icon } = window.HomeAssistDesignSystem_cf0a2b;
 
 const GR_STORAGE_KEY = 'ha-geyser-config-v1';
 
-/* The three hero slides.
-
-   These were originally one wide graphic with its headings, size chips and kPa
-   values set as pixels inside the image — which meant none of it reflowed, none
-   of it was readable on a phone and none of it was indexable. Each slide is now
-   cropped to the subject alone, at a consistent 3:2, and every word that used
-   to be baked into the artwork is real HTML underneath it.
-
-   Slide two is composed rather than cropped: the control valve render on the
-   brand's grey, because cropping the original panel to 3:2 clipped the pressure
-   list in half. */
-const GR_SLIDES = [
-  {
-    image: '/assets/illustrations/geyser-hero-1-size.jpg',
-    label: 'Capacity',
-    title: 'The right size, for the number of people who shower',
-    body: 'Roughly 35 to 50 litres of hot water per person, and around 70% of South African homes run a 150 litre cylinder. Step 3 asks how many people shower, which is the same question the useful way round.',
-    alt: 'An electric hot water cylinder on mounting feet, showing the element cover plate, thermostat access and the energy rating label.'
-  },
-  {
-    image: '/assets/illustrations/geyser-hero-2-pressure.jpg',
-    label: 'Pressure',
-    title: 'A control valve matched to the cylinder, not to the van',
-    body: '100 to 200 kPa gives weak flow and cold showers. 400 to 600 kPa is the working range. Above 600 kPa shortens the life of the tank. This one part decides how the whole installation behaves.',
-    alt: 'A brass geyser control valve assembly with an isolating lever, a pressure control cartridge and compression fittings.'
-  },
-  {
-    image: '/assets/illustrations/geyser-hero-3-shower.jpg',
-    label: 'The result',
-    title: 'Strong, consistent flow — and a certificate to prove it',
-    body: 'A cylinder sized to the household, a valve matched to the cylinder, and a certificate of compliance saying so. Which is also the document your insurer asks for.',
-    alt: 'A rain shower head running at strong, even pressure in a sunlit bathroom.'
-  }
-];
-
-/* Rotating carousel. Auto-advances, and stops on hover, on keyboard focus and
-   for anyone who has asked their system to reduce motion — an image that keeps
-   moving under a reader is worse than one that never moved. Index starts at 0
-   on the server and on first paint, so the prerendered HTML and the hydrated
-   page agree. */
-function GrCarousel() {
-  const [i, setI] = React.useState(0);
-  const [paused, setPaused] = React.useState(false);
-  const count = GR_SLIDES.length;
-
-  React.useEffect(function () {
-    if (paused) return;
-    if (typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-    const t = setTimeout(function () { setI(function (v) { return (v + 1) % count; }); }, 5200);
-    return function () { clearTimeout(t); };
-  }, [i, paused, count]);
-
-  const go = function (next) { setI(((next % count) + count) % count); };
-  const slide = GR_SLIDES[i];
-
-  const arrow = {
-    cursor: 'pointer', background: '#fff', border: '1px solid var(--web-grey-300)', borderRadius: 4,
-    width: 42, height: 42, minHeight: 'var(--web-tap-min)', flex: '0 0 auto',
-    display: 'flex', alignItems: 'center', justifyContent: 'center'
-  };
-
-  return <div role="group" aria-roledescription="carousel" aria-label="Geyser sizing, pressure and the result"
-    onFocus={function () { setPaused(true); }} onBlur={function () { setPaused(false); }}
-    style={{ background: '#fff', border: '1px solid rgba(255,255,255,.22)', borderRadius: 4, overflow: 'hidden' }}>
-
-    {/* 3 / 2 on every slide, so the card never changes height as it rotates. */}
-    <div style={{ position: 'relative', width: '100%', aspectRatio: '3 / 2', background: 'var(--web-grey-050)' }}>
-      <img src={slide.image} alt={slide.alt}
-        style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
-      <div style={{ position: 'absolute', left: 12, top: 12, ...LABEL, fontSize: 10, color: '#fff', background: 'rgba(11,29,58,.78)', padding: '4px 8px', borderRadius: 2 }}>
-        {String(i + 1).padStart(2, '0')} &middot; {slide.label}
-      </div>
-    </div>
-
-    <div style={{ padding: '20px 22px 18px' }}>
-      {/* A caption, not a section heading — it changes as the carousel turns,
-          and a heading that rewrites itself makes a mess of the document
-          outline a screen reader reads. */}
-      <div style={{ ...H3, fontSize: 17, margin: '0 0 6px' }}>{slide.title}</div>
-      <p aria-live="polite" style={{ ...BODY, fontSize: 14, margin: 0, minHeight: '4.2em' }}>{slide.body}</p>
-
-      <div style={{ display: 'flex', gap: 8, alignItems: 'center', marginTop: 14, flexWrap: 'wrap' }}>
-        <button type="button" onClick={function () { go(i - 1); }} aria-label="Previous slide" style={arrow}>
-          <Icon name="chevron-left" size={17} color="var(--web-navy)" />
-        </button>
-        <button type="button" onClick={function () { go(i + 1); }} aria-label="Next slide" style={arrow}>
-          <Icon name="chevron-right" size={17} color="var(--web-navy)" />
-        </button>
-        <div style={{ display: 'flex', gap: 6, marginLeft: 6 }}>
-          {GR_SLIDES.map(function (sl, k) {
-            return <button key={sl.label} type="button" onClick={function () { go(k); }}
-              aria-label={'Show slide ' + (k + 1) + ': ' + sl.label} aria-current={k === i}
-              style={{ cursor: 'pointer', width: 28, height: 44, minHeight: 'var(--web-tap-min)', padding: 0, background: 'none', border: 0, display: 'flex', alignItems: 'center' }}>
-              <span style={{ display: 'block', width: '100%', height: 3, background: k === i ? 'var(--web-blue)' : 'var(--web-grey-300)' }}></span>
-            </button>;
-          })}
-        </div>
-      </div>
-    </div>
-  </div>;
-}
-
 const GR_SAFETY = [
   ['file-check', 'Certificate of compliance',
    'Issued by a registered plumber on completion and logged. Your insurer can ask for it, and without one an installation is not finished.'],
@@ -446,7 +344,11 @@ function GeyserReplacementsPage({ go }) {
           </div>
           <p style={{ ...SMALL, color: 'rgba(255,255,255,.75)', marginTop: 14 }}>Not replacing yet? <a href="#warranty" style={{ color: '#fff', fontWeight: 600 }}>Check whether your geyser is still under warranty</a> — free, and it may mean you do not need to buy anything.</p>
         </div>
-        <GrCarousel />
+        <div style={{ border: '1px solid rgba(255,255,255,.22)', borderRadius: 4, overflow: 'hidden', lineHeight: 0 }}>
+          <img src="/assets/illustrations/geyser-hero-3-shower.jpg"
+            alt="A rain shower head running at strong, even pressure in a sunlit bathroom"
+            style={{ width: '100%', height: 'auto', display: 'block' }} />
+        </div>
       </div>
     </section>
 
@@ -469,8 +371,9 @@ function GeyserReplacementsPage({ go }) {
         <div style={{ ...CARD, display: 'flex', gap: 20, alignItems: 'center' }}>
           <img src="/assets/illustrations/geyser-control-valve.png" alt="A brass geyser control valve assembly with an isolating lever, a pressure control cartridge and compression fittings" style={{ width: 120, height: 'auto', display: 'block', flex: '0 0 auto' }} />
           <div>
-            <div style={{ ...LABEL, marginBottom: 8 }}>The control valve</div>
-            <p style={{ ...BODY, margin: 0, fontSize: 14 }}>The pressure control valve is matched to the rating of the cylinder that was fitted. Fit a 400 kPa valve to a 600 kPa cylinder and you get weak flow; fit it the other way round and you shorten the life of the tank. It is a small part and it decides how the whole installation behaves.</p>
+            <div style={{ ...LABEL, marginBottom: 8 }}>A dripping valve is not always a dead geyser</div>
+            <p style={{ ...BODY, margin: '0 0 10px', fontSize: 14 }}>Water sediment collects in the strainer on the pressure control valve, and a blocked strainer makes the valve drip more than it should. That looks like a failing geyser and it often is not one — so a dripping overflow is worth having looked at before anybody quotes you for a new cylinder.</p>
+            <p style={{ ...BODY, margin: 0, fontSize: 14 }}>When the cylinder genuinely is being replaced, the valve gets replaced with it. That is good practice rather than an upsell: <strong>the valve pressure may never exceed the cylinder pressure</strong>, so a valve carried over from the old installation can be wrong for the new one.</p>
           </div>
         </div>
         <div style={{ ...CARD, padding: 0, overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
