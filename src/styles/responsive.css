@@ -82,9 +82,18 @@ img {
      fixed height, so a long label — "Send my request on WhatsApp" — cannot
      shrink and forces the whole document wider than the viewport. On a phone we
      let the label wrap and the height grow instead. This was the 35px of
-     horizontal overflow on the home page. */
+     horizontal overflow on the home page.
+
+     `a[style]` was added on 30 August 2026. The design-system Button renders
+     as an `<a>` with inline styles and NO class, so `a[class]` never matched
+     a Button used as a link — on any page. Any Button-as-link with a label
+     longer than the viewport pushed the document sideways, which is exactly
+     what a 'Message us on WhatsApp' button did at 320px. Plain text links in
+     this codebase also carry inline styles and are unaffected by these three
+     declarations, so widening the selector is safe. */
   #root button,
   #root a[class],
+  #root a[style],
   #root form button {
     max-width: 100%;
     white-space: normal !important;
