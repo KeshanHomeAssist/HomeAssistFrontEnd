@@ -159,6 +159,15 @@ function grLabelFor(list, id, fallback) {
   return hit ? hit[1] : fallback;
 }
 
+function GrBurst({ tick }) {
+  if (!tick) return null;
+  return <span key={tick} className="ha-gr-burst" aria-hidden="true">
+    {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11].map(function (i) {
+      return <i key={i} style={{ '--i': i }} />;
+    })}
+  </span>;
+}
+
 function GrSummaryLine({ label, value }) {
   return <div style={{ display: 'flex', justifyContent: 'space-between', gap: 12, padding: '10px 0', borderBottom: '1px solid var(--web-grey-100)' }}>
     <span style={{ ...LABEL, fontSize: 10, color: 'var(--web-grey-500)', flex: '0 0 auto' }}>{label}</span>
@@ -206,6 +215,8 @@ function GeyserReplacementsPage({ go }) {
   const [sent, setSent] = React.useState(false);
   const [manualLink, setManualLink] = React.useState('');
   const [ready, setReady] = React.useState(false);
+  /* Bumped on every answer; remounting the burst on this restarts its animation. */
+  const [tick, setTick] = React.useState(0);
 
   const capacityIndex = GR_CAPACITIES.indexOf(capacity);
 
@@ -252,6 +263,7 @@ function GeyserReplacementsPage({ go }) {
 
   function choose(field, setter, value, stepLabel) {
     setter(value);
+    setTick(function (t) { return t + 1; });
     grTrack('geyser_step_complete', { step: stepLabel, field: field, value: String(value) });
   }
 
@@ -268,6 +280,8 @@ function GeyserReplacementsPage({ go }) {
   };
 
   const answered = ['systemType', 'pressure', 'position', 'access', 'brand'].filter(function (k) { return spec[k]; }).length + 1;
+  const stepsDone = [systemType, position, access, brand].filter(Boolean).length + 1;
+  const stepsTotal = 5;
 
   function specIntro() {
     return [
@@ -313,7 +327,16 @@ function GeyserReplacementsPage({ go }) {
   };
 
   const summaryPanel = <div>
-    <div style={{ ...LABEL, marginBottom: 12 }}>Your specification</div>
+    <div style={{ position: 'relative', marginBottom: 14 }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', gap: 10 }}>
+        <span style={{ ...LABEL }}>Your specification</span>
+        <span style={{ ...LABEL, fontSize: 10, color: 'var(--web-blue)' }}>{stepsDone} of {stepsTotal}</span>
+      </div>
+      <span style={{ display: 'block', height: 4, background: 'var(--web-grey-100)', marginTop: 8, borderRadius: 2, overflow: 'hidden' }}>
+        <span className="ha-gr-progress" style={{ display: 'block', height: '100%', width: (stepsDone / stepsTotal * 100) + '%', background: 'var(--web-blue)' }}></span>
+      </span>
+      <GrBurst tick={tick} />
+    </div>
     <GrSummaryLine label="System type" value={spec.systemType} />
     {(!systemType || systemType === 'electric') ? <GrSummaryLine label="Pressure" value={spec.pressure} /> : null}
     <GrSummaryLine label="Position" value={spec.position} />
@@ -422,13 +445,31 @@ function GeyserReplacementsPage({ go }) {
       </div>
     </section>
 
-    {/* The configurator */}
-    <section id="configurator" style={{ background: '#fff' }}>
-      <div style={{ ...WRAP, padding: '64px 40px' }}>
-        <Eyebrow>Build your specification</Eyebrow>
-        <h2 style={{ ...H2, fontSize: 26, marginBottom: 14, maxWidth: '26ch' }}>Five questions for same-day service</h2>
-        <div style={{ width: 56, height: 3, background: 'var(--web-blue)', marginBottom: 24 }}></div>
-        <p style={{ ...BODY, maxWidth: '68ch', fontSize: 17 }}>Nothing here is gated and nothing is compulsory. Every answer you give is one less thing to establish on the phone, and knowing the position and the access up front is what lets us arrive with the right unit, the right brackets and the right size team — and replace on the same day.</p>
+    {/* The configurator.
+
+        This is the section the page exists for, and on a white background it
+        read as just more page. It now sits on the pale blue with a solid navy
+        rule above it, so it is visibly a different kind of block — somewhere you
+        do something rather than somewhere you read.
+
+        The movement is deliberate and it is all tied to meaning: the accent rule
+        sweeps once on arrival, the cylinder breathes slowly, the progress bar
+        fills as answers land, and each answer pops a small burst on the
+        specification panel. Every one of them is switched off under
+        prefers-reduced-motion — see src/styles/site.css. */}
+    <section id="configurator" className="ha-gr-focus" style={{ background: 'var(--web-blue-050)', borderTop: '4px solid var(--web-navy)', borderBottom: '1px solid var(--web-blue-100)' }}>
+      <div style={{ ...WRAP, padding: '60px 40px' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 240px', gap: 40, alignItems: 'center' }}>
+          <div>
+            <Eyebrow>Build your specification</Eyebrow>
+            <h2 style={{ ...H2, fontSize: 28, marginBottom: 14, maxWidth: '24ch' }}>Five questions for same-day service</h2>
+            <div className="ha-gr-rule" style={{ width: 72, height: 4, background: 'var(--web-blue)', marginBottom: 22 }}></div>
+            <p style={{ ...BODY, maxWidth: '64ch', fontSize: 17, margin: 0 }}>Nothing is gated and nothing is compulsory. Every answer is one less thing to establish on the phone, and knowing the position and the access up front is what lets us arrive with the right unit, the right brackets and the right size team — and replace on the same day.</p>
+          </div>
+          <img className="ha-gr-float" src="/assets/illustrations/geyser-cylinder-burst.png"
+            alt="An electric hot water cylinder on its mounting feet, showing the element cover plate and thermostat access"
+            style={{ width: '100%', maxWidth: 240, height: 'auto', display: 'block', justifySelf: 'end' }} />
+        </div>
 
         <div className="ha-gr-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 340px', gap: 40, alignItems: 'start', marginTop: 32 }}>
 
