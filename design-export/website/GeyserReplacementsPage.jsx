@@ -38,31 +38,38 @@ const { Button, Icon } = window.HomeAssistDesignSystem_cf0a2b;
 
 const GR_STORAGE_KEY = 'ha-geyser-config-v1';
 
-/* The three panels of the sizing-and-pressure graphic, split apart so each one
-   can carry a note that ties it back to the question on this page it answers.
-   As one wide image the text was baked in at a size nothing could reflow; as
-   three slides each panel gets its own headline in real HTML. */
+/* The three hero slides.
+
+   These were originally one wide graphic with its headings, size chips and kPa
+   values set as pixels inside the image — which meant none of it reflowed, none
+   of it was readable on a phone and none of it was indexable. Each slide is now
+   cropped to the subject alone, at a consistent 3:2, and every word that used
+   to be baked into the artwork is real HTML underneath it.
+
+   Slide two is composed rather than cropped: the control valve render on the
+   brand's grey, because cropping the original panel to 3:2 clipped the pressure
+   list in half. */
 const GR_SLIDES = [
   {
-    image: '/assets/illustrations/geyser-slide-1-size.jpg',
+    image: '/assets/illustrations/geyser-hero-1-size.jpg',
     label: 'Capacity',
-    title: 'Size decides whether there is enough hot water',
-    body: 'Roughly 35 to 50 litres per person is the standard allowance, and around 70% of the market runs a 150 litre cylinder. Step 3 below asks how many people shower, which is the same question asked the useful way round.',
-    alt: 'Geyser size guide. A 30 litre cylinder suits one person, 50 litres one to two people, 80 litres two to three, 100 litres three to four, 150 litres four to five, and 200, 250 and 400 litre cylinders serve larger households.'
+    title: 'The right size, for the number of people who shower',
+    body: 'Roughly 35 to 50 litres of hot water per person, and around 70% of South African homes run a 150 litre cylinder. Step 3 asks how many people shower, which is the same question the useful way round.',
+    alt: 'A horizontal electric hot water cylinder on mounting feet, with the element cover, thermostat access and energy rating label visible.'
   },
   {
-    image: '/assets/illustrations/geyser-slide-2-pressure.jpg',
+    image: '/assets/illustrations/geyser-hero-2-pressure.jpg',
     label: 'Pressure',
-    title: 'Pressure decides how it feels, and how long it lasts',
-    body: '100 to 200 kPa gives weak flow and cold showers. 400 to 600 kPa is the working range. Above 600 kPa shortens the life of the tank. The control valve that sets it is one of the five compliance parts above — matched to the cylinder, not to whatever was in the van.',
-    alt: 'Pressure control guide. Low pressure of 100 to 200 kPa gives weak flow and cold showers. Optimal pressure of 400 to 600 kPa gives strong comfortable flow and a longer geyser lifespan. Above 600 kPa can damage the geyser, waste water and reduce its life.'
+    title: 'A control valve matched to the cylinder, not to the van',
+    body: '100 to 200 kPa gives weak flow and cold showers. 400 to 600 kPa is the working range. Above 600 kPa shortens the life of the tank. This one part decides how the whole installation behaves.',
+    alt: 'A brass geyser control valve assembly with an isolating lever, a pressure control cartridge and compression fittings.'
   },
   {
-    image: '/assets/illustrations/geyser-slide-3-shower.jpg',
+    image: '/assets/illustrations/geyser-hero-3-shower.jpg',
     label: 'The result',
-    title: 'Right size, right pressure, and you stop thinking about it',
-    body: 'This is what the whole specification is for. A cylinder sized to the household, a valve matched to the cylinder, and a certificate of compliance saying so — which is also what your insurer asks for.',
-    alt: 'A rain shower head running at strong, even pressure.'
+    title: 'Strong, consistent flow — and a certificate to prove it',
+    body: 'A cylinder sized to the household, a valve matched to the cylinder, and a certificate of compliance saying so. Which is also the document your insurer asks for.',
+    alt: 'A rain shower head running at strong, even pressure in a sunlit bathroom.'
   }
 ];
 
@@ -88,49 +95,50 @@ function GrCarousel() {
 
   const arrow = {
     cursor: 'pointer', background: '#fff', border: '1px solid var(--web-grey-300)', borderRadius: 4,
-    width: 44, height: 44, minHeight: 'var(--web-tap-min)', display: 'flex', alignItems: 'center', justifyContent: 'center'
+    width: 42, height: 42, minHeight: 'var(--web-tap-min)', flex: '0 0 auto',
+    display: 'flex', alignItems: 'center', justifyContent: 'center'
   };
 
-  return <div role="group" aria-roledescription="carousel" aria-label="Sizing and pressure"
+  return <div role="group" aria-roledescription="carousel" aria-label="Geyser sizing, pressure and the result"
     onMouseEnter={function () { setPaused(true); }} onMouseLeave={function () { setPaused(false); }}
-    onFocus={function () { setPaused(true); }} onBlur={function () { setPaused(false); }}>
+    onFocus={function () { setPaused(true); }} onBlur={function () { setPaused(false); }}
+    style={{ background: '#fff', border: '1px solid rgba(255,255,255,.22)', borderRadius: 4, overflow: 'hidden' }}>
 
-    <div style={{ ...CARD, padding: 0, overflow: 'hidden', display: 'grid', gridTemplateColumns: '420px 1fr', alignItems: 'stretch' }}>
-      <div style={{ background: 'var(--web-grey-050)', borderRight: '1px solid var(--web-grey-100)', display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: 300 }}>
-        <img src={slide.image} alt={slide.alt} style={{ width: '100%', height: 'auto', display: 'block' }} />
+    {/* 3 / 2 on every slide, so the card never changes height as it rotates. */}
+    <div style={{ position: 'relative', width: '100%', aspectRatio: '3 / 2', background: 'var(--web-grey-050)' }}>
+      <img src={slide.image} alt={slide.alt}
+        style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+      <div style={{ position: 'absolute', left: 12, top: 12, ...LABEL, fontSize: 10, color: '#fff', background: 'rgba(11,29,58,.78)', padding: '4px 8px', borderRadius: 2 }}>
+        {String(i + 1).padStart(2, '0')} &middot; {slide.label}
       </div>
-      <div style={{ padding: 32, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-        <div style={{ ...LABEL, color: 'var(--web-blue)', marginBottom: 10 }}>{String(i + 1).padStart(2, '0')} &middot; {slide.label}</div>
-        <h3 style={{ ...H2, fontSize: 22, marginBottom: 12, maxWidth: '24ch' }}>{slide.title}</h3>
-        <p aria-live="polite" style={{ ...BODY, maxWidth: '54ch', margin: 0 }}>{slide.body}</p>
+    </div>
 
-        <div style={{ display: 'flex', gap: 10, alignItems: 'center', marginTop: 24, flexWrap: 'wrap' }}>
-          <button type="button" onClick={function () { go(i - 1); }} aria-label="Previous slide" style={arrow}>
-            <Icon name="chevron-left" size={18} color="var(--web-navy)" />
-          </button>
-          <button type="button" onClick={function () { go(i + 1); }} aria-label="Next slide" style={arrow}>
-            <Icon name="chevron-right" size={18} color="var(--web-navy)" />
-          </button>
-          <div style={{ display: 'flex', gap: 8, marginLeft: 8 }}>
-            {GR_SLIDES.map(function (sl, k) {
-              return <button key={sl.label} type="button" onClick={function () { go(k); }}
-                aria-label={'Show slide ' + (k + 1) + ': ' + sl.label} aria-current={k === i}
-                style={{ cursor: 'pointer', width: 32, height: 44, minHeight: 'var(--web-tap-min)', padding: 0, background: 'none', border: 0, display: 'flex', alignItems: 'center' }}>
-                <span style={{ display: 'block', width: '100%', height: 3, background: k === i ? 'var(--web-blue)' : 'var(--web-grey-300)' }}></span>
-              </button>;
-            })}
-          </div>
+    <div style={{ padding: '20px 22px 18px' }}>
+      {/* A caption, not a section heading — it changes as the carousel turns,
+          and a heading that rewrites itself makes a mess of the document
+          outline a screen reader reads. */}
+      <div style={{ ...H3, fontSize: 17, margin: '0 0 6px' }}>{slide.title}</div>
+      <p aria-live="polite" style={{ ...BODY, fontSize: 14, margin: 0, minHeight: '4.2em' }}>{slide.body}</p>
+
+      <div style={{ display: 'flex', gap: 8, alignItems: 'center', marginTop: 14, flexWrap: 'wrap' }}>
+        <button type="button" onClick={function () { go(i - 1); }} aria-label="Previous slide" style={arrow}>
+          <Icon name="chevron-left" size={17} color="var(--web-navy)" />
+        </button>
+        <button type="button" onClick={function () { go(i + 1); }} aria-label="Next slide" style={arrow}>
+          <Icon name="chevron-right" size={17} color="var(--web-navy)" />
+        </button>
+        <div style={{ display: 'flex', gap: 6, marginLeft: 6 }}>
+          {GR_SLIDES.map(function (sl, k) {
+            return <button key={sl.label} type="button" onClick={function () { go(k); }}
+              aria-label={'Show slide ' + (k + 1) + ': ' + sl.label} aria-current={k === i}
+              style={{ cursor: 'pointer', width: 28, height: 44, minHeight: 'var(--web-tap-min)', padding: 0, background: 'none', border: 0, display: 'flex', alignItems: 'center' }}>
+              <span style={{ display: 'block', width: '100%', height: 3, background: k === i ? 'var(--web-blue)' : 'var(--web-grey-300)' }}></span>
+            </button>;
+          })}
         </div>
       </div>
     </div>
   </div>;
-}
-
-function grTrack(name, params) {
-  if (typeof window === 'undefined') return;
-  window.dataLayer = window.dataLayer || [];
-  window.dataLayer.push(Object.assign({ event: name }, params));
-  if (typeof window.gtag === 'function') window.gtag('event', name, params);
 }
 
 const GR_SAFETY = [
@@ -452,18 +460,7 @@ function GeyserReplacementsPage({ go }) {
           </div>
           <p style={{ ...SMALL, color: 'rgba(255,255,255,.75)', marginTop: 14 }}>Not replacing yet? <a href="#warranty" style={{ color: '#fff', fontWeight: 600 }}>Check whether your geyser is still under warranty</a> — free, and it may mean you do not need to buy anything.</p>
         </div>
-        <div style={{ border: '1px solid rgba(255,255,255,.22)', borderRadius: 4, padding: 28, display: 'flex', gap: 24, alignItems: 'center', flexWrap: 'wrap' }}>
-          <img src="/assets/illustrations/geyser-cylinder-render.png" alt="An electric hot water cylinder, showing the element cover, thermostat access and mounting feet" style={{ width: 168, maxWidth: '100%', height: 'auto', display: 'block', flex: '0 1 auto' }} />
-          <div style={{ minWidth: 0, flex: '1 1 180px' }}>
-            <div style={{ ...LABEL, color: 'var(--web-blue-300)', marginBottom: 10 }}>Every installation includes</div>
-            {['Pressure control valve', 'Vacuum breakers, hot and cold', 'Drip tray and piped overflow', 'Isolator within one metre', 'Certificate of compliance'].map(function (t) {
-              return <div key={t} style={{ display: 'flex', gap: 8, alignItems: 'center', marginBottom: 7 }}>
-                <Icon name="check" size={15} color="var(--web-blue-300)" />
-                <span style={{ ...SMALL, color: 'rgba(255,255,255,.88)' }}>{t}</span>
-              </div>;
-            })}
-          </div>
-        </div>
+        <GrCarousel />
       </div>
     </section>
 
@@ -738,12 +735,6 @@ function GeyserReplacementsPage({ go }) {
         </div>
       </div>
     </section>
-
-    {/* Sizing and pressure, as a carousel */}
-    <Section tint eyebrow="Sizing and pressure" title="How the two decisions fit together"
-      intro="Capacity decides whether there is enough hot water. Pressure decides what it feels like at the shower head, and how long the cylinder lasts. Two separate choices, both made on the day of the install.">
-      <GrCarousel />
-    </Section>
 
     {/* Running costs moved to /smart-homes on 30 August 2026. It was a large
         two-column block in the middle of a configurator, and what it actually
