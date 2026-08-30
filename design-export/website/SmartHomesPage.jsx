@@ -57,8 +57,6 @@ const SH_DEVICES = [
     kind: 'Energy source and control',
     name: 'Kwikot Elon 100',
     made: 'Made by PowerOptimal, sold through Kwikot',
-    logo: '/assets/logo/logo-kwikot.png',
-    logoOnLight: true,
     makerHref: 'https://poweroptimal.com/',
     summary: 'Feeds DC current straight from photovoltaic panels to a standard geyser element, with mains AC as backup — and schedules and monitors the cylinder from a phone.',
     points: [
@@ -101,7 +99,6 @@ const SH_DEVICES = [
     fitting: 'A plumber only, because it sits at the cylinder. If a model in the range needs photovoltaic work, that step needs a PV installer electrician as well.',
     image: '/assets/illustrations/smart-hotbot.jpg',
     imageAlt: 'The Plentify HotBot, a flat dark controller with a status light, fitted at the geyser.',
-    logo: '/assets/illustrations/logo-plentify-white.png',
     href: 'https://plentify.io/non-solar-households/'
   },
   {
@@ -229,11 +226,6 @@ function SmartHomesPage({ go }) {
         {SH_DEVICES.map(function (d) {
           return <div key={d.id} style={{ ...CARD, display: 'flex', flexDirection: 'column' }}>
             <div style={{ ...LABEL, color: 'var(--web-blue)', marginBottom: 10 }}>{d.kind}</div>
-            {d.logo
-              ? <div style={{ background: d.logoOnLight ? 'var(--web-grey-050)' : 'var(--web-navy)', border: d.logoOnLight ? '1px solid var(--web-grey-100)' : 'none', borderRadius: 3, padding: '10px 14px', marginBottom: 12, height: 50, boxSizing: 'border-box', display: 'flex', alignItems: 'center' }}>
-                  <img src={d.logo} alt={d.name} style={{ maxHeight: 30, width: 'auto', display: 'block' }} />
-                </div>
-              : null}
             {/* One frame for all three. Each source photograph is composed to
                 the same 4 by 3 on white, so a tall DIN rail unit and a wide
                 blue box occupy identical space and the cards read as a set. */}
