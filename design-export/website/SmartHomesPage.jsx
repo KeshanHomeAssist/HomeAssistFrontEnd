@@ -67,7 +67,11 @@ const SH_DEVICES = [
     ],
     claim: 'Kwikot states water heating energy savings of 50 to 70% are common, with payback in three to five years.',
     notThis: 'It has no app, no schedule and no leak detection. It is not a controller — it changes where the energy comes from, not when the element runs.',
-    cost: 'One upfront amount for the unit and the panels. No monthly fee.',
+    range: 'The Elon 100 is the unit most homes fit. Kwikot also sells it as a full solar PV kit and as a water heater kit, so what you need depends on whether you already have panels.',
+    price: 'R3,500 to R4,000 for the unit, indicative and excluding panels.',
+    monthly: 'No monthly cost.',
+    fitting: 'A plumber, if your geyser already has an isolator — no electrician needed. Connecting photovoltaic panels does need a PV installer electrician, and that work is certified through the PV Green Card scheme. Home Assist can arrange it.',
+    fittingLink: { href: 'https://pvgreencard.co.za/app/directory/', text: 'PV Green Card installer directory' },
     href: 'https://www.kwikot.com/elon-solar-pv-geyser-water-heating-range'
   },
   {
@@ -84,8 +88,11 @@ const SH_DEVICES = [
       'Optimises for solar hours on compatible systems'
     ],
     claim: 'Plentify states households using HotBot save on average R355 per month on their electricity bill.',
-    notThis: 'It needs a Wi-Fi connection within 10 metres. If the signal is down the schedule cannot be overridden remotely. It fits electric and thermosyphon solar thermal geysers — not pumped solar thermal, and not gas.',
-    cost: 'R849 once for activation and installation, then R149 per month. Additional units R99 per month each. Plentify offers a 60-day free trial.',
+    notThis: 'It fits electric and thermosyphon solar thermal geysers — not pumped solar thermal, and not gas. It wants Wi-Fi within 10 metres, though it carries a backup connection so losing the house Wi-Fi does not leave it stranded.',
+    range: 'The HotBot is the geyser device. Plentify makes other devices in the same family, and some of those do involve photovoltaic work.',
+    price: 'R849 to R950 for the hardware, indicative. Plentify also sells it as R849 once for activation and installation.',
+    monthly: 'R149 per month on Plentify\u2019s subscription, R99 per month for additional units. 60-day free trial.',
+    fitting: 'A plumber only, because it sits at the cylinder. If a model in the range needs photovoltaic work, that step needs a PV installer electrician as well.',
     logo: '/assets/illustrations/logo-plentify-white.png',
     href: 'https://plentify.io/non-solar-households/'
   },
@@ -109,9 +116,10 @@ const SH_DEVICES = [
     ],
     claim: null,
     notThis: 'It does not read the water temperature. It switches the supply and reports on it, which is why it is the simplest of the three and the one that keeps working when you are standing in front of it.',
-    cost: null,
-    image: '/assets/illustrations/geyser-db-controller.png',
-    confirm: true
+    price: 'R400 to R650 excluding VAT for the unit, indicative.',
+    monthly: 'No monthly cost.',
+    fitting: 'An electrician, because the unit clips into your distribution board. No plumbing work at all.',
+    image: '/assets/illustrations/geyser-db-controller.png'
   }
 ];
 
@@ -126,9 +134,11 @@ const SH_TABLE = [
   ['Takes DC directly from PV panels', 'Yes', 'No', 'No'],
   ['Runs through load-shedding', 'Yes', 'Schedule only', 'Manual override'],
   ['Needs Wi-Fi', 'No', 'Yes, within 10 m', 'Yes'],
-  ['Works if connectivity fails', 'Yes', 'Not remotely', 'Yes, press the button'],
+  ['Works if connectivity fails', 'Yes', 'Yes, backup connection', 'Yes, press the button'],
   ['Fitted at', 'The cylinder', 'The cylinder', 'The DB board'],
-  ['Monthly cost', 'None', 'R149', 'Confirm']
+  ['Who installs it', 'Plumber', 'Plumber', 'Electrician'],
+  ['Indicative hardware', 'R3,500 - R4,000', 'R849 - R950', 'R400 - R650 ex VAT'],
+  ['Monthly cost', 'None', 'R149', 'None']
 ];
 
 const SH_FAQ = [
@@ -226,10 +236,21 @@ function SmartHomesPage({ go }) {
               <p style={{ ...BODY, fontSize: 14, margin: 0 }}>{d.notThis}</p>
             </div>
 
-            <div style={{ marginTop: 14, marginBottom: 14 }}>
-              <div style={{ ...LABEL, fontSize: 10, color: 'var(--web-grey-500)', marginBottom: 6 }}>Cost</div>
-              <p style={{ ...BODY, fontSize: 14, margin: 0 }}>{d.cost ? d.cost : <React.Fragment>Monthly or once-off, <Confirm>pricing</Confirm></React.Fragment>}</p>
-              {d.confirm ? <p style={{ ...SMALL, marginTop: 8 }}>Saving on your bill: <Confirm>figure</Confirm></p> : null}
+            {d.range ? <div style={{ borderTop: '1px solid var(--web-grey-100)', paddingTop: 12, marginTop: 12 }}>
+              <div style={{ ...LABEL, fontSize: 10, color: 'var(--web-grey-500)', marginBottom: 6 }}>Other models</div>
+              <p style={{ ...BODY, fontSize: 14, margin: 0 }}>{d.range}</p>
+            </div> : null}
+
+            <div style={{ borderTop: '1px solid var(--web-grey-100)', paddingTop: 12, marginTop: 12 }}>
+              <div style={{ ...LABEL, fontSize: 10, color: 'var(--web-grey-500)', marginBottom: 6 }}>Indicative hardware price</div>
+              <p style={{ ...BODY, fontSize: 14, margin: '0 0 6px' }}>{d.price}</p>
+              <p style={{ ...SMALL, margin: 0 }}>{d.monthly}</p>
+            </div>
+
+            <div style={{ borderTop: '1px solid var(--web-grey-100)', paddingTop: 12, margin: '12px 0 14px' }}>
+              <div style={{ ...LABEL, fontSize: 10, color: 'var(--web-grey-500)', marginBottom: 6 }}>Who installs it</div>
+              <p style={{ ...BODY, fontSize: 14, margin: 0 }}>{d.fitting}</p>
+              {d.fittingLink ? <p style={{ ...SMALL, margin: '6px 0 0' }}><a href={d.fittingLink.href} target="_blank" rel="noopener noreferrer" style={{ fontWeight: 600 }}>{d.fittingLink.text}</a></p> : null}
             </div>
 
             <div style={{ marginTop: 'auto', display: 'flex', flexDirection: 'column', gap: 8 }}>
