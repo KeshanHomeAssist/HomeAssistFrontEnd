@@ -55,7 +55,7 @@ const GR_SLIDES = [
     label: 'Capacity',
     title: 'The right size, for the number of people who shower',
     body: 'Roughly 35 to 50 litres of hot water per person, and around 70% of South African homes run a 150 litre cylinder. Step 3 asks how many people shower, which is the same question the useful way round.',
-    alt: 'A horizontal electric hot water cylinder on mounting feet, with the element cover, thermostat access and energy rating label visible.'
+    alt: 'An electric hot water cylinder on mounting feet, showing the element cover plate, thermostat access and the energy rating label.'
   },
   {
     image: '/assets/illustrations/geyser-hero-2-pressure.jpg',
@@ -86,7 +86,7 @@ function GrCarousel() {
   React.useEffect(function () {
     if (paused) return;
     if (typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-    const t = setTimeout(function () { setI(function (v) { return (v + 1) % count; }); }, 6500);
+    const t = setTimeout(function () { setI(function (v) { return (v + 1) % count; }); }, 5200);
     return function () { clearTimeout(t); };
   }, [i, paused, count]);
 
@@ -100,7 +100,6 @@ function GrCarousel() {
   };
 
   return <div role="group" aria-roledescription="carousel" aria-label="Geyser sizing, pressure and the result"
-    onMouseEnter={function () { setPaused(true); }} onMouseLeave={function () { setPaused(false); }}
     onFocus={function () { setPaused(true); }} onBlur={function () { setPaused(false); }}
     style={{ background: '#fff', border: '1px solid rgba(255,255,255,.22)', borderRadius: 4, overflow: 'hidden' }}>
 
@@ -191,55 +190,46 @@ const GR_CAPACITIES = [50, 100, 150, 200, 250];
 const GR_HOUSEHOLD_FOR = { 50: '1 person', 100: '2 people', 150: '3 to 4 people', 200: '4 to 5 people', 250: '5 to 6 people' };
 const GR_HOUSEHOLD_STEPS = [1, 2, 3, 4, 5];
 
-/* Which cylinders exist for which system. A visitor who chose Solar must never
-   be shown a range we cannot supply for that configuration.
+/* The four cylinder brands Home Assist supplies, presented as equals.
 
-   RATINGS are Hello Peter TrustIndex scores read 30 August 2026, from one source
-   so they stay comparable. The footnote under the grid explains how to read
-   them — see the note in the section copy.
+   HELLO PETER RATINGS REMOVED, 30 August 2026. They were 2.6 and 2.5 — 0.1
+   apart, which differentiated nothing, and a bare 2.6 beside "we recommend this
+   one first" argued against our own recommendation. A complaint-weighted index
+   does that to any manufacturer with volume. If a service metric goes back on
+   these cards it should be one that supports the argument rather than
+   undercutting it — response rate would.
 
-   Nothing here fits 'heatpump'. That is deliberate rather than an omission: the
-   step shows an on-request panel instead of an empty grid. */
+   No lead-and-secondary tiering either. All four are cylinders we fit, they are
+   shown at the same size with their own logo, and 'Not sure' is a first-class
+   option rather than something a visitor has to work out how to skip. Most
+   people genuinely do not have a view on this, and forcing a choice they cannot
+   make is how a configurator gets abandoned three questions from the end. */
 const GR_BRANDS = [
   {
-    id: 'kwikot', name: 'Kwikot', tier: 'lead',
-    fits: ['electric', 'solar', 'gas'],
-    rating: '2.6', ratingSource: 'Hello Peter',
-    lead: 'Home Assist recommends Kwikot first.',
-    body: 'One of the most reliable cylinders in the South African market, and Home Assist holds a warranty capability on Kwikot that most installers do not — so a warranty claim on a unit we fitted is handled by us rather than passed back to you.'
+    id: 'kwikot', name: 'Kwikot',
+    logo: '/assets/logo/logo-kwikot.png',
+    covers: 'Electric, solar and gas',
+    body: 'One of the most established cylinders in the South African market. Home Assist holds a warranty capability on Kwikot that most installers do not, so a warranty claim on a unit we fitted is handled by us rather than passed back to you.'
   },
   {
-    id: 'ariston', name: 'Ariston', tier: 'lead',
-    fits: ['electric', 'solar', 'gas'],
-    rating: '2.5', ratingSource: 'Hello Peter',
-    note: 'Ariston is the new name for Heat Tech — same manufacturer.',
-    body: 'An established range across electric, solar and gas water heating in South Africa. Widely stocked, so a same-day replacement is usually possible on the common capacities.'
+    id: 'ariston', name: 'Ariston',
+    logo: '/assets/logo/logo-ariston.png',
+    covers: 'Electric, solar and gas',
+    note: 'The new name for Heat Tech — same manufacturer.',
+    body: 'A wide range across electric, solar and gas water heating, and widely stocked, so a same-day replacement is usually possible on the common capacities.'
   },
   {
-    id: 'kwiksol', name: 'Kwiksol', tier: 'other',
-    fits: ['solar'],
-    rating: 'See Kwikot', ratingSource: 'Hello Peter',
-    body: 'Kwikot’s solar range. Shown because you selected a solar system.'
-  },
-  {
-    id: 'tecron', name: 'Tecron', tier: 'other',
-    fits: ['electric', 'solar'],
-    rating: 'Not listed', ratingSource: 'Hello Peter',
+    id: 'tecron', name: 'Tecron',
+    logo: '/assets/logo/logo-tecron.png',
+    covers: 'Electric and solar',
     note: 'Manufactured in Cape Town.',
     body: 'Copper hot water cylinders built to SABS specification, in standard, slimline, square, point-of-use and solar ranges. A local manufacturer, which can mean a shorter lead time on an unusual size.'
   },
   {
-    id: 'builders-pride', name: 'Builders Pride', tier: 'other',
-    fits: ['electric'],
-    rating: 'Not listed', ratingSource: 'Hello Peter',
-    note: 'Retailed through Builders Warehouse.',
-    body: 'SABS approved with a five-year warranty. Worth knowing if you are comparing a Builders quote against ours, because the cylinder is rarely the variable — the installation is.'
-  },
-  {
-    id: 'xtreme', name: 'Xtreme', tier: 'other',
-    fits: ['electric'],
-    rating: 'Not listed', ratingSource: 'Hello Peter',
-    body: 'A smaller Western Cape manufacturer. Available on request where stock and lead time suit the job.'
+    id: 'xstream', name: 'Xstream',
+    logo: '/assets/logo/logo-xstream.png',
+    covers: 'Electric',
+    body: 'Hot water cylinders from Mainstream. A straightforward, well-priced unit for a standard high pressure replacement where the job does not call for anything unusual.'
   }
 ];
 
@@ -310,7 +300,6 @@ function GeyserReplacementsPage({ go }) {
   const [access, setAccess] = React.useState('');
   const [capacity, setCapacity] = React.useState(150);
   const [brand, setBrand] = React.useState('');
-  const [showOther, setShowOther] = React.useState(false);
   const [showDiagnostic, setShowDiagnostic] = React.useState(false);
   const [sent, setSent] = React.useState(false);
   const [manualLink, setManualLink] = React.useState('');
@@ -347,12 +336,10 @@ function GeyserReplacementsPage({ go }) {
     } catch (e) { /* private browsing, or storage disabled — the page still works */ }
   }, [ready, systemType, pressure, position, access, capacity, brand]);
 
-  /* A selection that no longer exists for the chosen system is cleared rather
-     than left showing a specification we cannot supply. */
+  /* Heat pump is the one system with no cylinder list, so a brand chosen before
+     switching to it would leave a specification we cannot supply. */
   React.useEffect(function () {
-    if (!systemType || !brand) return;
-    const chosen = GR_BRANDS.find(function (b) { return b.id === brand; });
-    if (chosen && chosen.fits.indexOf(systemType) === -1) setBrand('');
+    if (systemType === 'heatpump' && brand) setBrand('');
   }, [systemType, brand]);
 
   /* Pressure is a property of an electric installation. Choosing solar or gas
@@ -366,12 +353,7 @@ function GeyserReplacementsPage({ go }) {
     grTrack('geyser_step_complete', { step: stepLabel, field: field, value: String(value) });
   }
 
-  const visibleBrands = GR_BRANDS.filter(function (b) {
-    return !systemType || b.fits.indexOf(systemType) !== -1;
-  });
-  const leadBrands = visibleBrands.filter(function (b) { return b.tier === 'lead'; });
-  const otherBrands = visibleBrands.filter(function (b) { return b.tier === 'other'; });
-  const noBrandsForSystem = systemType && visibleBrands.length === 0;
+  const noBrandsForSystem = systemType === 'heatpump';
 
   const spec = {
     systemType: systemType ? grLabelFor(GR_SYSTEMS, systemType) : '',
@@ -380,7 +362,7 @@ function GeyserReplacementsPage({ go }) {
     access: access ? grLabelFor(GR_ACCESS, access) : '',
     capacity: capacity + ' L',
     household: GR_HOUSEHOLD_FOR[capacity],
-    brand: brand ? (GR_BRANDS.find(function (b) { return b.id === brand; }) || {}).name : ''
+    brand: brand === 'unsure' ? 'Not sure — recommend one' : (brand ? (GR_BRANDS.find(function (b) { return b.id === brand; }) || {}).name : '')
   };
 
   const answered = ['systemType', 'pressure', 'position', 'access', 'brand'].filter(function (k) { return spec[k]; }).length + 1;
@@ -660,56 +642,61 @@ function GeyserReplacementsPage({ go }) {
 
             {/* Step 4 — brand */}
             <GrStep n="4" label="Brand" title="Choose your cylinder"
-              intro={systemType ? 'Showing only cylinders that exist for a ' + String(spec.systemType).toLowerCase() + ' system.' : 'Choose a system type above and this list narrows to the cylinders we can actually supply for it.'}>
+              intro="Four cylinders we fit and support. If you have no view on this — and most people do not — say so and we will recommend one for your system and capacity.">
 
               {noBrandsForSystem ? <div style={{ ...CARD, background: 'var(--web-blue-050)', border: '1px solid var(--web-blue-100)', marginTop: 18 }}>
                 <div style={{ ...LABEL, marginBottom: 8 }}>Quoted on request</div>
                 <p style={{ ...BODY, margin: 0 }}>We do not hold a standard heat pump range on the shelf the way we do cylinders, because the unit has to be matched to the household and to where the outdoor unit can physically go. Finish the rest of the specification and send it — we will come back with options rather than guess at one here.</p>
               </div> : <React.Fragment>
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 16, marginTop: 18 }}>
-                  {leadBrands.map(function (b) {
-                    return <div key={b.id} style={{ ...CARD, borderLeft: brand === b.id ? '3px solid var(--web-blue)' : '1px solid var(--web-grey-100)', background: brand === b.id ? 'var(--web-blue-050)' : '#fff' }}>
-                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 12 }}>
-                        <div>
-                          <h4 style={{ ...H3, margin: 0, fontSize: 20 }}>{b.name}</h4>
-                          {b.lead ? <div style={{ ...LABEL, color: 'var(--web-blue)', marginTop: 6 }}>{b.lead}</div> : null}
-                        </div>
-                        <div style={{ textAlign: 'right', flex: '0 0 auto' }}>
-                          <div style={{ font: '700 20px/1 var(--font-core)', color: 'var(--web-navy)' }}>{b.rating}</div>
-                          <div style={{ ...SMALL, fontSize: 11 }}>{b.ratingSource}</div>
-                        </div>
-                      </div>
-                      {b.note ? <p style={{ ...SMALL, color: 'var(--web-blue)', margin: '10px 0 0' }}>{b.note}</p> : null}
-                      <p style={{ ...BODY, margin: '12px 0 16px', fontSize: 14 }}>{b.body}</p>
-                      <Button variant={brand === b.id ? 'navy' : 'secondary'} fullWidth
-                        onClick={function () { choose('brand', setBrand, b.id, 'brand'); }}>{brand === b.id ? 'Selected' : 'Choose ' + b.name}</Button>
-                    </div>;
+                  {GR_BRANDS.map(function (b) {
+                    const on = brand === b.id;
+                    return <button key={b.id} type="button" aria-pressed={on}
+                      onClick={function () { choose('brand', setBrand, b.id, 'brand'); }}
+                      style={{ ...CARD, textAlign: 'left', cursor: 'pointer', font: 'inherit', width: '100%', boxSizing: 'border-box',
+                        display: 'flex', flexDirection: 'column',
+                        background: on ? 'var(--web-blue-050)' : '#fff',
+                        border: '1px solid ' + (on ? 'var(--web-blue)' : 'var(--web-grey-100)'),
+                        borderLeft: on ? '3px solid var(--web-blue)' : '1px solid var(--web-grey-100)' }}>
+
+                      {/* A fixed logo band, so a tall stacked mark and a wide
+                          horizontal one still occupy the same space and the four
+                          brands read as equals. */}
+                      <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start', height: 54, marginBottom: 14 }}>
+                        <img src={b.logo} alt={b.name} style={{ maxHeight: 48, maxWidth: 170, width: 'auto', height: 'auto', display: 'block' }} />
+                      </span>
+
+                      <span style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', gap: 10 }}>
+                        <span style={{ font: '700 19px/1.2 var(--font-core)', color: 'var(--web-navy)' }}>{b.name}</span>
+                        <span style={{ ...LABEL, fontSize: 10, color: 'var(--web-grey-500)' }}>{b.covers}</span>
+                      </span>
+                      {b.note ? <span style={{ display: 'block', ...SMALL, color: 'var(--web-blue)', marginTop: 6 }}>{b.note}</span> : null}
+                      <span style={{ display: 'block', ...BODY, margin: '10px 0 0', fontSize: 14 }}>{b.body}</span>
+
+                      <span style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: 'auto', paddingTop: 16 }}>
+                        <Icon name={on ? 'check' : 'plus'} size={16} color={on ? 'var(--web-blue)' : 'var(--web-grey-500)'} />
+                        <span style={{ ...LABEL, color: on ? 'var(--web-blue)' : 'var(--web-grey-500)' }}>{on ? 'Selected' : 'Choose ' + b.name}</span>
+                      </span>
+                    </button>;
                   })}
                 </div>
 
-                <p style={{ ...SMALL, marginTop: 12 }}>Ratings are Hello Peter TrustIndex scores read in August 2026, shown for both brands from the same source so they are comparable. Hello Peter is weighted towards complaints, so read them as a like-for-like comparison rather than as a score out of ten — both major manufacturers sit in the same band, which is the honest answer and the reason we do not choose a cylinder on this number.</p>
-
-                {otherBrands.length ? <div style={{ marginTop: 16 }}>
-                  <button type="button" onClick={function () { setShowOther(!showOther); }} aria-expanded={showOther}
-                    style={{ background: 'none', border: 0, padding: '12px 0', cursor: 'pointer', color: 'var(--web-blue)', font: '600 15px/1.4 var(--font-core)', display: 'flex', alignItems: 'center', gap: 8, minHeight: 'var(--web-tap-min)' }}>
-                    <Icon name={showOther ? 'chevron-up' : 'chevron-down'} size={16} color="var(--web-blue)" />
-                    {showOther ? 'Hide other options' : 'Other options (' + otherBrands.length + ')'}
-                  </button>
-                  {showOther ? <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 12 }}>
-                    {otherBrands.map(function (b) {
-                      return <div key={b.id} style={{ ...CARD, padding: 18, background: brand === b.id ? 'var(--web-blue-050)' : 'var(--web-grey-050)' }}>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', gap: 10 }}>
-                          <h4 style={{ ...H3, margin: 0, fontSize: 17 }}>{b.name}</h4>
-                          <span style={{ ...SMALL, fontSize: 11, textAlign: 'right' }}>{b.rating}<br />{b.ratingSource}</span>
-                        </div>
-                        {b.note ? <p style={{ ...SMALL, color: 'var(--web-blue)', margin: '8px 0 0' }}>{b.note}</p> : null}
-                        <p style={{ ...BODY, margin: '10px 0 12px', fontSize: 14 }}>{b.body}</p>
-                        <Button size="sm" variant={brand === b.id ? 'navy' : 'secondary'} fullWidth
-                          onClick={function () { choose('brand', setBrand, b.id, 'brand'); }}>{brand === b.id ? 'Selected' : 'Choose ' + b.name}</Button>
-                      </div>;
-                    })}
-                  </div> : null}
-                </div> : null}
+                {/* Not sure is an answer, not a skip. It is stored and it is
+                    carried into the WhatsApp message, so the person who picks it
+                    up knows to recommend rather than to confirm. */}
+                <button type="button" aria-pressed={brand === 'unsure'}
+                  onClick={function () { choose('brand', setBrand, 'unsure', 'brand'); }}
+                  style={{ marginTop: 14, width: '100%', boxSizing: 'border-box', cursor: 'pointer', font: 'inherit', textAlign: 'left',
+                    minHeight: 'var(--web-tap-min)', padding: '16px 20px', borderRadius: 4,
+                    background: brand === 'unsure' ? 'var(--web-blue-050)' : 'var(--web-grey-050)',
+                    border: '1px solid ' + (brand === 'unsure' ? 'var(--web-blue)' : 'var(--web-grey-300)'),
+                    display: 'flex', alignItems: 'center', gap: 12 }}>
+                  <Icon name={brand === 'unsure' ? 'check' : 'info'} size={18} color={brand === 'unsure' ? 'var(--web-blue)' : 'var(--web-navy)'} />
+                  <span>
+                    <span style={{ display: 'block', font: '600 16px/1.3 var(--font-core)', color: 'var(--web-navy)' }}>Not sure — recommend one for me</span>
+                    <span style={{ display: 'block', ...SMALL, marginTop: 2 }}>We will match it to your system type, capacity and what is in stock today.</span>
+                  </span>
+                </button>
               </React.Fragment>}
 
               {/* The most important trust copy on the page. */}
