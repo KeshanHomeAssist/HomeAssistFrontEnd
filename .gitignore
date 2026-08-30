@@ -23,6 +23,11 @@ deploy/.env.deploy
 # in the Claude Design export, which is the source of truth for artwork.
 design-export/asset-library/
 
+# Vite writes a temporary compiled config beside vite.config.js while it builds
+# and normally removes it. A build interrupted part-way leaves one behind, and
+# one was committed on 30 August 2026 before this rule existed.
+vite.config.js.timestamp-*.mjs
+
 # Editor / OS noise
 .DS_Store
 .idea/

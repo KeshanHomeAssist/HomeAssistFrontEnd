@@ -121,4 +121,11 @@ a:hover {
     height: auto !important;
     min-height: var(--web-tap-min);
   }
+
+  /* The [CONFIRM] chip is `white-space: nowrap` by design, which is right on a
+     desktop and pushed a 320px screen 69px sideways. Wrapping is scoped to this
+     page so the chips on /terms keep the behaviour they were built with. */
+  #root .ha-gr span[style*="nowrap"] {
+    white-space: normal !important;
+  }
 }

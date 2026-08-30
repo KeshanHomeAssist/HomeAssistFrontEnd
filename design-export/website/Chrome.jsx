@@ -102,7 +102,8 @@ const NAV = [
     children: [
       { id: 'home', label: 'Home page', route: '/' },
       { id: 'geyserReplacements', label: 'Geyser replacements', route: '/geyser-replacements' },
-      { id: 'leakDetection', label: 'Leak detection', route: '/leak-detection' }
+      { id: 'leakDetection', label: 'Leak detection', route: '/leak-detection' },
+      { id: 'smartHomes', label: 'Smart homes', route: '/smart-homes' }
     ]
   },
   { id: 'propertyManagers', label: 'Property managers', route: '/property-managers' },

@@ -158,3 +158,9 @@
 /product/pipe-betterment                                    /  301
 /careers/                                                   /about  301
 /careers                                                    /about  301
+
+# The Home Assist smart homes adverts print homeassist.co.za/smarthomes, so
+# that spelling has to resolve. The page itself lives at /smart-homes, which
+# is the canonical URL in the sitemap and the canonical tag.
+/smarthomes/                                                /smart-homes  301
+/smarthomes                                                 /smart-homes  301

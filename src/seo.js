@@ -201,6 +201,48 @@ export const ROUTES = {
       },
     ],
   },
+  '/smart-homes': {
+    title: 'Smart Geyser Control & Solar Water Heating | Home Assist',
+    description:
+      'Geyser scheduling, leak detection and direct solar PV water heating. The Kwikot Elon 100, Plentify HotBot and a DB board breaker, compared honestly.',
+    schema: [
+      organization,
+      {
+        '@type': 'Service',
+        name: 'Smart geyser control and solar water heating',
+        provider: { '@id': `${SITE_URL}/#organization` },
+        areaServed: { '@type': 'Country', name: 'South Africa' },
+        serviceType:
+          'Geyser scheduling, monitoring and direct photovoltaic water heating installation',
+      },
+      {
+        '@type': 'FAQPage',
+        '@id': `${SITE_URL}/smart-homes#faq`,
+        mainEntity: [
+          {
+            '@type': 'Question',
+            name: 'Which smart geyser control should I buy?',
+            acceptedAnswer: { '@type': 'Answer', text: 'It depends what you are trying to fix. The Kwikot Elon 100 feeds DC straight from photovoltaic panels to the geyser element and takes water heating off the grid. The Plentify HotBot puts the element on a schedule, reads the cylinder temperature and detects leaks, from a phone. A distribution board breaker switches the supply on a schedule with a physical override. They solve different problems and are not three versions of the same product.' },
+          },
+          {
+            '@type': 'Question',
+            name: 'Does a geyser control device have to be installed at the geyser?',
+            acceptedAnswer: { '@type': 'Answer', text: 'A device that reads the water temperature does, because that is where the sensor sits, and the electrical point must be within one metre of the cylinder. A supply-side controller sits at the distribution board instead. In every case a dedicated breaker on the distribution board must isolate the geyser completely.' },
+          },
+          {
+            '@type': 'Question',
+            name: 'Will a smart geyser controller void my manufacturer warranty?',
+            acceptedAnswer: { '@type': 'Answer', text: 'Not if it is installed to the manufacturer\'s specification by a registered plumber and, where electrical work is involved, a qualified electrician. Installations that do not follow the manufacturer\'s diagram and the national standard are the most common reason a geyser warranty is voided.' },
+          },
+          {
+            '@type': 'Question',
+            name: 'How much can a smart geyser controller save?',
+            acceptedAnswer: { '@type': 'Answer', text: 'Kwikot states water heating energy savings of 50 to 70% are common with the Elon 100, with payback in three to five years. Plentify states households using HotBot save on average R355 per month. Both are the manufacturers\' own published figures and depend on your tariff, your household\'s hot water habits and, for the Elon, on your roof and panel array.' },
+          },
+        ],
+      },
+    ],
+  },
   '/leak-detection': {
     title: 'Leak Detection in South Africa | Home Assist',
     description:
