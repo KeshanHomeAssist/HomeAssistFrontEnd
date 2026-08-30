@@ -72,6 +72,8 @@ const SH_DEVICES = [
     monthly: 'No monthly cost.',
     fitting: 'A plumber, if your geyser already has an isolator — no electrician needed. Connecting photovoltaic panels does need a PV installer electrician, and that work is certified through the PV Green Card scheme. Home Assist can arrange it.',
     fittingLink: { href: 'https://pvgreencard.co.za/app/directory/', text: 'PV Green Card installer directory' },
+    image: '/assets/illustrations/smart-elon.jpg',
+    imageAlt: 'The Elon 100 unit, a compact blue enclosure with AC and DC terminal blocks and a temperature probe.',
     href: 'https://www.kwikot.com/elon-solar-pv-geyser-water-heating-range'
   },
   {
@@ -90,9 +92,11 @@ const SH_DEVICES = [
     claim: 'Plentify states households using HotBot save on average R355 per month on their electricity bill.',
     notThis: 'It fits electric and thermosyphon solar thermal geysers — not pumped solar thermal, and not gas. It wants Wi-Fi within 10 metres, though it carries a backup connection so losing the house Wi-Fi does not leave it stranded.',
     range: 'The HotBot is the geyser device. Plentify makes other devices in the same family, and some of those do involve photovoltaic work.',
-    price: 'R849 to R950 for the hardware, indicative. Plentify also sells it as R849 once for activation and installation.',
-    monthly: 'R149 per month on Plentify’s subscription, R99 per month for additional units. 60-day free trial.',
+    price: 'R849 excluding VAT, once off.',
+    monthly: 'R149 per month thereafter. Additional units R99 per month. Plentify offers a 60-day free trial.',
     fitting: 'A plumber only, because it sits at the cylinder. If a model in the range needs photovoltaic work, that step needs a PV installer electrician as well.',
+    image: '/assets/illustrations/smart-hotbot.jpg',
+    imageAlt: 'The Plentify HotBot, a flat dark controller with a status light, fitted at the geyser.',
     logo: '/assets/illustrations/logo-plentify-white.png',
     href: 'https://plentify.io/non-solar-households/'
   },
@@ -119,7 +123,8 @@ const SH_DEVICES = [
     price: 'R400 to R650 excluding VAT for the unit, indicative.',
     monthly: 'No monthly cost.',
     fitting: 'An electrician, because the unit clips into your distribution board. No plumbing work at all.',
-    image: '/assets/illustrations/geyser-db-controller.png'
+    image: '/assets/illustrations/smart-dbboard.jpg',
+    imageAlt: 'A DIN rail geyser controller clipped into a distribution board, with Wi-Fi and heat indicators and a push button on the face.'
   }
 ];
 
@@ -137,7 +142,7 @@ const SH_TABLE = [
   ['Works if connectivity fails', 'Yes', 'Yes, backup connection', 'Yes, press the button'],
   ['Fitted at', 'The cylinder', 'The cylinder', 'The DB board'],
   ['Who installs it', 'Plumber', 'Plumber', 'Electrician'],
-  ['Indicative hardware', 'R3,500 - R4,000', 'R849 - R950', 'R400 - R650 ex VAT'],
+  ['Indicative hardware', 'R3,500 - R4,000', 'R849 ex VAT', 'R400 - R650 ex VAT'],
   ['Monthly cost', 'None', 'R149', 'None']
 ];
 
@@ -173,19 +178,28 @@ function SmartHomesPage({ go }) {
             <Button as="a" size="lg" variant="ghost" href="#compare" style={{ color: '#fff', border: '1px solid rgba(255,255,255,.5)' }} iconLeft={<Icon name="table" size={18} color="#fff" />}>Compare the three</Button>
           </div>
         </div>
-        <div style={{ border: '1px solid rgba(255,255,255,.22)', borderRadius: 4, padding: 28 }}>
-          <div style={{ ...LABEL, color: 'var(--web-blue-300)', marginBottom: 14 }}>What a controlled geyser gives you</div>
-          {[
-            ['clock', 'Hot water when you need it, not all day'],
-            ['trending-up', 'A bill you can see and change'],
-            ['droplets', 'A leak caught before the ceiling goes'],
-            ['sun', 'The option to run it off the sun']
-          ].map(function (row) {
-            return <div key={row[1]} style={{ display: 'flex', gap: 10, alignItems: 'center', marginBottom: 10 }}>
-              <Icon name={row[0]} size={17} color="var(--web-blue-300)" />
-              <span style={{ ...SMALL, color: 'rgba(255,255,255,.88)', fontSize: 14 }}>{row[1]}</span>
-            </div>;
-          })}
+        {/* Drawn for this page rather than lifted from any manufacturer's app —
+            the layout, the wording and the colours are Home Assist's, so it
+            illustrates the idea without misrepresenting a specific product. */}
+        <div style={{ display: 'flex', gap: 32, alignItems: 'center', flexWrap: 'wrap' }}>
+          <img src="/assets/illustrations/smart-phone-mockup.png"
+            alt="A phone showing a geyser control screen: the cylinder at 56 degrees with the element off, a morning and an evening heating slot, and the month's consumption"
+            style={{ width: 250, maxWidth: '100%', height: 'auto', display: 'block', flex: '0 1 auto' }} />
+          <div style={{ minWidth: 0, flex: '1 1 200px' }}>
+            <div style={{ ...LABEL, color: 'var(--web-blue-300)', marginBottom: 14 }}>What a controlled geyser gives you</div>
+            {[
+              ['clock', 'Hot water when you need it, not all day'],
+              ['trending-up', 'A bill you can see and change'],
+              ['droplets', 'A leak caught before the ceiling goes'],
+              ['sun', 'The option to run it off the sun']
+            ].map(function (row) {
+              return <div key={row[1]} style={{ display: 'flex', gap: 10, alignItems: 'center', marginBottom: 10 }}>
+                <Icon name={row[0]} size={17} color="var(--web-blue-300)" />
+                <span style={{ ...SMALL, color: 'rgba(255,255,255,.88)', fontSize: 14 }}>{row[1]}</span>
+              </div>;
+            })}
+            <p style={{ ...SMALL, color: 'rgba(255,255,255,.6)', marginTop: 14 }}>Illustration. Each device has its own app and its own screens.</p>
+          </div>
         </div>
       </div>
     </section>
@@ -216,9 +230,12 @@ function SmartHomesPage({ go }) {
                   <img src={d.logo} alt={d.name} style={{ height: 26, width: 'auto', display: 'block' }} />
                 </div>
               : null}
+            {/* One frame for all three. Each source photograph is composed to
+                the same 4 by 3 on white, so a tall DIN rail unit and a wide
+                blue box occupy identical space and the cards read as a set. */}
             {d.image
-              ? <div style={{ background: 'var(--web-grey-050)', border: '1px solid var(--web-grey-100)', borderRadius: 3, padding: 12, marginBottom: 12, display: 'flex', justifyContent: 'center' }}>
-                  <img src={d.image} alt="A DIN rail geyser controller clipped into a distribution board, with Wi-Fi and heat indicators and a push button on the face" style={{ height: 150, width: 'auto', display: 'block' }} />
+              ? <div style={{ border: '1px solid var(--web-grey-100)', borderRadius: 3, overflow: 'hidden', marginBottom: 14, aspectRatio: '4 / 3', background: '#fff' }}>
+                  <img src={d.image} alt={d.imageAlt} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
                 </div>
               : null}
             <h3 style={{ ...H3, fontSize: 19, margin: '0 0 4px' }}>{d.name}</h3>

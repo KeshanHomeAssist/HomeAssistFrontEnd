@@ -161,6 +161,11 @@ function HomePage({ go }) {
           <CostReveal context="burst_geyser" lines={['The cost depends on the size of the unit, the brand, the type — electric, solar or heat pump — how accessible the installation is, and whether the existing unit is still under manufacturer warranty. We typically see costs ranging between R 9,800 ex vat and R 12,800 ex vat for safe complaint geyser replacements']}>
             <Button as="a" variant="navy" fullWidth href={wa('Hi Home Assist, my geyser has burst. ')} target="_blank" rel="noopener" iconLeft={<Icon name="message-circle" size={17} color="#fff" />}>Send us the details</Button>
           </CostReveal>
+          <div style={{ marginTop: 16 }}>
+            <img src="../../assets/illustrations/geyser-cylinder-burst.png" alt="An electric hot water cylinder on its mounting feet, showing the element cover plate and thermostat access" style={{ width: '100%', height: 'auto', display: 'block' }} />
+            <Button variant="secondary" fullWidth onClick={() => go('geyserReplacements')} iconLeft={<Icon name="clipboard-check" size={17} color="var(--web-navy)" />}>Build your spec</Button>
+            <Button variant="ghost" fullWidth onClick={() => go('geyserReplacements')} style={{ marginTop: 8 }} iconLeft={<Icon name="camera" size={17} color="var(--web-navy)" />}>Check my warranty</Button>
+          </div>
         </div>
       </div>
 
@@ -173,23 +178,6 @@ function HomePage({ go }) {
           <div style={{ ...LABEL, marginBottom: 10 }}>Who may work on your geyser</div>
           <p style={BODY}>Plumbers must be registered with the <a href="https://www.pirb.co.za/" target="_blank" rel="noopener">Plumbing Industry Registration Board</a>. Home Assist Technologies is a registered member of IOPSA, membership number 57677983, valid 01/03/2026 to 28/02/2027.</p>
           <p style={{ ...BODY, margin: 0 }}><a href="../../assets/certificates/home-assist-iopsa-2026.jpeg" target="_blank" rel="noopener">View our IOPSA membership certificate</a></p>
-        </div>
-      </div>
-
-      {/* The warranty and serial-plate check is gone from this page entirely —
-          it is the first interactive block on /geyser-replacements, where the
-          annotated plate photograph, the field list and the non-WhatsApp
-          fallback all have room. What belongs here is the route to it. */}
-      <div style={{ marginTop: 32, background: '#fff', border: '1px solid var(--web-grey-100)', borderLeft: '3px solid var(--web-blue)', borderRadius: 4, padding: '26px 30px', display: 'grid', gridTemplateColumns: '200px 1fr', gap: 32, alignItems: 'center', boxShadow: 'var(--web-shadow-card)' }}>
-        <img src="../../assets/illustrations/geyser-cylinder-burst.png" alt="An electric hot water cylinder on its mounting feet, showing the element cover, thermostat access and rating label" style={{ width: '100%', height: 'auto', display: 'block' }} />
-        <div>
-          <div style={{ ...LABEL, marginBottom: 10 }}>Replacing it</div>
-          <h3 style={{ ...H2, fontSize: 21 }}>Build your replacement specification in five questions</h3>
-          <p style={{ ...BODY, maxWidth: '64ch' }}>System type, position, access, capacity and brand — answered before we load the van, which is what makes a same-day replacement possible. Check whether your existing geyser is still under manufacturer warranty at the same time, at no charge.</p>
-          <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
-            <Button variant="navy" size="lg" onClick={() => go('geyserReplacements')} iconLeft={<Icon name="clipboard-check" size={18} color="#fff" />}>Geyser replacements</Button>
-            <Button variant="secondary" size="lg" onClick={() => go('geyserReplacements')} iconLeft={<Icon name="camera" size={18} color="var(--web-navy)" />}>Check my warranty</Button>
-          </div>
         </div>
       </div>
 
@@ -220,6 +208,9 @@ function HomePage({ go }) {
           <CostReveal context="leak_detection" lines={['Leak detection is done first, to pinpoint the leak. The pipe repair and then the resultant damage repair follow. Finding and repairing the leak typically runs R2,000 to R6,200 ex VAT, and resultant repairs R5,000 to R21,000 ex VAT. The repair scope genuinely cannot be quoted until the leak has been found.']}>
             <Button as="a" variant="navy" fullWidth href={wa('Hi Home Assist, I think I have a hidden water leak. ')} target="_blank" rel="noopener" iconLeft={<Icon name="message-circle" size={17} color="#fff" />}>Send us the details</Button>
           </CostReveal>
+          <div style={{ marginTop: 16, borderRadius: 4, overflow: 'hidden', border: '1px solid var(--web-blue-100)' }}>
+            <img src="../../assets/illustrations/leak-thermal-technician.jpg" alt="A Home Assist technician scanning the wall behind a basin with a handheld thermal imaging camera" style={{ width: '100%', height: 'auto', display: 'block' }} />
+          </div>
         </div>
       </div>
     </Section>
@@ -288,8 +279,8 @@ function HomePage({ go }) {
             </div>)}
           </div>
           <Button as="a" variant="ghost" fullWidth href="https://www.google.com/search?q=home+assist+technologies" target="_blank" rel="noopener" style={{ marginTop: 18 }}>Read them on Google</Button>
-          <Button as="a" variant="navy" fullWidth href={CH.rating} target="_blank" rel="noopener" style={{ marginTop: 10 }}>Rate us</Button>
-          <p style={{ ...SMALL, marginTop: 10 }}>A private rating on a job we handled for you — or change a rating you have already given.</p>
+          <Button as="a" variant="navy" fullWidth href={CH.rating} target="_blank" rel="noopener" style={{ marginTop: 10 }} iconLeft={<Icon name="star" size={16} color="#fff" />}>Rate a job we did for you</Button>
+          <p style={{ ...SMALL, marginTop: 10 }}>You will need the seven-digit case number from your SMS or WhatsApp. It is a private rating, and you can change one you have already given.</p>
         </div>
         <ReviewsCarousel />
       </div>
