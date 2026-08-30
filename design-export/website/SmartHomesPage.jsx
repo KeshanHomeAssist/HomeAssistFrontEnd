@@ -9,21 +9,22 @@ const { Button, Icon } = window.HomeAssistDesignSystem_cf0a2b;
 
    ACCURACY NOTE, AND IT MATTERS ON THIS PAGE MORE THAN MOST.
 
-   The original brief described the Kwikot Elon 100 as a smart controller with
-   app control, scheduling, consumption reporting and drip-tray leak detection,
-   plus a DC input, and ranked it first for having all of those at once. The
-   manufacturer's own product pages do not support that. The Elon 100 is a
-   PowerOptimal direct-PV switching unit sold through Kwikot: it feeds DC
-   straight from photovoltaic panels to a standard geyser element, with mains AC
-   as backup, and needs no inverter and no battery. Kwikot documents no app, no
-   schedule, no consumption reporting and no leak detection for it.
+   The Elon 100 was first written up here as a supply-side product only — DC from
+   the panels to the element, no app, no schedule, no leak detection. That came
+   from the manufacturers' public pages: neither kwikot.com nor poweroptimal.com
+   documents the control side anywhere, on any page read on 30 August 2026.
 
-   Those features belong to the Plentify HotBot, which is a genuinely different
-   category of product. So this page does not rank the three against each other
-   on one list. It splits them into what they actually are — one changes where
-   the energy comes from, the others change when the element runs — because a
-   comparison table that pretends they are the same product would mislead a
-   customer into buying the wrong one.
+   CORRECTED 30 August 2026 on Keshan's instruction. He fits these. The unit's
+   own label reads "elon SMART HOT WATER SYSTEM by PowerOptimal" and carries an
+   SSID, which is physical confirmation of the Wi-Fi, and the device does
+   schedule, read cylinder temperature and flag a leak. If anyone re-checks this
+   against the manufacturers' websites and finds nothing, that is why — the
+   websites are thin, not the product.
+
+   The page still splits the three by what they change, because it is a real
+   distinction and it is how somebody chooses: the Elon is the only one that
+   changes where the energy comes from, and it is the only one whose
+   load-shedding answer depends on whether panels were actually fitted.
 
    Sources, read 30 August 2026:
      kwikot.com/the-elon-100-solar-pv-water-heating-unit
@@ -53,20 +54,23 @@ const SH_PROBLEM = [
 const SH_DEVICES = [
   {
     id: 'elon',
-    kind: 'Where the energy comes from',
+    kind: 'Energy source and control',
     name: 'Kwikot Elon 100',
-    made: 'Manufactured by PowerOptimal, sold through Kwikot',
-    summary: 'Feeds DC current straight from photovoltaic panels to a standard geyser element, with mains AC as backup.',
+    made: 'Made by PowerOptimal, sold through Kwikot',
+    logo: '/assets/logo/logo-kwikot.png',
+    logoOnLight: true,
+    makerHref: 'https://poweroptimal.com/',
+    summary: 'Feeds DC current straight from photovoltaic panels to a standard geyser element, with mains AC as backup — and schedules and monitors the cylinder from a phone.',
     points: [
       'No inverter and no battery — the panels connect to the element directly',
+      'Schedules the element and reports on it from a mobile app',
+      'Reads the cylinder temperature, and flags a leak',
       'Runs completely off-grid, or on AC as backup',
-      'Works through load-shedding, because it is not drawing from the grid',
       'Over 90% efficient, and switches on under load from as little as 20 V',
-      'Accepts a solar array up to 4 kW, at 20 to 250 V DC',
-      'Over- and undervoltage protection'
+      'Accepts a solar array up to 4 kW, at 20 to 250 V DC, with over- and undervoltage protection'
     ],
     claim: 'Kwikot states water heating energy savings of 50 to 70% are common, with payback in three to five years.',
-    notThis: 'It has no app, no schedule and no leak detection. It is not a controller — it changes where the energy comes from, not when the element runs.',
+    notThis: 'It needs Wi-Fi for the app, and it only keeps heating through load-shedding if photovoltaic panels are actually fitted — on AC alone it goes off with everything else. The panels are a separate cost and a separate trade.',
     range: 'The Elon 100 is the unit most homes fit. Kwikot also sells it as a full solar PV kit and as a water heater kit, so what you need depends on whether you already have panels.',
     price: 'R3,500 to R4,000 for the unit, indicative and excluding panels.',
     monthly: 'No monthly cost.',
@@ -132,23 +136,23 @@ const SH_DEVICES = [
    other two change the schedule. Comparing them on a single list of ticks is
    how somebody ends up buying a PV kit when what they wanted was an app. */
 const SH_TABLE = [
-  ['Puts the geyser on a schedule', 'No', 'Yes', 'Yes'],
-  ['Controlled from a phone', 'No', 'Yes', 'Yes'],
-  ['Reads cylinder temperature', 'No', 'Yes', 'No'],
-  ['Detects a leak', 'No', 'Yes', 'Logs a warning'],
+  ['Puts the geyser on a schedule', 'Yes', 'Yes', 'Yes'],
+  ['Controlled from a phone', 'Yes', 'Yes', 'Yes'],
+  ['Reads cylinder temperature', 'Yes', 'Yes', 'No'],
+  ['Detects a leak', 'Yes', 'Yes', 'Limited'],
   ['Takes DC directly from PV panels', 'Yes', 'No', 'No'],
-  ['Runs through load-shedding', 'Yes', 'Schedule only', 'Manual override'],
-  ['Needs Wi-Fi', 'No', 'Yes, within 10 m', 'Yes'],
-  ['Works if connectivity fails', 'Yes', 'Yes, backup connection', 'Yes, press the button'],
+  ['Runs through load-shedding', 'Only with PV fitted', 'No', 'Manual override'],
+  ['Needs Wi-Fi', 'Yes', 'Yes, within 10 m', 'Yes'],
+  ['Works if connectivity fails', 'Only if DC connected', 'Yes, backup connection', 'Yes, press the button'],
   ['Fitted at', 'The cylinder', 'The cylinder', 'The DB board'],
   ['Who installs it', 'Plumber', 'Plumber', 'Electrician'],
-  ['Indicative hardware', 'R3,500 - R4,000', 'R849 ex VAT', 'R400 - R650 ex VAT'],
+  ['Indicative hardware ex VAT', 'R3,500 - R4,000', 'R849', 'R400 - R650'],
   ['Monthly cost', 'None', 'R149', 'None']
 ];
 
 const SH_FAQ = [
   ['Which one should I actually buy?',
-   'It depends what you are trying to fix. If the bill is the problem and you have roof space, the Elon takes the water heating off the grid and is the biggest single change of the three. If you want the geyser to stop heating water nobody is going to use, and you want to see what it is doing, the HotBot is the one built for that. If you want the simplest and cheapest useful thing, and no plumbing work at all, the distribution board unit does that. They are not three versions of the same product and it is worth being clear which problem you are solving.'],
+   'All three schedule the geyser and show it to you on a phone, so that is not the deciding question. If the bill is the problem and you have roof space, the Elon is the only one that takes water heating off the grid, and it is the biggest single change of the three — but it needs panels, and those are a separate cost and a separate trade. If you want scheduling, temperature and leak detection without going near a roof, the HotBot does that for the lowest upfront cost. If you want the simplest thing, no plumbing work at all and a button you can press when the Wi-Fi is down, the distribution board unit does that.'],
   ['Can I have more than one?',
    'Yes, and the combination people ask for most is a PV supply plus a schedule — the Elon deciding where the energy comes from and a controller deciding when the element runs. Tell us what you already have and we will say plainly whether adding the second one is worth it on your setup.'],
   ['Who has to install it, and will I need a certificate of compliance?',
@@ -219,15 +223,15 @@ function SmartHomesPage({ go }) {
     </Section>
 
     {/* The three devices */}
-    <Section tint eyebrow="The options" title="Two different problems, three products"
-      intro="The Elon changes where the energy comes from. The HotBot and the distribution board breaker change when the element runs. Read the category before you read the features.">
+    <Section tint eyebrow="The options" title="Three products, and one real difference between them"
+      intro="All three will put your geyser on a schedule and show it to you on a phone. Only the Elon changes where the energy comes from, and that is the decision worth making first — everything else follows from it.">
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 20 }}>
         {SH_DEVICES.map(function (d) {
           return <div key={d.id} style={{ ...CARD, display: 'flex', flexDirection: 'column' }}>
             <div style={{ ...LABEL, color: 'var(--web-blue)', marginBottom: 10 }}>{d.kind}</div>
             {d.logo
-              ? <div style={{ background: 'var(--web-navy)', borderRadius: 3, padding: '12px 14px', marginBottom: 12, display: 'flex', alignItems: 'center' }}>
-                  <img src={d.logo} alt={d.name} style={{ height: 26, width: 'auto', display: 'block' }} />
+              ? <div style={{ background: d.logoOnLight ? 'var(--web-grey-050)' : 'var(--web-navy)', border: d.logoOnLight ? '1px solid var(--web-grey-100)' : 'none', borderRadius: 3, padding: '10px 14px', marginBottom: 12, height: 50, boxSizing: 'border-box', display: 'flex', alignItems: 'center' }}>
+                  <img src={d.logo} alt={d.name} style={{ maxHeight: 30, width: 'auto', display: 'block' }} />
                 </div>
               : null}
             {/* One frame for all three. Each source photograph is composed to
@@ -239,7 +243,9 @@ function SmartHomesPage({ go }) {
                 </div>
               : null}
             <h3 style={{ ...H3, fontSize: 19, margin: '0 0 4px' }}>{d.name}</h3>
-            <p style={{ ...SMALL, marginBottom: 12 }}>{d.made}</p>
+            <p style={{ ...SMALL, marginBottom: 12 }}>{d.makerHref
+              ? <a href={d.makerHref} target="_blank" rel="noopener noreferrer" style={{ fontWeight: 600 }}>{d.made}</a>
+              : d.made}</p>
             <p style={{ ...BODY, fontSize: 15, marginBottom: 14 }}>{d.summary}</p>
 
             <ul style={{ ...BODY, fontSize: 14, margin: '0 0 14px', paddingLeft: 18, display: 'flex', flexDirection: 'column', gap: 6 }}>
@@ -289,7 +295,7 @@ function SmartHomesPage({ go }) {
 
     {/* Comparison */}
     <Section eyebrow="Side by side" title="What each one actually does" id="compare"
-      intro="Read down the first two rows before anything else. They are what separates a supply-side product from a controller.">
+      intro="The first two rows are the same for all three. The rows worth reading are the PV input, load-shedding and what happens when the connection drops.">
       <div style={{ overflowX: 'auto' }}>
         <table style={{ borderCollapse: 'collapse', width: '100%', minWidth: 620 }}>
           <thead>

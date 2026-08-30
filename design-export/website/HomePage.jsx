@@ -158,7 +158,7 @@ function HomePage({ go }) {
         </div>
         <div style={{ ...CARD, background: 'var(--web-blue-050)', border: '1px solid var(--web-blue-100)' }}>
           <div style={{ ...LABEL, marginBottom: 10 }}>What it costs</div>
-          <CostReveal context="burst_geyser" lines={['The cost depends on the size of the unit, the brand, the type — electric, solar or heat pump — how accessible the installation is, and whether the existing unit is still under manufacturer warranty. We typically see costs ranging between R 9,800 ex vat and R 12,800 ex vat for safe complaint geyser replacements']}>
+          <CostReveal context="burst_geyser" lines={['The cost depends on the size of the unit, the brand, the type — electric, solar or heat pump — how accessible the installation is, and whether the existing unit is still under manufacturer warranty. We typically see costs ranging between R 9,800 ex VAT and R 13,200 ex VAT for a safe, compliant electric geyser replacement']}>
             <Button as="a" variant="navy" fullWidth href={wa('Hi Home Assist, my geyser has burst. ')} target="_blank" rel="noopener" iconLeft={<Icon name="message-circle" size={17} color="#fff" />}>Send us the details</Button>
           </CostReveal>
           <div style={{ marginTop: 16 }}>

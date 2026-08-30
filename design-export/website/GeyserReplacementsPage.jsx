@@ -188,7 +188,10 @@ const GR_ACCESS = [
 
 const GR_CAPACITIES = [50, 100, 150, 200, 250];
 const GR_HOUSEHOLD_FOR = { 50: '1 person', 100: '2 people', 150: '3 to 4 people', 200: '4 to 5 people', 250: '5 to 6 people' };
-const GR_HOUSEHOLD_STEPS = [1, 2, 3, 4, 5];
+/* How many figures light up at each capacity — the top of the range above, so a
+   150 L cylinder shows four and reads as "up to four people". */
+const GR_PEOPLE_FOR = { 50: 1, 100: 2, 150: 4, 200: 5, 250: 6 };
+const GR_PEOPLE_STEPS = [1, 2, 3, 4, 5, 6];
 
 /* The four cylinder brands Home Assist supplies, presented as equals.
 
@@ -228,8 +231,9 @@ const GR_BRANDS = [
   {
     id: 'xstream', name: 'Xstream',
     logo: '/assets/logo/logo-xstream.png',
-    covers: 'Electric',
-    body: 'Hot water cylinders from Mainstream. A straightforward, well-priced unit for a standard high pressure replacement where the job does not call for anything unusual.'
+    covers: 'Electric and solar',
+    note: 'Made only in the Western Cape.',
+    body: 'Solar ready, like Kwikot and Ariston, and the only fibre cylinder on the market — a different material to the steel and copper everything else is built from. Made only in the Western Cape, which is where most of our geyser work sits.'
   }
 ];
 
@@ -519,7 +523,7 @@ function GeyserReplacementsPage({ go }) {
     <section id="configurator" style={{ background: '#fff' }}>
       <div style={{ ...WRAP, padding: '64px 40px' }}>
         <Eyebrow>Build your specification</Eyebrow>
-        <h2 style={{ ...H2, fontSize: 26, marginBottom: 14, maxWidth: '26ch' }}>Five questions, and we arrive with the right cylinder</h2>
+        <h2 style={{ ...H2, fontSize: 26, marginBottom: 14, maxWidth: '26ch' }}>Five questions for same-day service</h2>
         <div style={{ width: 56, height: 3, background: 'var(--web-blue)', marginBottom: 24 }}></div>
         <p style={{ ...BODY, maxWidth: '68ch', fontSize: 17 }}>Nothing here is gated and nothing is compulsory. Every answer you give is one less thing to establish on the phone, and knowing the position and the access up front is what lets us arrive with the right unit, the right brackets and the right size team — and replace on the same day.</p>
 
@@ -621,17 +625,23 @@ function GeyserReplacementsPage({ go }) {
                   })}
                 </div>
 
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', margin: '22px 0 6px' }}>
+                {/* One slider, not two. The second range input was a duplicate
+                    control bound to the same value, which is a confusing thing
+                    to put in front of somebody — two handles that always move
+                    together. The household is a readout now: the figures fill
+                    left to right as the capacity slider moves. */}
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', margin: '26px 0 10px' }}>
                   <div style={{ ...LABEL }}>Household</div>
                   <div style={{ font: '700 18px/1 var(--font-core)', color: 'var(--web-navy)' }}>{GR_HOUSEHOLD_FOR[capacity]}</div>
                 </div>
-                <input type="range" min="0" max="4" step="1" value={capacityIndex < 0 ? 2 : capacityIndex}
-                  aria-label="Number of people in the household"
-                  onChange={function (e) { choose('capacity', setCapacity, GR_CAPACITIES[Number(e.target.value)], 'capacity'); }}
-                  style={{ width: '100%', minHeight: 'var(--web-tap-min)', accentColor: 'var(--web-blue)' }} />
-                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                  {GR_HOUSEHOLD_STEPS.map(function (h) {
-                    return <span key={h} style={{ ...SMALL, color: 'var(--web-grey-500)' }}>{h}</span>;
+                <div aria-hidden="true" style={{ display: 'flex', gap: 10, alignItems: 'flex-end', minHeight: 46 }}>
+                  {GR_PEOPLE_STEPS.map(function (k) {
+                    const lit = k <= GR_PEOPLE_FOR[capacity];
+                    return <svg key={k} width="22" height="42" viewBox="0 0 22 42" style={{ display: 'block', transition: 'opacity .18s' }}>
+                      <circle cx="11" cy="7" r="6" fill={lit ? 'var(--web-blue)' : 'var(--web-grey-300)'} />
+                      <path d="M11 15 c-5 0 -8 3 -8 8 v7 h3 v11 h10 v-11 h3 v-7 c0 -5 -3 -8 -8 -8 z"
+                        fill={lit ? 'var(--web-blue)' : 'var(--web-grey-300)'} />
+                    </svg>;
                   })}
                 </div>
 
@@ -844,8 +854,8 @@ function CostRevealGeyser() {
     </div>;
   }
   return <div>
-    <p style={{ ...BODY, fontSize: 14 }}>A standard compliant geyser replacement typically runs between R9,800 and R12,800 excluding VAT, including the cylinder, the installation, the compliance parts and the certificate of compliance.</p>
-    <p style={{ ...SMALL, borderTop: '1px solid var(--web-blue-100)', paddingTop: 10 }}>An indication for a standard installation, not a quote. Your cost depends on the capacity, the brand, the system type, the access and the condition of the existing installation. We confirm it on site before any work starts.</p>
+    <p style={{ ...BODY, fontSize: 14 }}>A standard compliant <strong>electric</strong> geyser replacement typically runs between R9,800 and R13,200 excluding VAT, including the cylinder, the installation, the compliance parts and the certificate of compliance.</p>
+    <p style={{ ...SMALL, borderTop: '1px solid var(--web-blue-100)', paddingTop: 10 }}>An indication for a standard electric installation, not a quote. Solar, heat pump and gas are priced separately. Your cost depends on the capacity, the brand, the access and the condition of the existing installation, and we confirm it on site before any work starts.</p>
   </div>;
 }
 
