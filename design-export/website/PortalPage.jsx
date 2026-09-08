@@ -3,7 +3,7 @@ const { Button, Icon } = window.HomeAssistDesignSystem_cf0a2b;
 function PortalPage({ go }) {
   return <main>
     <section style={{ background: 'var(--web-navy)' }}>
-      <div style={{ ...WRAP, padding: '88px 40px 72px', display: 'grid', gridTemplateColumns: '1fr .82fr', gap: 56, alignItems: 'center' }}>
+      <div style={{ ...WRAP, padding: '88px 40px 72px' }}>
         <div>
           <Eyebrow onDark>Home Assist portal</Eyebrow>
           <h1 style={{ ...DISPLAY, color: '#fff', maxWidth: '20ch', marginBottom: 18 }}>Every claim, every job, every certificate — in one place.</h1>
@@ -13,7 +13,6 @@ function PortalPage({ go }) {
             <Button as="a" size="lg" variant="ghost" href={CH.register} target="_blank" rel="noopener" style={{ color: '#fff', border: '1px solid rgba(255,255,255,.55)' }}>Register as a provider</Button>
           </div>
         </div>
-        <PortalMock />
       </div>
     </section>
 
@@ -65,13 +64,6 @@ function PortalPage({ go }) {
       </div>
     </div>
   </main>;
-}
-
-/* Abstract two-blue portal mockup — no laptop photography. */
-function PortalMock() {
-  return <div style={{ borderRadius: 4, overflow: 'hidden', background: '#fff' }}>
-    <img src="../../assets/illustrations/technician-phone-illustration.jpg" alt="Home Assist technician checking a job on his phone" style={{ display: 'block', width: '100%', height: 'auto' }} />
-  </div>;
 }
 
 Object.assign(window, { PortalPage });
