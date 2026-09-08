@@ -425,9 +425,19 @@ function SmartHomesPage({ go }) {
       </div>
 
       <div style={{ ...CARD, marginTop: 20, background: 'var(--web-blue-050)', border: '1px solid var(--web-blue-100)' }}>
-        <div style={{ ...LABEL, marginBottom: 10 }}>One worked example</div>
-        <p style={{ ...BODY, fontSize: 16, maxWidth: '70ch' }}>Two people, a 150 litre cylinder, and a simple scheduler set to come on for an hour in the morning and an hour in the evening. At September 2026 tariffs that saves in the region of <strong>R300 a month</strong>.</p>
-        <p style={{ ...BODY, fontSize: 15, maxWidth: '70ch', margin: 0 }}>Change any one of the four things above and that number moves. A larger household saves more in rand and less in percentage. A house with solar PV may save very little on top of what it already generates. A household that does not change how it showers gets the scheduling saving and not the rest. We would rather tell you that than quote a range you will not reach.</p>
+        <div style={{ display: 'flex', gap: 28, alignItems: 'center', flexWrap: 'wrap' }}>
+          <div style={{ flex: '1 1 380px', minWidth: 0 }}>
+            <div style={{ ...LABEL, marginBottom: 10 }}>One worked example</div>
+            <p style={{ ...BODY, fontSize: 16, maxWidth: '70ch' }}>Two people, a 150 litre cylinder, and a simple scheduler set to come on for an hour in the morning and an hour in the evening. At September 2026 tariffs that saves in the region of <strong>R300 a month</strong>.</p>
+            <p style={{ ...BODY, fontSize: 15, maxWidth: '70ch', margin: 0 }}>Change any one of the four things above and that number moves. A larger household saves more in rand and less in percentage. A house with solar PV may save very little on top of what it already generates. A household that does not change how it showers gets the scheduling saving and not the rest. We would rather tell you that than quote a range you will not reach.</p>
+          </div>
+          <div style={{ flex: '0 1 300px', minWidth: 220 }}>
+            <img src="/assets/illustrations/smart-solar-home.jpg"
+              alt="Illustration of a home with rooftop solar panels, a battery unit on the wall and an electric van charging outside"
+              style={{ width: '100%', height: 'auto', display: 'block', borderRadius: 3, border: '1px solid var(--web-blue-100)' }} />
+            <p style={{ ...SMALL, marginTop: 8 }}>Illustration. Solar on the roof changes the arithmetic — see the Elon Smart above.</p>
+          </div>
+        </div>
       </div>
 
       <p style={{ ...SMALL, marginTop: 14, maxWidth: '76ch' }}>Tell us your household size, your cylinder and roughly what you pay for a unit of electricity, and we will work through your own numbers with you rather than repeat this one.</p>
@@ -454,10 +464,30 @@ function SmartHomesPage({ go }) {
         </div>
       </div>
       <div style={{ ...CARD, marginTop: 20 }}>
-        <div style={{ ...LABEL, marginBottom: 10 }}>We check the geyser first</div>
-        <p style={{ ...BODY, margin: 0, maxWidth: '76ch' }}>Before we fit any of these we look at the installation it is going onto. A schedule on a cylinder with no working pressure control or no vacuum breakers is a schedule on a problem. If something is missing we tell you what it is and what it costs to put right, separately from the device you came for.</p>
+        <div style={{ display: 'flex', gap: 28, alignItems: 'center', flexWrap: 'wrap' }}>
+          <div style={{ flex: '1 1 380px', minWidth: 0 }}>
+            <div style={{ ...LABEL, marginBottom: 10 }}>We check the geyser first</div>
+            <p style={{ ...BODY, margin: 0, maxWidth: '76ch' }}>Before we fit any of these we look at the installation it is going onto. A schedule on a cylinder with no working pressure control or no vacuum breakers is a schedule on a problem. If something is missing we tell you what it is and what it costs to put right, separately from the device you came for.</p>
+          </div>
+          <div style={{ flex: '0 1 320px', minWidth: 220 }}>
+            <img src="/assets/illustrations/smart-electrician-db.jpg"
+              alt="Illustration of an electrician working at a wall-mounted distribution board inside a home"
+              style={{ width: '100%', height: 'auto', display: 'block', borderRadius: 3, border: '1px solid var(--web-grey-100)' }} />
+          </div>
+        </div>
       </div>
     </Section>
+
+    {/* Full-width illustration band. Supplied by Keshan, 8 September 2026 —
+        a visual break between the installation detail and the CTA. */}
+    <section>
+      <div style={{ ...WRAP, padding: '0 40px 56px' }}>
+        <img src="/assets/illustrations/smart-future-home.jpg"
+          alt="Illustration of a valley of homes with rooftop solar panels and a service van on the road, opening onto a futuristic connected home"
+          style={{ width: '100%', height: 'auto', display: 'block', borderRadius: 4, border: '1px solid var(--web-grey-100)' }} />
+        <p style={{ ...SMALL, marginTop: 10 }}>Illustration. Solar on the roof, the geyser on a schedule, and the bill on your phone — the ordinary house is already headed this way.</p>
+      </div>
+    </section>
 
     {/* CTA */}
     <NavyBand eyebrow="Tell us what you have" title="Send us your geyser and your bill, and we will say which of the three is worth it.">
