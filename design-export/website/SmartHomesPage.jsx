@@ -329,6 +329,27 @@ function SmartHomesPage({ go }) {
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 20 }}>
         {SH_DEVICES.map(function (d) { return <ShDeviceCard key={d.id} d={d} />; })}
       </div>
+      {/* Tried and tested — added 8 September 2026 on Keshan's instruction.
+          Home Assist team members run all three devices in their own homes,
+          which is the bar for a product appearing on this page. The approvals
+          line names the two regimes this hardware falls under — ICASA type
+          approval for the Wi-Fi radio, NRCS compulsory specifications for the
+          hardware (the Sonoff BASIC-1GSP page publishes its NRCS certification
+          number) — and ties "safe and compliant" to proper installation, which
+          is the same argument the rest of the page makes. */}
+      <div style={{ ...CARD, marginTop: 20 }}>
+        <div style={{ display: 'flex', gap: 28, alignItems: 'center', flexWrap: 'wrap' }}>
+          <div style={{ flex: '1 1 380px', minWidth: 0 }}>
+            <div style={{ ...LABEL, marginBottom: 10 }}>Tried in our own homes</div>
+            <p style={{ ...BODY, fontSize: 14 }}>Home Assist team members have fitted, run and tested all three of these products in their own homes. That is the bar for being on this page: we have watched them cut our own bills, and we know they do what their manufacturers say they do.</p>
+            <p style={{ ...BODY, fontSize: 14, margin: 0 }}>Each one is approved for safe use in a South African home — Wi-Fi devices are type-approved by ICASA and the hardware meets NRCS compulsory specifications — <strong>provided the installation is done properly</strong>. That is what a Home Assist installer is for: a certificate of compliance is issued for the distribution board controller, and for any photovoltaic connection.</p>
+          </div>
+          <div style={{ flex: '0 1 auto', display: 'flex', gap: 24, alignItems: 'center', flexWrap: 'wrap' }}>
+            <img src="/assets/logo/logo-icasa.png" alt="ICASA — Independent Communications Authority of South Africa" style={{ height: 44, width: 'auto', display: 'block' }} />
+            <img src="/assets/logo/logo-nrcs.png" alt="NRCS — National Regulator for Compulsory Specifications" style={{ height: 40, width: 'auto', display: 'block' }} />
+          </div>
+        </div>
+      </div>
       {/* Whichever device wins, the installation is the part Home Assist owns.
           Said once, under the three tiles, rather than three times inside them. */}
       <div style={{ ...CARD, marginTop: 20, background: 'var(--web-navy)', border: 'none' }}>
