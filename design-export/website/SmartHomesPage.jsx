@@ -26,14 +26,26 @@ const { Button, Icon } = window.HomeAssistDesignSystem_cf0a2b;
    changes where the energy comes from, and it is the only one whose
    load-shedding answer depends on whether panels were actually fitted.
 
-   Sources, read 30 August 2026:
-     kwikot.com/the-elon-100-solar-pv-water-heating-unit
-     kwikot.com/elon-solar-pv-geyser-water-heating-range
-     plentify.io/non-solar-households
+   RENAMED AND RE-SPECCED 8 September 2026, on Keshan's instruction after a
+   fact-check against kwikot.com/the-elon-smart-water-heating-unit and
+   PowerOptimal's spec sheets (docs.poweroptimal.com). The unit Kwikot sells and
+   Home Assist fits is the ELON SMART, not the Elon 100 — two different
+   PowerOptimal models. Elon Smart figures: array < 3 kW at 30-230 V DC,
+   18A AC / 15A DC, payback 2-4 years per Kwikot. The Elon 100's 20-250 V /
+   larger-array figures do NOT apply to this card. Leak detection on the Elon
+   Smart is a premium-app feature PowerOptimal schedules for H2 2026, so the
+   card and the table say "fault alerts", not "detects a leak".
 
-   OUTSTANDING: the Home Assist DB board breaker copy and specifications. The
-   advert was not supplied, so that card carries [CONFIRM] chips rather than
-   invented numbers. */
+   Sources, read 30 August and 8 September 2026:
+     kwikot.com/the-elon-smart-water-heating-unit
+     docs.poweroptimal.com (Elon Smart thermostat specification)
+     plentify.io/non-solar-households
+     sonoffafrica.co.za/product/sonoff-32-amp-din-rail-basic-1gsp (DB unit)
+     energybee.co.za/guides/best-geyser-timers-south-africa-2026 (DB savings)
+
+   The DB board hardware is confirmed as the Sonoff BASIC-1GSP, a 32 A
+   double-pole DIN rail switch — the earlier "held until confirmed" note on the
+   comparison table is resolved. */
 
 function shTrack(name, params) {
   if (typeof window === 'undefined') return;
@@ -55,28 +67,28 @@ const SH_DEVICES = [
   {
     id: 'elon',
     kind: 'Energy source and control',
-    name: 'Kwikot Elon 100',
+    name: 'Kwikot Elon Smart',
     made: 'Made by PowerOptimal, sold through Kwikot',
     makerHref: 'https://poweroptimal.com/',
     summary: 'Feeds DC current straight from photovoltaic panels to a standard geyser element, with mains AC as backup — and schedules and monitors the cylinder from a phone.',
     points: [
       'No inverter and no battery — the panels connect to the element directly',
       'Schedules the element and reports on it from a mobile app',
-      'Reads the cylinder temperature, and flags a leak',
+      'Reads the cylinder temperature, and alerts early on faults — element failure, hot connections, incorrect wiring',
       'Runs completely off-grid, or on AC as backup',
-      'Over 90% efficient, and switches on under load from as little as 20 V',
-      'Accepts a solar array up to 4 kW, at 20 to 250 V DC, with over- and undervoltage protection'
+      'Accepts a solar array up to 3 kW, at 30 to 230 V DC, with over- and undervoltage protection'
     ],
-    claim: 'Kwikot states water heating energy savings of 50 to 70% are common, with payback in three to five years.',
+    claim: 'Kwikot states payback periods of 2 to 4 years with a solar PV installation.',
+    claimHref: 'https://www.kwikot.com/the-elon-smart-water-heating-unit',
     notThis: 'It needs Wi-Fi for the app, and it only keeps heating through load-shedding if photovoltaic panels are actually fitted — on AC alone it goes off with everything else. The panels are a separate cost and a separate trade.',
-    range: 'The Elon 100 is the unit most homes fit. Kwikot also sells it as a full solar PV kit and as a water heater kit, so what you need depends on whether you already have panels.',
+    range: 'The Elon Smart is the unit most homes fit. Kwikot also sells the Elon range as a full solar PV kit and as a water heater kit, so what you need depends on whether you already have panels.',
     price: 'R3,500 to R4,000 for the unit, indicative and excluding panels.',
     monthly: 'No monthly cost.',
     fitting: 'A plumber, if your geyser already has an isolator — no electrician needed. Connecting photovoltaic panels does need a PV installer electrician, and that work is certified through the PV Green Card scheme. Home Assist can arrange it.',
     fittingLink: { href: 'https://pvgreencard.co.za/app/directory/', text: 'PV Green Card installer directory' },
     image: '/assets/illustrations/smart-elon.jpg',
-    imageAlt: 'The Elon 100 unit, a compact blue enclosure with AC and DC terminal blocks and a temperature probe.',
-    href: 'https://www.kwikot.com/elon-solar-pv-geyser-water-heating-range'
+    imageAlt: 'The Elon Smart unit, a compact blue enclosure with AC and DC terminal blocks and a temperature probe.',
+    href: 'https://www.kwikot.com/the-elon-smart-water-heating-unit'
   },
   {
     id: 'hotbot',
@@ -92,6 +104,7 @@ const SH_DEVICES = [
       'Optimises for solar hours on compatible systems'
     ],
     claim: 'Plentify states households using HotBot save on average R355 per month on their electricity bill.',
+    claimHref: 'https://plentify.io/non-solar-households/',
     notThis: 'It fits electric and thermosyphon solar thermal geysers — not pumped solar thermal, and not gas. It wants Wi-Fi within 10 metres, though it carries a backup connection so losing the house Wi-Fi does not leave it stranded.',
     range: 'The HotBot is the geyser device. Plentify makes other devices in the same family, and some of those do involve photovoltaic work.',
     price: 'R849 excluding VAT, once off.',
@@ -115,17 +128,21 @@ const SH_DEVICES = [
     points: [
       'Puts the geyser on a schedule so it heats outside peak tariff hours',
       'Learns the household routine, so hot water is ready when it is wanted',
-      'Wi-Fi, on a 20 A DIN rail unit that clips into the existing board',
+      'Wi-Fi, on a 32 A double-pole DIN rail unit that clips into the existing board',
       'A physical button on the face of the unit',
+      'Tracks live power and energy use, with daily and monthly history in the app',
       'Logs a warning on a leak or a component fault, and routes it to an installer'
     ],
-    claim: null,
+    claim: 'Timing a geyser into two daily heating blocks typically saves R200 to R400 a month, per Energy Bee’s 2026 geyser timer guide.',
+    claimHref: 'https://energybee.co.za/guides/best-geyser-timers-south-africa-2026',
     notThis: 'It does not read the water temperature. It switches the supply and reports on it, which is why it is the simplest of the three and the one that keeps working when you are standing in front of it.',
+    range: 'The hardware is the Sonoff BASIC-1GSP, a 32 A double-pole DIN rail switch with energy monitoring, built on Matter over Wi-Fi.',
     price: 'R400 to R650 excluding VAT for the unit, indicative.',
     monthly: 'No monthly cost.',
     fitting: 'An electrician, because the unit clips into your distribution board. No plumbing work at all.',
     image: '/assets/illustrations/smart-dbboard.jpg',
-    imageAlt: 'A DIN rail geyser controller clipped into a distribution board, with Wi-Fi and heat indicators and a push button on the face.'
+    imageAlt: 'A DIN rail geyser controller clipped into a distribution board, with Wi-Fi and heat indicators and a push button on the face.',
+    href: 'https://sonoffafrica.co.za/product/sonoff-32-amp-din-rail-basic-1gsp/'
   }
 ];
 
@@ -136,9 +153,9 @@ const SH_TABLE = [
   ['Puts the geyser on a schedule', 'Yes', 'Yes', 'Yes'],
   ['Controlled from a phone', 'Yes', 'Yes', 'Yes'],
   ['Reads cylinder temperature', 'Yes', 'Yes', 'No'],
-  ['Detects a leak', 'Yes', 'Yes', 'Limited'],
+  ['Detects a leak', 'Fault alerts', 'Yes', 'Limited'],
   ['Takes DC directly from PV panels', 'Yes', 'No', 'No'],
-  ['Runs through load-shedding', 'Only with PV fitted', 'No', 'Manual override'],
+  ['Runs through load-shedding', 'Only with PV fitted', 'No', 'No'],
   ['Needs Wi-Fi', 'Yes', 'Yes, within 10 m', 'Yes'],
   ['Works if connectivity fails', 'Only if DC connected', 'Yes, backup connection', 'Yes, press the button'],
   ['Fitted at', 'The cylinder', 'The cylinder', 'The DB board'],
@@ -157,10 +174,97 @@ const SH_FAQ = [
   ['Will this void my geyser warranty?',
    'Not if it is installed to the manufacturer’s specification by a registered plumber and, where electrical work is involved, a qualified electrician. Work that is not is exactly how warranties get voided — which is the same argument we make about the installation itself on the geyser replacements page.'],
   ['Do the savings figures hold up?',
-   'They are the manufacturers’ own published figures and we have quoted them as such rather than as our own. Every one of them depends on what you pay for electricity, whether you already have solar PV, whether the geyser is on a schedule at all, and whether the household changes how it showers. Our own worked example is two people on a 150 litre cylinder with a simple twice-daily scheduler, saving in the region of R300 a month at September 2026 tariffs. Treat a published figure as the best case a well-matched installation reaches, not as a number to budget against.'],
+   'They are published figures — the manufacturers’ own for the Elon Smart and the HotBot, and Energy Bee’s independent 2026 geyser timer guide for the distribution board unit — and every one is quoted as such and linked to its source rather than presented as our own. Every one of them depends on what you pay for electricity, whether you already have solar PV, whether the geyser is on a schedule at all, and whether the household changes how it showers. Our own worked example is two people on a 150 litre cylinder with a simple twice-daily scheduler, saving in the region of R300 a month at September 2026 tariffs. Treat a published figure as the best case a well-matched installation reaches, not as a number to budget against.'],
   ['Can you fit one to a geyser you did not install?',
    'Yes. We will check the existing installation first, because fitting a controller to a cylinder that has no working pressure control or no vacuum breakers is putting a schedule on a problem rather than fixing it.']
 ];
+
+/* One card per device. The savings badge is identical on all three tiles and
+   links to the published source of the figure — Kwikot, Plentify and Energy
+   Bee respectively — because the "Before you compare the prices" note promises
+   the claims are labelled, and a label you can click is a stronger label.
+
+   Everything below the price — what it does not do, other models, who installs
+   it — sits behind a "Learn more" disclosure so the three tiles compare at a
+   glance and the detail is still one tap away. Closed on the server and on
+   first paint, so the prerendered HTML and the hydrated page agree. */
+function ShDeviceCard({ d }) {
+  const [open, setOpen] = React.useState(false);
+  function toggle() {
+    const next = !open;
+    setOpen(next);
+    shTrack('smart_learn_more', { device: d.id, open: next });
+  }
+  const RULE = { borderTop: '1px solid var(--web-grey-100)', paddingTop: 12, marginTop: 12 };
+  return <div style={{ ...CARD, display: 'flex', flexDirection: 'column' }}>
+    <div style={{ ...LABEL, color: 'var(--web-blue)', marginBottom: 10 }}>{d.kind}</div>
+    {/* One frame for all three. Each source photograph is composed to
+        the same 4 by 3 on white, so a tall DIN rail unit and a wide
+        blue box occupy identical space and the cards read as a set. */}
+    {d.image
+      ? <div style={{ border: '1px solid var(--web-grey-100)', borderRadius: 3, overflow: 'hidden', marginBottom: 14, aspectRatio: '4 / 3', background: '#fff' }}>
+          <img src={d.image} alt={d.imageAlt} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+        </div>
+      : null}
+    <h3 style={{ ...H3, fontSize: 19, margin: '0 0 4px' }}>{d.name}</h3>
+    <p style={{ ...SMALL, marginBottom: 12 }}>{d.makerHref
+      ? <a href={d.makerHref} target="_blank" rel="noopener noreferrer" style={{ fontWeight: 600 }}>{d.made}</a>
+      : d.made}</p>
+    <p style={{ ...BODY, fontSize: 15, marginBottom: 14 }}>{d.summary}</p>
+
+    <ul style={{ ...BODY, fontSize: 14, margin: '0 0 14px', paddingLeft: 18, display: 'flex', flexDirection: 'column', gap: 6 }}>
+      {d.points.map(function (p) { return <li key={p}>{p}</li>; })}
+    </ul>
+
+    {/* The savings badge — same shape on all three tiles, linked to its source. */}
+    {d.claim ? (d.claimHref
+      ? <a href={d.claimHref} target="_blank" rel="noopener noreferrer"
+          style={{ ...BODY, fontSize: 14, display: 'block', color: 'var(--web-grey-700)', textDecoration: 'none', background: 'var(--web-blue-050)', border: '1px solid var(--web-blue-100)', borderRadius: 3, padding: '10px 12px' }}>
+          {d.claim}
+          <span style={{ ...SMALL, display: 'block', marginTop: 6, color: 'var(--web-blue)', fontWeight: 600 }}>Read the source <Icon name="external-link" size={12} color="var(--web-blue)" /></span>
+        </a>
+      : <p style={{ ...BODY, fontSize: 14, background: 'var(--web-blue-050)', border: '1px solid var(--web-blue-100)', borderRadius: 3, padding: '10px 12px' }}>{d.claim}</p>) : null}
+
+    <div style={{ ...RULE, marginTop: d.claim ? 12 : 4 }}>
+      <div style={{ ...LABEL, fontSize: 10, color: 'var(--web-grey-500)', marginBottom: 6 }}>Indicative hardware price</div>
+      <p style={{ ...BODY, fontSize: 14, margin: '0 0 6px' }}>{d.price}</p>
+      <p style={{ ...SMALL, margin: 0 }}>{d.monthly}</p>
+    </div>
+
+    <button type="button" onClick={toggle} aria-expanded={open}
+      style={{ ...RULE, ...SMALL, color: 'var(--web-blue)', fontWeight: 700, background: 'none', border: 'none', borderTop: '1px solid var(--web-grey-100)', textAlign: 'left', padding: '12px 0 0', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 6 }}>
+      <Icon name={open ? 'chevron-up' : 'chevron-down'} size={14} color="var(--web-blue)" />
+      {open ? 'Show less' : 'Learn more — what it does not do, and who installs it'}
+    </button>
+
+    {/* Rendered always, toggled with display — the copy stays in the
+        prerendered HTML for search engines even while the card is closed. */}
+    <div style={{ display: open ? 'block' : 'none' }}>
+      <div style={RULE}>
+        <div style={{ ...LABEL, fontSize: 10, color: 'var(--web-grey-500)', marginBottom: 6 }}>What it does not do</div>
+        <p style={{ ...BODY, fontSize: 14, margin: 0 }}>{d.notThis}</p>
+      </div>
+
+      {d.range ? <div style={RULE}>
+        <div style={{ ...LABEL, fontSize: 10, color: 'var(--web-grey-500)', marginBottom: 6 }}>Other models</div>
+        <p style={{ ...BODY, fontSize: 14, margin: 0 }}>{d.range}</p>
+      </div> : null}
+
+      <div style={RULE}>
+        <div style={{ ...LABEL, fontSize: 10, color: 'var(--web-grey-500)', marginBottom: 6 }}>Who installs it</div>
+        <p style={{ ...BODY, fontSize: 14, margin: 0 }}>{d.fitting}</p>
+        {d.fittingLink ? <p style={{ ...SMALL, margin: '6px 0 0' }}><a href={d.fittingLink.href} target="_blank" rel="noopener noreferrer" style={{ fontWeight: 600 }}>{d.fittingLink.text}</a></p> : null}
+      </div>
+    </div>
+
+    <div style={{ marginTop: 'auto', paddingTop: 14, display: 'flex', flexDirection: 'column', gap: 8 }}>
+      <Button variant="navy" size="sm" fullWidth as="a" target="_blank" rel="noopener"
+        href={wa('Hi Home Assist, I would like to know more about the ' + d.name + '. ')}
+        iconLeft={<Icon name="message-circle" size={16} color="#fff" />}>Ask about this one</Button>
+      {d.href ? <a href={d.href} target="_blank" rel="noopener noreferrer" style={{ ...SMALL, color: 'var(--web-blue)', fontWeight: 600, textAlign: 'center' }}>Manufacturer&rsquo;s product page</a> : null}
+    </div>
+  </div>;
+}
 
 function SmartHomesPage({ go }) {
   return <main className="ha-sh">
@@ -223,65 +327,22 @@ function SmartHomesPage({ go }) {
     <Section tint eyebrow="The options" title="Three products, and one real difference between them"
       intro="All three will put your geyser on a schedule and show it to you on a phone. Only the Elon changes where the energy comes from, and that is the decision worth making first — everything else follows from it.">
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 20 }}>
-        {SH_DEVICES.map(function (d) {
-          return <div key={d.id} style={{ ...CARD, display: 'flex', flexDirection: 'column' }}>
-            <div style={{ ...LABEL, color: 'var(--web-blue)', marginBottom: 10 }}>{d.kind}</div>
-            {/* One frame for all three. Each source photograph is composed to
-                the same 4 by 3 on white, so a tall DIN rail unit and a wide
-                blue box occupy identical space and the cards read as a set. */}
-            {d.image
-              ? <div style={{ border: '1px solid var(--web-grey-100)', borderRadius: 3, overflow: 'hidden', marginBottom: 14, aspectRatio: '4 / 3', background: '#fff' }}>
-                  <img src={d.image} alt={d.imageAlt} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
-                </div>
-              : null}
-            <h3 style={{ ...H3, fontSize: 19, margin: '0 0 4px' }}>{d.name}</h3>
-            <p style={{ ...SMALL, marginBottom: 12 }}>{d.makerHref
-              ? <a href={d.makerHref} target="_blank" rel="noopener noreferrer" style={{ fontWeight: 600 }}>{d.made}</a>
-              : d.made}</p>
-            <p style={{ ...BODY, fontSize: 15, marginBottom: 14 }}>{d.summary}</p>
-
-            <ul style={{ ...BODY, fontSize: 14, margin: '0 0 14px', paddingLeft: 18, display: 'flex', flexDirection: 'column', gap: 6 }}>
-              {d.points.map(function (p) { return <li key={p}>{p}</li>; })}
-            </ul>
-
-            {d.claim ? <p style={{ ...BODY, fontSize: 14, background: 'var(--web-blue-050)', border: '1px solid var(--web-blue-100)', borderRadius: 3, padding: '10px 12px' }}>{d.claim}</p> : null}
-
-            <div style={{ borderTop: '1px solid var(--web-grey-100)', paddingTop: 12, marginTop: 4 }}>
-              <div style={{ ...LABEL, fontSize: 10, color: 'var(--web-grey-500)', marginBottom: 6 }}>What it does not do</div>
-              <p style={{ ...BODY, fontSize: 14, margin: 0 }}>{d.notThis}</p>
-            </div>
-
-            {d.range ? <div style={{ borderTop: '1px solid var(--web-grey-100)', paddingTop: 12, marginTop: 12 }}>
-              <div style={{ ...LABEL, fontSize: 10, color: 'var(--web-grey-500)', marginBottom: 6 }}>Other models</div>
-              <p style={{ ...BODY, fontSize: 14, margin: 0 }}>{d.range}</p>
-            </div> : null}
-
-            <div style={{ borderTop: '1px solid var(--web-grey-100)', paddingTop: 12, marginTop: 12 }}>
-              <div style={{ ...LABEL, fontSize: 10, color: 'var(--web-grey-500)', marginBottom: 6 }}>Indicative hardware price</div>
-              <p style={{ ...BODY, fontSize: 14, margin: '0 0 6px' }}>{d.price}</p>
-              <p style={{ ...SMALL, margin: 0 }}>{d.monthly}</p>
-            </div>
-
-            <div style={{ borderTop: '1px solid var(--web-grey-100)', paddingTop: 12, margin: '12px 0 14px' }}>
-              <div style={{ ...LABEL, fontSize: 10, color: 'var(--web-grey-500)', marginBottom: 6 }}>Who installs it</div>
-              <p style={{ ...BODY, fontSize: 14, margin: 0 }}>{d.fitting}</p>
-              {d.fittingLink ? <p style={{ ...SMALL, margin: '6px 0 0' }}><a href={d.fittingLink.href} target="_blank" rel="noopener noreferrer" style={{ fontWeight: 600 }}>{d.fittingLink.text}</a></p> : null}
-            </div>
-
-            <div style={{ marginTop: 'auto', display: 'flex', flexDirection: 'column', gap: 8 }}>
-              <Button variant="navy" size="sm" fullWidth as="a" target="_blank" rel="noopener"
-                href={wa('Hi Home Assist, I would like to know more about the ' + d.name + '. ')}
-                iconLeft={<Icon name="message-circle" size={16} color="#fff" />}>Ask about this one</Button>
-              {d.href ? <a href={d.href} target="_blank" rel="noopener noreferrer" style={{ ...SMALL, color: 'var(--web-blue)', fontWeight: 600, textAlign: 'center' }}>Manufacturer&rsquo;s product page</a> : null}
-            </div>
-          </div>;
-        })}
+        {SH_DEVICES.map(function (d) { return <ShDeviceCard key={d.id} d={d} />; })}
+      </div>
+      {/* Whichever device wins, the installation is the part Home Assist owns.
+          Said once, under the three tiles, rather than three times inside them. */}
+      <div style={{ ...CARD, marginTop: 20, background: 'var(--web-navy)', border: 'none' }}>
+        <div style={{ ...LABEL, color: 'var(--web-blue-300)', marginBottom: 10 }}>One installer for all three</div>
+        <p style={{ ...BODY, color: 'rgba(255,255,255,.88)', fontSize: 15, maxWidth: '76ch' }}>Whichever one you pick, Home Assist supplies the device, sends the right trade for it — plumber, electrician or PV Green Card installer — and handles the certificate of compliance where one is needed. We check the geyser it is going onto before we fit anything, and we manage geyser installations for South African insurers every day, so the installation is done the way an assessor expects to find it.</p>
+        <Button as="a" size="sm" variant="onDark" target="_blank" rel="noopener"
+          href={wa('Hi Home Assist, I would like a smart geyser control installed. ')}
+          iconLeft={<Icon name="message-circle" size={16} color="#fff" />}>Have Home Assist install it</Button>
       </div>
       <div style={{ ...CARD, marginTop: 20, background: 'var(--web-grey-050)' }}>
         <div style={{ ...LABEL, marginBottom: 10 }}>Before you compare the prices</div>
         <p style={{ ...BODY, fontSize: 14 }}>Hardware prices above are <strong>indicative ranges for the unit only</strong>, and they move with stock and with the exchange rate. Installation is quoted separately once we know what your board and your cylinder look like.</p>
         <p style={{ ...BODY, fontSize: 14 }}><strong>Where an electrician is required, expect a certificate of compliance to be charged for as well.</strong> That is not us adding a line — an electrician who touches your distribution board has to issue one, and it is the document that protects you afterwards. A device fitted by a plumber alone, at a cylinder that already has an isolator, does not attract that cost.</p>
-        <p style={{ ...BODY, fontSize: 14, margin: 0 }}>Savings figures are the manufacturers&rsquo; own published claims and are labelled as such. What any of them saves in your house depends on your tariff, your household&rsquo;s habits and, for the Elon, on your roof and panel array.</p>
+        <p style={{ ...BODY, fontSize: 14, margin: 0 }}>Savings figures are published claims — the manufacturers&rsquo; own for the Elon Smart and the HotBot, and an independent 2026 guide for the distribution board unit — and each badge links to its source. What any of them saves in your house depends on your tariff, your household&rsquo;s habits and, for the Elon, on your roof and panel array.</p>
       </div>
     </Section>
 
@@ -292,7 +353,7 @@ function SmartHomesPage({ go }) {
         <table style={{ borderCollapse: 'collapse', width: '100%', minWidth: 620 }}>
           <thead>
             <tr>
-              {['', 'Elon 100', 'Plentify HotBot', 'DB breaker'].map(function (h) {
+              {['', 'Elon Smart', 'Plentify HotBot', 'DB breaker'].map(function (h) {
                 return <th key={h || 'blank'} style={{ ...LABEL, textAlign: h ? 'center' : 'left', padding: '10px 8px', borderBottom: '2px solid var(--web-navy)', verticalAlign: 'bottom' }}>{h}</th>;
               })}
             </tr>
@@ -311,7 +372,7 @@ function SmartHomesPage({ go }) {
           </tbody>
         </table>
       </div>
-      <p style={{ ...SMALL, marginTop: 14, maxWidth: '76ch' }}>Elon 100 and HotBot rows are from the manufacturers&rsquo; published product information, read in August 2026. Distribution board breaker rows are held until the specification is confirmed rather than filled in with a guess.</p>
+      <p style={{ ...SMALL, marginTop: 14, maxWidth: '76ch' }}>Elon Smart and HotBot rows are from the manufacturers&rsquo; published product information, and distribution board breaker rows from the Sonoff BASIC-1GSP product information, read in September 2026.</p>
     </Section>
 
     {/* Running cost — moved here from /geyser-replacements on 30 August 2026.
