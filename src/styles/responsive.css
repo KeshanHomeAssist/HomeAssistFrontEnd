@@ -68,6 +68,23 @@ img {
     row-gap: 8px !important;
   }
 
+  /* Header nav items align on one baseline.
+     The Home item is a dropdown <button> with a 44px tap-target min-height;
+     its siblings are bare <a> text about 15px tall. On the wrapped mobile
+     rows that height difference reads as Home floating out of line. Give
+     every nav link the same tap-height and centre them all, which also
+     brings the links up to the tap-target minimum. */
+  #root header nav {
+    align-items: center !important;
+  }
+
+  #root header nav > a,
+  #root header nav > div > button {
+    display: inline-flex !important;
+    align-items: center;
+    min-height: var(--web-tap-min);
+  }
+
   /* Hero copy comes first on a phone.
      The property-manager pair mirror each other on desktop — one puts the
      illustration left of the headline, the other right. Once the grid collapses
