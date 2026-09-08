@@ -112,6 +112,11 @@ function InsurersBody() {
       </div>
     </Section>
 
+    {/* Operations-centre banner — sitting straight above the nine modules */}
+    <section style={{ background: '#fff', lineHeight: 0 }}>
+      <img src="/assets/illustrations/ops-centre-day-night.jpg" alt="The Home Assist operations centre by day and by night — agents on headsets working across claim dashboards, under the words Always here tomorrow and Support today and tomorrow" style={{ width: '100%', height: 'auto', display: 'block' }} />
+    </section>
+
     {/* Modules */}
     <Section tint eyebrow="What we do" title="Nine modules. Take all of them, or take the gaps." intro="Click any module to open it.">
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 20, alignItems: 'start' }}>

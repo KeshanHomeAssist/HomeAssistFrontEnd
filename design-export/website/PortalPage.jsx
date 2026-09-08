@@ -17,6 +17,11 @@ function PortalPage({ go }) {
       </div>
     </section>
 
+    {/* Operations-centre banner — the people behind the portal, day and night */}
+    <section style={{ background: '#fff', lineHeight: 0 }}>
+      <img src="../../assets/illustrations/ops-centre-day-night.jpg" alt="The Home Assist operations centre by day and by night — agents on headsets working across claim dashboards, under the words Always here tomorrow and Support today and tomorrow" style={{ width: '100%', height: 'auto', display: 'block' }} />
+    </section>
+
     <Section eyebrow="Two doors" title="Sign in as a client or as a service provider">
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20 }}>
         <div style={{ ...CARD, padding: 32 }}>
