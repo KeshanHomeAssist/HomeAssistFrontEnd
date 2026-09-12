@@ -3,22 +3,23 @@ const { Button, Icon } = window.HomeAssistDesignSystem_cf0a2b;
 function PortalPage({ go }) {
   return <main>
     <section style={{ background: 'var(--web-navy)' }}>
-      <div style={{ ...WRAP, padding: '88px 40px 72px' }}>
-        <div>
+      <div style={{ ...WRAP, padding: '72px 40px 64px', display: 'grid', gridTemplateColumns: '1fr 1.15fr', gap: 48, alignItems: 'center' }}>
+        <div data-hero-text>
           <Eyebrow onDark>Home Assist portal</Eyebrow>
-          <h1 style={{ ...DISPLAY, color: '#fff', maxWidth: '20ch', marginBottom: 18 }}>Every claim, every job, every certificate — in one place.</h1>
+          <h1 style={{ ...DISPLAY, color: '#fff', maxWidth: '18ch', marginBottom: 18 }}>Get jobs. Resolve them. Store them.<br /><span style={{ color: 'var(--web-blue-300)' }}>All in one place.</span></h1>
           <p style={{ ...BODY, color: 'var(--web-grey-100)', fontSize: 17, maxWidth: '58ch', marginBottom: 28 }}>The Home Assist portal is where clients track claims and where service providers manage jobs, submit evidence and get paid.</p>
           <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
             <Button as="a" size="lg" variant="onDark" href={CH.portal} target="_blank" rel="noopener">Sign in to the portal</Button>
             <Button as="a" size="lg" variant="ghost" href={CH.register} target="_blank" rel="noopener" style={{ color: '#fff', border: '1px solid rgba(255,255,255,.55)' }}>Register as a provider</Button>
           </div>
         </div>
+        {/* Cropped from Keshan's hero mockup (Sept 2026); the navy wedge along its
+            left edge is retinted to --web-navy so it dissolves into the section
+            background and reads as the mockup's diagonal panel edge. */}
+        <img src="../../assets/illustrations/portal-hero-provider.jpg"
+          alt="A service provider at a desk working in the Home Assist portal — a job list and map on screen, a Home Assist van outside, with Claims, Jobs, Evidence and Payments panels alongside"
+          style={{ width: '100%', height: 'auto', display: 'block' }} />
       </div>
-    </section>
-
-    {/* Operations-centre banner — the people behind the portal, day and night */}
-    <section style={{ background: '#fff', lineHeight: 0 }}>
-      <img src="../../assets/illustrations/ops-centre-day-night.jpg" alt="The Home Assist operations centre by day and by night — agents on headsets working across claim dashboards, under the words Always here tomorrow and Support today and tomorrow" style={{ width: '100%', height: 'auto', display: 'block' }} />
     </section>
 
     <Section eyebrow="Two doors" title="Sign in as a client or as a service provider">
