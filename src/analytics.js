@@ -48,6 +48,16 @@ function outboundEvent(href) {
   if (href.startsWith('mailto:')) return 'email_click';
   if (href.includes('calendar.app.google')) return 'booking_click';
   if (href.includes('portal.homeassist.co.za')) return 'portal_click';
+  // Anything else leaving the site (PIRB, NHBRC, CIDB, PV Green Card, the
+  // Google reviews search, manufacturer sites, …). Not a conversion — never
+  // mark it as a key event — but without it an exit to a directory we sent
+  // someone to is indistinguishable from an abandoned visit.
+  if (/^https?:\/\//.test(href)) {
+    try {
+      const host = new URL(href).hostname;
+      if (host !== 'homeassist.co.za' && !host.endsWith('.homeassist.co.za')) return 'outbound_click';
+    } catch (e) { /* malformed href — not worth an event */ }
+  }
   return null;
 }
 

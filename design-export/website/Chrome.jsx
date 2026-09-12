@@ -71,6 +71,22 @@ function whatsappHandoff(form, { biz = false, intro }) {
   const answers = formAnswers(form);
   const text = intro + '\n\n' + answers.map(([k, v]) => k + ': ' + v).join('\n');
   const url = wa(text, biz);
+  /* GA4: a form hands off through window.open rather than an <a>, so the
+     document-level click tracker in src/analytics.js never sees it. Fire the
+     same whatsapp_click event here so a submitted form counts exactly like a
+     tapped WhatsApp button — same event name, same key event in GA4/Ads.
+     link_text carries the form's intro line so the three forms stay
+     distinguishable in reports. */
+  try {
+    const params = {
+      page_path: (window.location.pathname.replace(/[/]+$/, '') || '/'),
+      link_text: 'form: ' + (intro || '').split('\n')[0].slice(0, 80),
+      link_url: url
+    };
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push(Object.assign({ event: 'whatsapp_click' }, params));
+    if (typeof window.gtag === 'function') window.gtag('event', 'whatsapp_click', params);
+  } catch (e) { /* tracking must never block the enquiry */ }
   let opened = null;
   try { opened = window.open(url, '_blank', 'noopener'); } catch (e) { opened = null; }
   if (!opened) window.location.href = url;
