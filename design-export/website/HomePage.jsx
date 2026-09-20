@@ -12,14 +12,14 @@ const HOME_FAQ = [
   ['Are your artisans registered and insured?', 'Every provider on the network is a registered entity carrying public liability cover, with a licensed technician genuinely linked to the working company. We verify this before allocating work.']
 ];
 
-const GOOGLE_REVIEWS = [
+const GOOGLE_REVIEWS = [ ['Maria Van Der Berg', 5, 'September 2026', '', ''], ['Theona Emmerson', 5, 'September 2026', '', 'Happy to be of service'],
   ['Anneline Coopsamy', 5, 'a year ago', 'The plumbers were excellent. Installation was quick. Service was impeccable. I am very happy with the services rendered.', 'Happy to be of service'],
   ['Sebastian Vries', 5, 'a year ago', 'Very happy with the service. Best company ever!!', 'Thank you'],
   ['Renita Swart', 5, 'a year ago', 'Always satisfied with your service.', 'Thank you'],
   ['Matshidiso Taunyane', 5, 'a year ago', 'The assistance on replacing the geyser was very efficient and a good job, we are also very grateful for the short turnaround in assistance after incident was reported.', 'Thank you']
 ];
 
-const GOOGLE_SUMMARY = { rating: '4,4', count: 9, bars: [[5, 6], [4, 1], [3, 0], [2, 0], [1, 1]] };
+const GOOGLE_SUMMARY = { rating: '4,5', count: 11, bars: [[5, 9], [4, 1], [3, 0], [2, 0], [1, 1]] };
 
 function Stars({ n, size = 15 }) {
   return <div style={{ display: 'flex', gap: 2 }}>{[0, 1, 2, 3, 4].map(s => <Icon key={s} name="star" size={size} color={s < n ? '#F2B01E' : 'var(--web-grey-300)'} />)}</div>;
@@ -47,8 +47,8 @@ function ReviewsCarousel() {
             </span>
             <span style={{ marginLeft: 'auto' }}><Stars n={stars} /></span>
           </div>
-          <p style={{ ...BODY, minHeight: '4.5em' }}>{text}</p>
-          <div style={{ borderLeft: '2px solid var(--web-blue-100)', paddingLeft: 12 }}>
+          <p style={{ ...BODY, minHeight: '4.5em' }}>{text || <span style={{ color: 'var(--web-grey-500)', fontStyle: 'italic' }}>Left a {stars}-star rating on Google.</span>}</p>
+          <div style={{ borderLeft: '2px solid var(--web-blue-100)', paddingLeft: 12, visibility: reply ? 'visible' : 'hidden' }}>
             <div style={{ ...LABEL, color: 'var(--web-grey-500)' }}>Home Assist Technologies</div>
             <p style={{ ...SMALL, margin: '4px 0 0' }}>{reply}</p>
           </div>
