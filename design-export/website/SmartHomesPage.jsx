@@ -157,7 +157,7 @@ const SH_TABLE = [
   ['Takes DC directly from PV panels', 'Yes', 'No', 'No'],
   ['Runs through load-shedding', 'Only with PV fitted', 'No', 'No'],
   ['Needs Wi-Fi', 'Yes', 'Yes, within 10 m', 'Yes'],
-  ['Works if connectivity fails', 'Only if DC connected', 'Yes, backup connection', 'Yes, press the button'],
+  ['Works if connectivity fails', 'Yes, with mobile app', 'Yes, backup connection', 'Yes, press the button'],
   ['Fitted at', 'The cylinder', 'The cylinder', 'The DB board'],
   ['Who installs it', 'Plumber', 'Plumber', 'Electrician'],
   ['Indicative hardware ex VAT', 'R3,500 - R4,000', 'R849', 'R400 - R650'],
