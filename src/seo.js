@@ -304,6 +304,12 @@ export const ROUTES = {
       'How to lodge a complaint with Home Assist, what happens next, the PIRB independent audit route for compliance disputes, and the one-year workmanship warranty process.',
     schema: [organization],
   },
+  '/data-request': {
+    title: 'Data Subject Request (POPIA) | Home Assist Technologies',
+    description:
+      'Ask what personal information Home Assist holds about you, or have it corrected or removed under POPIA. Fill the form in online and download the PDF.',
+    schema: [organization],
+  },
   '/privacy-policy': {
     title: 'Privacy Policy | Home Assist Technologies',
     description:

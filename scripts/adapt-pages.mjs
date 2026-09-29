@@ -48,7 +48,7 @@ const PAGE_EXPORTS = {
   'PortalPage.jsx': ['PortalPage'],
   'AboutPage.jsx': ['AboutPage'],
   'BlogPage.jsx': ['BlogPage', 'POSTS'],
-  'LegalPage.jsx': ['TermsPage', 'PrivacyPage', 'ComplaintsPage'],
+  'LegalPage.jsx': ['TermsPage', 'PrivacyPage', 'ComplaintsPage', 'DataRequestPage'],
 };
 
 // Site.jsx is the prototype's page-switcher plus a debug strip that printed the

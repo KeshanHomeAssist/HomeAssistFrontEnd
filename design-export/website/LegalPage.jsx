@@ -23,6 +23,7 @@ function LegalNav({ go, current }) {
       <a href="#/terms" onClick={e => { e.preventDefault(); go('terms'); }} style={item('terms')}>Terms of Use</a>
       <a href="#/privacy-policy" onClick={e => { e.preventDefault(); go('privacy'); }} style={item('privacy')}>Privacy Policy</a>
       <a href="#/complaints" onClick={e => { e.preventDefault(); go('complaints'); }} style={item('complaints')}>Complaints</a>
+      <a href="#/data-request" onClick={e => { e.preventDefault(); go('dataRequest'); }} style={item('dataRequest')}>Data Requests</a>
     </div>
   </div>;
 }
@@ -364,4 +365,243 @@ function ComplaintsPage({ go }) {
   </React.Fragment>;
 }
 
-Object.assign(window, { PrivacyPage, TermsPage, ComplaintsPage });
+/* /data-request — the POPIA Data Subject Request form (HA-DSR-01).
+
+   DELIBERATELY NO ENDPOINT AND NO STORAGE. The customer fills the form in,
+   the completed HA-DSR-01 PDF is generated entirely in their browser with
+   pdf-lib (the template at /downloads/... has real AcroForm fields, so this is
+   a field fill, not text placed at coordinates), and they email it to help@
+   themselves with their ID copy attached. Nothing typed here ever leaves the
+   visitor's device, which the page says out loud — the right privacy posture
+   for a page whose whole subject is personal information.
+
+   pdf-lib is imported dynamically so its ~300KB only loads when somebody
+   actually clicks Download, not on every page view.
+
+   NO FIELD IS MANDATORY (Keshan's instruction, 29 Sept 2026). An incomplete
+   form still downloads; the office follows up for whatever is missing, which
+   beats a validation wall that loses the request. */
+
+const DR_FIELDS = {
+  fullName: '', idNumber: '', mobile: '', email: '', propertyAddress: '',
+  insurer: '', claimNo: '', policyNo: '',
+  who: '', agentName: '', agentCapacity: '', agentContact: '',
+  reqAccess: false, reqCorrect: false, reqRemove: false, reqRestrict: false,
+  reqObject: false, reqMarketing: false, reqOther: false,
+  details: '', idAttached: false, authAttached: false,
+  declName: '', declSignature: '', declDate: '',
+};
+
+const DR_ACTIONS = [
+  ['reqAccess', 'Tell me what personal information you hold about me, and give me a copy', 'Section 23'],
+  ['reqCorrect', 'Correct or update my personal information (describe the correction below)', 'Section 24'],
+  ['reqRemove', 'Remove my personal information', 'Section 24'],
+  ['reqRestrict', 'Restrict how my personal information is used', 'Section 24'],
+  ['reqObject', 'Object to the processing of my personal information (give your reasons below)', 'Section 11(3)'],
+  ['reqMarketing', 'Stop sending me marketing or advertising communications', 'Section 69'],
+  ['reqOther', 'Other query about my personal information (describe it below)', ''],
+];
+
+const DR_PDF_URL = '/downloads/Home-Assist-Data-Subject-Request-Form.pdf';
+
+/* Maps the page's state onto the AcroForm field names inside HA-DSR-01. */
+async function fillDsrPdf(f) {
+  const { PDFDocument } = await import('pdf-lib');
+  const bytes = await fetch(DR_PDF_URL).then(r => {
+    if (!r.ok) throw new Error('template fetch failed: ' + r.status);
+    return r.arrayBuffer();
+  });
+  const doc = await PDFDocument.load(bytes);
+  const form = doc.getForm();
+  const text = (name, value) => {
+    if (!value) return;
+    const field = form.getTextField(name);
+    field.setFontSize(9); // pdf-lib otherwise auto-sizes to fill the box, comically large in the details box
+    field.setText(String(value));
+  };
+  const tick = (name, on) => { if (on) form.getCheckBox(name).check(); };
+
+  text('full_name', f.fullName); text('id_number', f.idNumber);
+  text('mobile', f.mobile); text('email', f.email);
+  text('property_address', f.propertyAddress);
+  text('insurer', f.insurer); text('claim_no', f.claimNo); text('policy_no', f.policyNo);
+  tick('for_self', f.who === 'self'); tick('for_other', f.who === 'other');
+  text('agent_name', f.agentName); text('agent_capacity', f.agentCapacity); text('agent_contact', f.agentContact);
+  tick('req_access', f.reqAccess); tick('req_correct', f.reqCorrect); tick('req_remove', f.reqRemove);
+  tick('req_restrict', f.reqRestrict); tick('req_object', f.reqObject);
+  tick('req_marketing', f.reqMarketing); tick('req_other', f.reqOther);
+  text('request_details', f.details);
+  tick('id_attached', f.idAttached); tick('auth_attached', f.authAttached);
+  text('decl_name', f.declName || f.fullName); text('decl_signature', f.declSignature); text('decl_date', f.declDate);
+
+  return doc.save();
+}
+
+function drDownloadBlob(bytes, filename) {
+  const blob = new Blob([bytes], { type: 'application/pdf' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = filename;
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 30000);
+}
+
+function DataRequestPage({ go }) {
+  const [f, setF] = React.useState(DR_FIELDS);
+  const [busy, setBusy] = React.useState(false);
+  const [done, setDone] = React.useState('');
+  const [err, setErr] = React.useState('');
+  const set = (k, v) => setF(prev => ({ ...prev, [k]: v }));
+
+  /* Today's date in the declaration by default, in SA date order. Set in an
+     effect, not at render time — the page is prerendered, and the build date
+     baked into static HTML would be wrong for every later visitor. */
+  React.useEffect(() => {
+    const d = new Date();
+    const pad = n => String(n).padStart(2, '0');
+    setF(prev => prev.declDate ? prev : { ...prev, declDate: pad(d.getDate()) + '/' + pad(d.getMonth() + 1) + '/' + d.getFullYear() });
+  }, []);
+
+  const fileName = () => {
+    const who = (f.fullName || 'Form').trim().replace(/[^A-Za-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 40) || 'Form';
+    return 'Home-Assist-Data-Subject-Request-' + who + '.pdf';
+  };
+
+  const download = async () => {
+    setBusy(true); setErr('');
+    try {
+      const bytes = await fillDsrPdf(f);
+      const name = fileName();
+      drDownloadBlob(bytes, name);
+      setDone(name);
+      try {
+        const params = { page_path: '/data-request', link_text: 'dsr_pdf_download', link_url: DR_PDF_URL };
+        window.dataLayer = window.dataLayer || [];
+        window.dataLayer.push(Object.assign({ event: 'dsr_pdf_download' }, params));
+        if (typeof window.gtag === 'function') window.gtag('event', 'dsr_pdf_download', params);
+      } catch (e) { /* tracking must never block the download */ }
+    } catch (e) {
+      setErr('Sorry — the PDF could not be generated in this browser. Download the blank form below and fill it in instead.');
+    }
+    setBusy(false);
+  };
+
+  const emailHref = () => {
+    const subject = 'Data Subject Request — ' + (f.fullName || 'HA-DSR-01');
+    const body = 'Hi Home Assist,\n\nPlease find my completed Data Subject Request form (HA-DSR-01) attached, together with a copy of my identity document.\n\n'
+      + (f.claimNo ? 'Claim or case number: ' + f.claimNo + '\n' : '')
+      + '\nRegards,\n' + (f.fullName || '');
+    return 'mailto:' + CH.help + '?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
+  };
+
+  const secH = { ...LABEL, background: 'var(--web-navy)', color: '#fff', padding: '9px 12px', borderRadius: 3, margin: '32px 0 16px' };
+  const grid2 = { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 };
+  const grid3 = { display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 16 };
+  const checkRow = { display: 'flex', gap: 10, alignItems: 'flex-start', font: '400 var(--web-size-body)/1.5 var(--font-core)', color: 'var(--web-grey-700)', cursor: 'pointer' };
+  const box = { width: 18, height: 18, marginTop: 2, accentColor: 'var(--web-navy)', flexShrink: 0 };
+
+  return <React.Fragment>
+    <LegalHero label="Legal" title="Data Subject Request" updated="Protection of Personal Information Act, No. 4 of 2013 · Form HA-DSR-01" />
+    <LegalNav go={go} current="dataRequest" />
+    <section style={{ background: '#fff' }}>
+      <div style={{ ...LEGAL_WRAP, padding: '48px 40px 56px' }}>
+
+        <p style={{ ...LEGAL_P, marginTop: 0 }}>Use this form to ask what personal information we hold about you, to correct or update it, to have it removed, to restrict how it is used, or to object to its use. These are your rights under <a href="#/privacy-policy" onClick={e => { e.preventDefault(); go('privacy'); }} style={{ color: 'var(--web-blue)' }}>section 8 of our Privacy Policy</a>.</p>
+        <p style={LEGAL_P}>Fill the form in below and download it — your answers are placed into the official form (HA-DSR-01) as a PDF, created on your own device. <strong>Nothing you type on this page is sent to us or stored anywhere</strong> until you email the form to us yourself. Then email the PDF, with a copy of your identity document, to <a href={'mailto:' + CH.help} style={{ color: 'var(--web-blue)' }}>{CH.help}</a>.</p>
+
+        <div style={secH}>1. Your details</div>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+          <div style={grid2}>
+            <FieldRow label="Full name and surname"><input style={INPUT} value={f.fullName} onChange={e => set('fullName', e.target.value)} autoComplete="name" /></FieldRow>
+            <FieldRow label="ID or passport number"><input style={INPUT} value={f.idNumber} onChange={e => set('idNumber', e.target.value)} /></FieldRow>
+          </div>
+          <div style={grid2}>
+            <FieldRow label="Mobile number"><input style={INPUT} value={f.mobile} onChange={e => set('mobile', e.target.value)} autoComplete="tel" inputMode="tel" /></FieldRow>
+            <FieldRow label="Email address"><input style={INPUT} value={f.email} onChange={e => set('email', e.target.value)} autoComplete="email" inputMode="email" /></FieldRow>
+          </div>
+          <FieldRow label="Address of the property we assisted with (if applicable)"><input style={INPUT} value={f.propertyAddress} onChange={e => set('propertyAddress', e.target.value)} /></FieldRow>
+          <div style={grid3}>
+            <FieldRow label="Insurer or broker (if known)"><input style={INPUT} value={f.insurer} onChange={e => set('insurer', e.target.value)} /></FieldRow>
+            <FieldRow label="Claim or case number (if known)"><input style={INPUT} value={f.claimNo} onChange={e => set('claimNo', e.target.value)} /></FieldRow>
+            <FieldRow label="Policy number (if known)"><input style={INPUT} value={f.policyNo} onChange={e => set('policyNo', e.target.value)} /></FieldRow>
+          </div>
+        </div>
+
+        <div style={secH}>2. Who is making this request</div>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+          <div style={grid2}>
+            <label style={checkRow}><input type="radio" name="dr-who" style={box} checked={f.who === 'self'} onChange={() => set('who', 'self')} /><span>I am the person the information is about</span></label>
+            <label style={checkRow}><input type="radio" name="dr-who" style={box} checked={f.who === 'other'} onChange={() => set('who', 'other')} /><span>I am acting on behalf of the person named in section 1</span></label>
+          </div>
+          {f.who === 'other' ? <React.Fragment>
+            <div style={grid3}>
+              <FieldRow label="Your name"><input style={INPUT} value={f.agentName} onChange={e => set('agentName', e.target.value)} /></FieldRow>
+              <FieldRow label="Relationship or capacity"><input style={INPUT} value={f.agentCapacity} onChange={e => set('agentCapacity', e.target.value)} /></FieldRow>
+              <FieldRow label="Your contact number or email"><input style={INPUT} value={f.agentContact} onChange={e => set('agentContact', e.target.value)} /></FieldRow>
+            </div>
+            <p style={{ ...SMALL, fontStyle: 'italic' }}>If you act for someone else, attach their written consent or other proof of your authority, such as a power of attorney, to your email.</p>
+          </React.Fragment> : null}
+        </div>
+
+        <div style={secH}>3. What would you like us to do? (tick all that apply)</div>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+          {DR_ACTIONS.map(([key, label, section]) =>
+            <label key={key} style={checkRow}>
+              <input type="checkbox" style={box} checked={f[key]} onChange={e => set(key, e.target.checked)} />
+              <span style={{ flex: 1 }}>{label}</span>
+              {section ? <span style={{ ...SMALL, whiteSpace: 'nowrap' }}>{section}</span> : null}
+            </label>)}
+        </div>
+        {f.reqRemove ? <div style={{ background: 'var(--web-grey-050)', border: '1px solid var(--web-grey-100)', borderRadius: 4, padding: '14px 16px', marginTop: 16 }}>
+          <div style={{ ...LABEL, marginBottom: 6 }}>How we remove personal information</div>
+          <p style={{ ...SMALL, color: 'var(--web-grey-700)', lineHeight: 1.6 }}>We remove personal information by permanently anonymising it, so that it can no longer be linked to you by anyone, including Home Assist. This is permitted by POPIA and by section 5.1 of our Privacy Policy. Where the law or our agreement with your insurer requires us to keep a claim record for a period (currently seven years), we will restrict its use to what is required, anonymise it at the end of that period, and tell you. If you need the information destroyed rather than anonymised, say so in section 4.</p>
+        </div> : null}
+
+        <div style={secH}>4. Details of your request</div>
+        <FieldRow label="Describe what you are asking for" hint="For a correction, give the current and the correct information. For an objection, give your reasons. Mention any supporting documents you will attach to your email.">
+          <textarea style={{ ...INPUT, minHeight: 140, resize: 'vertical' }} value={f.details} onChange={e => set('details', e.target.value)} />
+        </FieldRow>
+
+        <div style={secH}>5. Proof of identity</div>
+        <p style={LEGAL_P}>To protect your information, we will only act once we have confirmed your identity. Attach a clear copy of your ID document, passport or driver’s licence to your email. We may contact you to confirm details, and we will never ask for your passwords or banking PINs.</p>
+        <div style={grid2}>
+          <label style={checkRow}><input type="checkbox" style={box} checked={f.idAttached} onChange={e => set('idAttached', e.target.checked)} /><span>I will attach a copy of my identity document</span></label>
+          <label style={checkRow}><input type="checkbox" style={box} checked={f.authAttached} onChange={e => set('authAttached', e.target.checked)} /><span>Proof of authority attached (if acting for someone)</span></label>
+        </div>
+
+        <div style={secH}>6. Declaration</div>
+        <p style={LEGAL_P}>I confirm that the information in this form is true and correct, and that I am the person the information relates to or am authorised to act for that person. I understand that Home Assist will use the information in this form only to deal with my request.</p>
+        <div style={grid3}>
+          <FieldRow label="Name"><input style={INPUT} value={f.declName} onChange={e => set('declName', e.target.value)} placeholder={f.fullName} /></FieldRow>
+          <FieldRow label="Signature (type your full name)"><input style={INPUT} value={f.declSignature} onChange={e => set('declSignature', e.target.value)} /></FieldRow>
+          <FieldRow label="Date"><input style={INPUT} value={f.declDate} onChange={e => set('declDate', e.target.value)} /></FieldRow>
+        </div>
+
+        <div style={{ marginTop: 32, borderTop: '1px solid var(--web-grey-100)', paddingTop: 24 }}>
+          <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
+            <Button variant="navy" size="lg" onClick={download} disabled={busy}
+              iconLeft={<Icon name="download" size={16} color="#fff" />}>{busy ? 'Preparing your PDF…' : 'Download the completed form (PDF)'}</Button>
+            <Button as="a" variant="secondary" size="lg" href={emailHref()}
+              iconLeft={<Icon name="mail" size={16} color="var(--web-navy)" />}>Email it to {CH.help}</Button>
+          </div>
+          {done ? <p style={{ ...LEGAL_P, marginTop: 16, marginBottom: 0 }}><strong>Saved as {done}.</strong> Now email it to <a href={emailHref()} style={{ color: 'var(--web-blue)' }}>{CH.help}</a>, attaching the PDF and a copy of your identity document.</p> : null}
+          {err ? <p style={{ ...LEGAL_P, marginTop: 16, marginBottom: 0, color: 'var(--web-navy)' }}>{err}</p> : null}
+          <p style={{ ...SMALL, marginTop: 14 }}>Prefer paper? <a href={DR_PDF_URL} download style={{ color: 'var(--web-blue)' }}>Download the blank form</a> to print and fill in by hand.</p>
+        </div>
+
+        <h2 style={LEGAL_H2}>What happens next</h2>
+        <ul style={LEGAL_UL}>
+          <li>We acknowledge your request within five business days and give you a reference number.</li>
+          <li>We verify your identity and, if needed, contact your insurer or broker, who may also hold your information as the responsible party for your claim.</li>
+          <li>We respond within 30 days. If we need more time, or cannot do all you have asked, we will explain why in writing.</li>
+          <li>We do not charge to correct, remove or restrict information or to record an objection. If a fee applies to an access request, we will tell you before we proceed.</li>
+          <li>If you are not satisfied with our response, you may complain to the Information Regulator at <a href="mailto:POPIAComplaints@inforegulator.org.za" style={{ color: 'var(--web-blue)' }}>POPIAComplaints@inforegulator.org.za</a> or through <a href="https://inforegulator.org.za" target="_blank" rel="noopener" style={{ color: 'var(--web-blue)' }}>www.inforegulator.org.za</a>.</li>
+        </ul>
+        <p style={{ ...SMALL, marginTop: 24 }}>Information Officer: Keshan Patel · Home Assist Technologies (Pty) Ltd · Registration 2016/243716/07</p>
+      </div>
+    </section>
+    <LegalFoot go={go} />
+  </React.Fragment>;
+}
+
+Object.assign(window, { PrivacyPage, TermsPage, ComplaintsPage, DataRequestPage });

@@ -21,7 +21,7 @@ import { JoinPage } from './site/JoinPage.jsx';
 import { PortalPage } from './site/PortalPage.jsx';
 import { AboutPage } from './site/AboutPage.jsx';
 import { BlogPage, POSTS } from './site/BlogPage.jsx';
-import { TermsPage, PrivacyPage, ComplaintsPage } from './site/LegalPage.jsx';
+import { TermsPage, PrivacyPage, ComplaintsPage, DataRequestPage } from './site/LegalPage.jsx';
 import { slugify, ROUTES, articleMeta } from './seo.js';
 import { useAnalytics } from './analytics.js';
 
@@ -50,6 +50,7 @@ export const PAGE_PATHS = {
   terms: '/terms',
   privacy: '/privacy-policy',
   complaints: '/complaints',
+  dataRequest: '/data-request',
 };
 
 const PATH_PAGES = Object.fromEntries(
@@ -267,6 +268,7 @@ export default function App() {
         <Route path="/terms" element={<TermsPage go={go} />} />
         <Route path="/privacy-policy" element={<PrivacyPage go={go} />} />
         <Route path="/complaints" element={<ComplaintsPage go={go} />} />
+        <Route path="/data-request" element={<DataRequestPage go={go} />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
       <Footer go={go} />
