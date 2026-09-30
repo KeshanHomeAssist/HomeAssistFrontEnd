@@ -19,12 +19,12 @@ const GOOGLE_REVIEWS = [ ['Maria Van Der Berg', 5, 'September 2026', '', ''], ['
   ['Matshidiso Taunyane', 5, 'a year ago', 'The assistance on replacing the geyser was very efficient and a good job, we are also very grateful for the short turnaround in assistance after incident was reported.', 'Thank you']
 ];
 
-const GOOGLE_SUMMARY = { rating: '4,5', count: 11, bars: [[5, 9], [4, 1], [3, 0], [2, 0], [1, 1]] };
+const GOOGLE_SUMMARY = { rating: '4,6', count: 12, bars: [[5, 10], [4, 1], [3, 0], [2, 0], [1, 1]] };
 
-function Stars({ n, size = 15 }) {
+function Stars({ n, half = false, size = 15 }) {
   /* Solid filled stars. The design-system Icon renders lucide's outline star
      via a CSS mask, which reads as hollow — reviews want bold, filled stars. */
-  return <div style={{ display: 'flex', gap: 2 }}>{[0, 1, 2, 3, 4].map(s => <svg key={s} width={size} height={size} viewBox="0 0 24 24" aria-hidden="true" style={{ flex: '0 0 auto' }}><path fill={s < n ? '#F2B01E' : 'var(--web-grey-300)'} d="M12 2.6l2.86 5.8 6.4.93-4.63 4.51 1.09 6.37L12 17.2l-5.72 3.01 1.09-6.37-4.63-4.51 6.4-.93L12 2.6z" /></svg>)}</div>;
+  return <div style={{ display: 'flex', gap: 2 }}>{[0, 1, 2, 3, 4].map(s => <svg key={s} width={size} height={size} viewBox="0 0 24 24" aria-hidden="true" style={{ flex: '0 0 auto' }}>{half && s === n ? <defs><linearGradient id="haStarHalf"><stop offset="50%" stopColor="#F2B01E" /><stop offset="50%" stopColor="var(--web-grey-300)" /></linearGradient></defs> : null}<path fill={s < n ? '#F2B01E' : (half && s === n ? 'url(#haStarHalf)' : 'var(--web-grey-300)')} d="M12 2.6l2.86 5.8 6.4.93-4.63 4.51 1.09 6.37L12 17.2l-5.72 3.01 1.09-6.37-4.63-4.51 6.4-.93L12 2.6z" /></svg>)}</div>;
 }
 
 function ReviewsCarousel() {
@@ -272,7 +272,7 @@ function HomePage({ go }) {
           <div style={{ ...LABEL, marginBottom: 12 }}>Google review summary</div>
           <div style={{ display: 'flex', alignItems: 'baseline', gap: 10 }}>
             <span style={{ font: '700 40px/1 var(--font-core)', color: 'var(--web-navy)' }}>{GOOGLE_SUMMARY.rating}</span>
-            <span><Stars n={4} size={18} /><span style={{ ...SMALL, display: 'block', marginTop: 4 }}>({GOOGLE_SUMMARY.count} reviews)</span></span>
+            <span><Stars n={4} half size={18} /><span style={{ ...SMALL, display: 'block', marginTop: 4 }}>({GOOGLE_SUMMARY.count} reviews)</span></span>
           </div>
           <div style={{ display: 'grid', gap: 6, marginTop: 16 }}>
             {GOOGLE_SUMMARY.bars.map(([star, count]) => <div key={star} style={{ display: 'grid', gridTemplateColumns: '10px 1fr', gap: 8, alignItems: 'center' }}>
@@ -283,7 +283,7 @@ function HomePage({ go }) {
             </div>)}
           </div>
           <Button as="a" variant="ghost" fullWidth href="https://www.google.com/search?q=home+assist+technologies" target="_blank" rel="noopener" style={{ marginTop: 18 }}>Read them on Google</Button>
-          <Button as="a" variant="navy" size="lg" fullWidth href={CH.rating} target="_blank" rel="noopener" style={{ marginTop: 10 }} iconLeft={<Icon name="star" size={18} color="#fff" />}>Rate a job we did for you</Button>
+          <Button as="a" variant="navy" size="lg" fullWidth href={CH.rating} target="_blank" rel="noopener" style={{ marginTop: 10, padding: '0 12px', fontSize: 'var(--size-body)' }} iconLeft={<Icon name="star" size={16} color="#fff" />}>Rate a job we did for you</Button>
           <p style={{ ...SMALL, marginTop: 10 }}>You will need the seven-digit case number from your SMS or WhatsApp. It is a private rating, and you can change one you have already given.</p>
         </div>
         <ReviewsCarousel />
