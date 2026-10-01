@@ -19,7 +19,7 @@ const GOOGLE_REVIEWS = [ ['Maria Van Der Berg', 5, 'September 2026', '', ''], ['
   ['Matshidiso Taunyane', 5, 'a year ago', 'The assistance on replacing the geyser was very efficient and a good job, we are also very grateful for the short turnaround in assistance after incident was reported.', 'Thank you']
 ];
 
-const GOOGLE_SUMMARY = { rating: '4,6', count: 12, bars: [[5, 10], [4, 1], [3, 0], [2, 0], [1, 1]] };
+const GOOGLE_SUMMARY = { rating: '4,5', count: 16, bars: [[5, 12], [4, 2], [3, 1], [2, 0], [1, 1]] };
 
 function Stars({ n, half = false, size = 15 }) {
   /* Solid filled stars. The design-system Icon renders lucide's outline star
