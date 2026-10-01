@@ -12,7 +12,8 @@ const HOME_FAQ = [
   ['Are your artisans registered and insured?', 'Every provider on the network is a registered entity carrying public liability cover, with a licensed technician genuinely linked to the working company. We verify this before allocating work.']
 ];
 
-const GOOGLE_REVIEWS = [ ['Maria Van Der Berg', 5, 'September 2026', '', ''], ['Theona Emmerson', 5, 'September 2026', '', 'Happy to be of service'],
+const GOOGLE_REVIEWS = [ ['Carl Bure', 5, 'October 2026', 'I had quick and efficient service from them.', ''],
+  ['Maria Van Der Berg', 5, 'September 2026', '', ''], ['Theona Emmerson', 5, 'September 2026', '', 'Happy to be of service'],
   ['Anneline Coopsamy', 5, 'a year ago', 'The plumbers were excellent. Installation was quick. Service was impeccable. I am very happy with the services rendered.', 'Happy to be of service'],
   ['Sebastian Vries', 5, 'a year ago', 'Very happy with the service. Best company ever!!', 'Thank you'],
   ['Renita Swart', 5, 'a year ago', 'Always satisfied with your service.', 'Thank you'],
