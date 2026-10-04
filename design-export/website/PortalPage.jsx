@@ -65,7 +65,7 @@ function PortalPage({ go }) {
     <div style={{ background: 'var(--web-grey-050)' }}>
       <div style={{ ...WRAP, padding: '28px 40px', display: 'flex', gap: 24, alignItems: 'center', flexWrap: 'wrap' }}>
         <div style={LABEL}>Need help signing in?</div>
-        <a href={wa('Hi Home Assist, I need help signing in to the portal. ')} target="_blank" rel="noopener" style={{ font: '600 15px/1 var(--font-core)' }}>WhatsApp {CH.waHome}</a>
+        <a href={wa('Hi Home Assist, I need help signing in to the portal. ', 'PORTAL-1')} target="_blank" rel="noopener" style={{ font: '600 15px/1 var(--font-core)' }}>WhatsApp {CH.waHome}</a>
         <a href={'mailto:' + CH.help} style={{ font: '600 15px/1 var(--font-core)' }}>{CH.help}</a>
       </div>
     </div>

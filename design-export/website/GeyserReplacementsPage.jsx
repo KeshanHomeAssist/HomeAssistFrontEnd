@@ -299,7 +299,7 @@ function GeyserReplacementsPage({ go }) {
   function submit(e) {
     e.preventDefault();
     grTrack('geyser_spec_submit', { answered: answered, system_type: systemType || 'not_specified', brand: brand || 'not_specified' });
-    const url = whatsappHandoff(e.target, { intro: specIntro() + '\n\nCONTACT DETAILS' });
+    const url = whatsappHandoff(e.target, { intro: specIntro() + '\n\nCONTACT DETAILS', ref: 'GEYSER-3' });
     setManualLink(url);
     setSent(true);
   }
@@ -360,7 +360,7 @@ function GeyserReplacementsPage({ go }) {
               the first, and the free warranty check is offered underneath. */}
           <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
             <Button as="a" size="lg" variant="onDark" target="_blank" rel="noopener"
-              href={wa('Hi Home Assist, I need a geyser replacement. ')}
+              href={wa('Hi Home Assist, I need a geyser replacement. ', 'GEYSER-1')}
               iconLeft={<Icon name="message-circle" size={18} color="#fff" />}>WhatsApp us</Button>
             <Button as="a" size="lg" variant="ghost" href={'tel:' + CH.phoneTel} style={{ color: '#fff', border: '1px solid rgba(255,255,255,.5)' }} iconLeft={<Icon name="phone" size={18} color="#fff" />}>Call {CH.phone}</Button>
             <Button as="a" size="lg" variant="ghost" href="#configurator" style={{ color: '#fff', border: '1px solid rgba(255,255,255,.5)' }} iconLeft={<Icon name="clipboard-check" size={18} color="#fff" />}>Build your spec</Button>
@@ -426,7 +426,7 @@ function GeyserReplacementsPage({ go }) {
           <p style={{ ...BODY, color: 'rgba(255,255,255,.85)', maxWidth: '58ch' }}>If you are claiming, or your insurer has settled in cash and asked you to appoint your own plumber, we can verify the quote and the work as well.</p>
           <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', marginTop: 6 }}>
             <Button as="a" size="lg" variant="onDark" target="_blank" rel="noopener"
-              href={wa('Hi Home Assist, I would like to check if my geyser is under warranty. I have attached a photo of the geyser plate.')}
+              href={wa('Hi Home Assist, I would like to check if my geyser is under warranty. I have attached a photo of the geyser plate.', 'GEYSER-2')}
               iconLeft={<Icon name="camera" size={18} color="#fff" />}>Send us the serial plate</Button>
             <Button as="a" size="lg" variant="ghost" href={'tel:' + CH.phoneTel} style={{ color: '#fff', border: '1px solid rgba(255,255,255,.5)' }} iconLeft={<Icon name="phone" size={18} color="#fff" />}>{CH.phone}</Button>
           </div>
@@ -766,7 +766,7 @@ function GeyserReplacementsPage({ go }) {
 
     <NavyBand eyebrow="Not ready to specify anything" title="Send us a photograph of the plate and we will tell you where you stand.">
       <Button as="a" size="lg" variant="onDark" target="_blank" rel="noopener"
-        href={wa('Hi Home Assist, I would like to check if my geyser is under warranty. I have attached a photo of the geyser plate.')}
+        href={wa('Hi Home Assist, I would like to check if my geyser is under warranty. I have attached a photo of the geyser plate.', 'GEYSER-4')}
         iconLeft={<Icon name="camera" size={18} color="#fff" />}>Send us the serial plate</Button>
       <Button as="a" size="lg" variant="ghost" href={'tel:' + CH.phoneTel} style={{ color: '#fff', border: '1px solid rgba(255,255,255,.5)' }} iconLeft={<Icon name="phone" size={18} color="#fff" />}>{CH.phone}</Button>
     </NavyBand>
@@ -781,7 +781,7 @@ function GeyserReplacementsPage({ go }) {
       intro="A geyser that has burst is one problem. Water appearing with no obvious source is a different one, and it is found rather than guessed at.">
       <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
         <Button variant="secondary" size="lg" onClick={function () { go('leakDetection'); }} iconLeft={<Icon name="search" size={18} color="var(--web-navy)" />}>How we find a hidden leak</Button>
-        <Button as="a" size="lg" variant="navy" target="_blank" rel="noopener" href={wa('Hi Home Assist, my geyser has burst. ')} iconLeft={<Icon name="message-circle" size={18} color="#fff" />}>My geyser has burst</Button>
+        <Button as="a" size="lg" variant="navy" target="_blank" rel="noopener" href={wa('Hi Home Assist, my geyser has burst. ', 'GEYSER-5')} iconLeft={<Icon name="message-circle" size={18} color="#fff" />}>My geyser has burst</Button>
       </div>
     </Section>
   </main>;

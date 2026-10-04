@@ -116,7 +116,7 @@ function PropertyManagersPage() {
           <p style={{ ...BODY, color: 'rgba(255,255,255,.85)', fontSize: 17, maxWidth: '54ch', marginBottom: 26 }}>Home Assist verifies every incident, every invoice and every certificate on the schemes you manage — without replacing the providers they already use. Insurer-backed, because a verified claim prices better than an unverified one.</p>
           <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
             <Button as="a" size="lg" variant="onDark" href={CH.booking} target="_blank" rel="noopener">Book Free Pilot</Button>
-            <Button as="a" size="lg" variant="ghost" href={wa('Hi Home Assist, I manage property and would like to discuss the free pilot on one block. ', true)} target="_blank" rel="noopener" style={{ color: '#fff', border: '1px solid rgba(255,255,255,.5)' }} iconLeft={<Icon name="message-circle" size={18} color="#fff" />}>WhatsApp us</Button>
+            <Button as="a" size="lg" variant="ghost" href={wa('Hi Home Assist, I manage property and would like to discuss the free pilot on one block. ', 'PM-1')} target="_blank" rel="noopener" style={{ color: '#fff', border: '1px solid rgba(255,255,255,.5)' }} iconLeft={<Icon name="message-circle" size={18} color="#fff" />}>WhatsApp us</Button>
           </div>
         </div>
         <div style={{ border: '1px solid rgba(255,255,255,.22)', borderRadius: 4, overflow: 'hidden', lineHeight: 0 }}>
@@ -240,7 +240,7 @@ function PropertyManagersPage() {
 
     <NavyBand eyebrow="Next step" title="Give us one block for ninety days. We will verify every incident on it and show you what we find.">
       <Button as="a" size="lg" variant="onDark" href={CH.booking} target="_blank" rel="noopener">Book Free Pilot</Button>
-      <Button as="a" size="lg" variant="ghost" href={wa('Hi Home Assist, I manage property and would like to start a free pilot on one block. ', true)} target="_blank" rel="noopener" style={{ color: '#fff', border: '1px solid rgba(255,255,255,.5)' }}>WhatsApp us</Button>
+      <Button as="a" size="lg" variant="ghost" href={wa('Hi Home Assist, I manage property and would like to start a free pilot on one block. ', 'PM-2')} target="_blank" rel="noopener" style={{ color: '#fff', border: '1px solid rgba(255,255,255,.5)' }}>WhatsApp us</Button>
     </NavyBand>
   </main>;
 }

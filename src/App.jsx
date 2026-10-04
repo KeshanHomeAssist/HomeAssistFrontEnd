@@ -271,7 +271,7 @@ export default function App() {
         <Route path="/data-request" element={<DataRequestPage go={go} />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
-      <Footer go={go} />
+      <Footer go={go} page={page} />
     </>
   );
 }

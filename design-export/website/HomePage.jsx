@@ -98,7 +98,7 @@ function HomePage({ go }) {
           <h1 style={{ ...DISPLAY, maxWidth: '20ch', marginBottom: 18 }}>Burst geyser, leaking pipe or no power? Get a verified artisan to your home.</h1>
           <p style={{ ...BODY, fontSize: 17, maxWidth: '58ch', marginBottom: 24 }}>Home Assist connects South African homeowners with vetted plumbers, electricians and building contractors. Send us a message on WhatsApp and we will find the right person for the job.</p>
           <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', marginBottom: 16 }}>
-            <Button as="a" size="lg" variant="navy" href={wa('Hi Home Assist, I need help with: ')} target="_blank" rel="noopener"
+            <Button as="a" size="lg" variant="navy" href={wa('Hi Home Assist, I need help with: ', 'HOME-1')} target="_blank" rel="noopener"
               iconLeft={<Icon name="message-circle" size={19} color="#fff" />}>WhatsApp us now</Button>
             <Button as="a" size="lg" variant="secondary" href={'tel:' + CH.phoneTel} iconLeft={<Icon name="phone" size={17} color="var(--web-navy)" />}>Call {CH.phone}</Button>
             {/* Jumps to the request form further down the page. Plain anchor to
@@ -149,7 +149,7 @@ function HomePage({ go }) {
               the list as the sixth thing to read. It is the action the whole
               section exists to produce, so it is a button. */}
           <div style={{ marginTop: 16 }}>
-            <Button as="a" variant="navy" size="lg" href={wa('Hi Home Assist, my geyser has burst. ')} target="_blank" rel="noopener" iconLeft={<Icon name="message-circle" size={18} color="#fff" />}>Message us on WhatsApp</Button>
+            <Button as="a" variant="navy" size="lg" href={wa('Hi Home Assist, my geyser has burst. ', 'HOME-2')} target="_blank" rel="noopener" iconLeft={<Icon name="message-circle" size={18} color="#fff" />}>Message us on WhatsApp</Button>
             <p style={{ ...SMALL, marginTop: 8, textAlign: 'center' }}>Or call <a href={'tel:' + CH.phoneTel} style={{ fontWeight: 600 }}>{CH.phone}</a> — answered 24 hours a day.</p>
           </div>
         </div>
@@ -166,7 +166,7 @@ function HomePage({ go }) {
         <div style={{ ...CARD, background: 'var(--web-blue-050)', border: '1px solid var(--web-blue-100)' }}>
           <div style={{ ...LABEL, marginBottom: 10 }}>What it costs</div>
           <CostReveal context="burst_geyser" lines={['The cost depends on the size of the unit, the brand, the type — electric, solar or heat pump — how accessible the installation is, and whether the existing unit is still under manufacturer warranty. We typically see costs ranging between R 9,800 ex VAT and R 13,200 ex VAT for a safe, compliant electric geyser replacement']}>
-            <Button as="a" variant="navy" fullWidth href={wa('Hi Home Assist, my geyser has burst. ')} target="_blank" rel="noopener" iconLeft={<Icon name="message-circle" size={17} color="#fff" />}>Send us the details</Button>
+            <Button as="a" variant="navy" fullWidth href={wa('Hi Home Assist, my geyser has burst. ', 'HOME-3')} target="_blank" rel="noopener" iconLeft={<Icon name="message-circle" size={17} color="#fff" />}>Send us the details</Button>
           </CostReveal>
           <div style={{ marginTop: 16 }}>
             <img src="../../assets/illustrations/geyser-cylinder-burst.png" alt="An electric hot water cylinder on its mounting feet, showing the element cover plate and thermostat access" style={{ width: '100%', height: 'auto', display: 'block' }} />
@@ -211,7 +211,7 @@ function HomePage({ go }) {
         <div style={{ ...CARD, background: 'var(--web-blue-050)', border: '1px solid var(--web-blue-100)' }}>
           <div style={{ ...LABEL, marginBottom: 10 }}>What it costs</div>
           <CostReveal context="leak_detection" lines={['Leak detection is done first, to pinpoint the leak. The pipe repair and then the resultant damage repair follow. Finding and repairing the leak typically runs R2,000 to R6,200 ex VAT, and resultant repairs R5,000 to R21,000 ex VAT. The repair scope genuinely cannot be quoted until the leak has been found.']}>
-            <Button as="a" variant="navy" fullWidth href={wa('Hi Home Assist, I think I have a hidden water leak. ')} target="_blank" rel="noopener" iconLeft={<Icon name="message-circle" size={17} color="#fff" />}>Send us the details</Button>
+            <Button as="a" variant="navy" fullWidth href={wa('Hi Home Assist, I think I have a hidden water leak. ', 'HOME-4')} target="_blank" rel="noopener" iconLeft={<Icon name="message-circle" size={17} color="#fff" />}>Send us the details</Button>
           </CostReveal>
           <div style={{ marginTop: 16, borderRadius: 4, overflow: 'hidden', border: '1px solid var(--web-blue-100)' }}>
             <img src="../../assets/illustrations/leak-thermal-technician.jpg" alt="A Home Assist technician scanning the wall behind a basin with a handheld thermal imaging camera" style={{ width: '100%', height: 'auto', display: 'block' }} />
@@ -297,7 +297,7 @@ function HomePage({ go }) {
     </Section>
 
     <NavyBand eyebrow="Get help now" title="Message us on WhatsApp. We pick up 24 hours a day.">
-      <Button as="a" size="lg" variant="onDark" href={wa('Hi Home Assist, I need help with: ')} target="_blank" rel="noopener" iconLeft={<Icon name="message-circle" size={18} color="var(--web-navy)" />}>WhatsApp {CH.waHome}</Button>
+      <Button as="a" size="lg" variant="onDark" href={wa('Hi Home Assist, I need help with: ', 'HOME-5')} target="_blank" rel="noopener" iconLeft={<Icon name="message-circle" size={18} color="var(--web-navy)" />}>WhatsApp {CH.waHome}</Button>
       <Button as="a" size="lg" variant="ghost" href={'tel:' + CH.phoneTel} style={{ color: '#fff', border: '1px solid rgba(255,255,255,.5)' }}>Call {CH.phone}</Button>
       <Button as="a" size="lg" variant="ghost" href={'mailto:' + CH.help} style={{ color: '#fff', border: '1px solid rgba(255,255,255,.5)' }}>{CH.help}</Button>
     </NavyBand>
@@ -314,7 +314,7 @@ function RequestForm() {
       <h2 style={{ ...H2, color: '#fff', fontSize: 26 }}>Press send on WhatsApp and we have it.</h2>
       <p style={{ ...BODY, color: 'rgba(255,255,255,.85)', maxWidth: '60ch' }}>WhatsApp has opened with your details already filled in. Send the message and a consultant will pick it up — we answer 24 hours a day. If WhatsApp did not open, use the button below.</p>
       <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
-        <Button as="a" variant="onDark" href={waLink || wa('Hi Home Assist, I would like to log a service request. ')} target="_blank" rel="noopener">Open WhatsApp with my request</Button>
+        <Button as="a" variant="onDark" href={waLink || wa('Hi Home Assist, I would like to log a service request. ', 'HOME-6')} target="_blank" rel="noopener">Open WhatsApp with my request</Button>
         <Button as="a" variant="ghost" href={'tel:' + CH.phoneTel} style={{ color: '#fff', border: '1px solid rgba(255,255,255,.5)' }}>Call {CH.phone} instead</Button>
         <Button variant="ghost" onClick={() => setSent(false)} style={{ color: '#fff', border: '1px solid rgba(255,255,255,.5)' }}>Edit my request</Button>
       </div>
@@ -322,7 +322,7 @@ function RequestForm() {
   </Section>;
   return <Section id="request" tint eyebrow="Service request" title="Tell us what you need"
     intro="We will match you with an artisan and come back to you on WhatsApp.">
-    <form onSubmit={e => { e.preventDefault(); setWaLink(whatsappHandoff(e.currentTarget, { intro: 'New service request from the Home Assist website.' })); setSent(true); }} style={{ ...CARD, padding: 32, maxWidth: 900 }}>
+    <form onSubmit={e => { e.preventDefault(); setWaLink(whatsappHandoff(e.currentTarget, { intro: 'New service request from the Home Assist website.', ref: 'HOME-6' })); setSent(true); }} style={{ ...CARD, padding: 32, maxWidth: 900 }}>
       <div style={row}>
         <FieldRow label="Full name"><input style={INPUT} required /></FieldRow>
         <FieldRow label="Mobile number" hint="South African format, e.g. 082 123 4567"><input style={INPUT} type="tel" required /></FieldRow>

@@ -151,7 +151,7 @@ function Article({ post, back, related }) {
           <div style={{ ...LABEL, marginBottom: 6 }}>Need help now?</div>
           <p style={{ ...BODY, margin: 0 }}>Message us and we will allocate a verified artisan in your area.</p>
         </div>
-        <Button as="a" variant="navy" href={wa('Hi Home Assist, I read your article and I need help with: ')} target="_blank" rel="noopener" iconLeft={<Icon name="message-circle" size={17} color="#fff" />}>WhatsApp us</Button>
+        <Button as="a" variant="navy" href={wa('Hi Home Assist, I read your article and I need help with: ', 'BLOG-1')} target="_blank" rel="noopener" iconLeft={<Icon name="message-circle" size={17} color="#fff" />}>WhatsApp us</Button>
       </div>
       {sources ? <div style={{ borderTop: '1px solid var(--web-grey-100)', paddingTop: 24, marginBottom: 8 }}>
         <div style={{ ...LABEL, marginBottom: 12 }}>Sources</div>

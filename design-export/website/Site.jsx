@@ -17,7 +17,7 @@ function SiteApp() {
   return <React.Fragment>
     <Header page={page} go={go} />
     <Page go={go} />
-    <Footer go={go} />
+    <Footer go={go} page={page} />
     <div style={{ background: 'var(--web-navy-900)' }}>
       <div style={{ ...WRAP, padding: '14px 40px', display: 'flex', gap: 20, flexWrap: 'wrap', alignItems: 'baseline' }}>
         <span style={{ ...LABEL, color: 'var(--web-blue-300)' }}>Title tag</span>

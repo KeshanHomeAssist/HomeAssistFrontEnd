@@ -259,7 +259,7 @@ function ShDeviceCard({ d }) {
 
     <div style={{ marginTop: 'auto', paddingTop: 14, display: 'flex', flexDirection: 'column', gap: 8 }}>
       <Button variant="navy" size="sm" fullWidth as="a" target="_blank" rel="noopener"
-        href={wa('Hi Home Assist, I would like to know more about the ' + d.name + '. ')}
+        href={wa('Hi Home Assist, I would like to know more about the ' + d.name + '. ', 'SMART-2-' + d.id.toUpperCase())}
         iconLeft={<Icon name="message-circle" size={16} color="#fff" />}>Ask about this one</Button>
       {d.href ? <a href={d.href} target="_blank" rel="noopener noreferrer" style={{ ...SMALL, color: 'var(--web-blue)', fontWeight: 600, textAlign: 'center' }}>Manufacturer&rsquo;s product page</a> : null}
     </div>
@@ -278,7 +278,7 @@ function SmartHomesPage({ go }) {
           <p style={{ ...BODY, color: 'rgba(255,255,255,.85)', fontSize: 17, maxWidth: '54ch', marginBottom: 26 }}>Three ways to spend less on hot water — one changes where the energy comes from, two change when the element runs. They solve different problems, and this page says which is which rather than ranking them on one list.</p>
           <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
             <Button as="a" size="lg" variant="onDark" target="_blank" rel="noopener"
-              href={wa('Hi Home Assist, I would like to talk about smart geyser control. ')}
+              href={wa('Hi Home Assist, I would like to talk about smart geyser control. ', 'SMART-1')}
               iconLeft={<Icon name="message-circle" size={18} color="#fff" />}>Ask us which one fits</Button>
             <Button as="a" size="lg" variant="ghost" href="#compare" style={{ color: '#fff', border: '1px solid rgba(255,255,255,.5)' }} iconLeft={<Icon name="table" size={18} color="#fff" />}>Compare the three</Button>
           </div>
@@ -356,7 +356,7 @@ function SmartHomesPage({ go }) {
         <div style={{ ...LABEL, color: 'var(--web-blue-300)', marginBottom: 10 }}>One installer for all three</div>
         <p style={{ ...BODY, color: 'rgba(255,255,255,.88)', fontSize: 15, maxWidth: '76ch' }}>Whichever one you pick, Home Assist supplies the device, sends the right trade for it — plumber, electrician or PV Green Card installer — and handles the certificate of compliance where one is needed. We check the geyser it is going onto before we fit anything, and we manage geyser installations for South African insurers every day, so the installation is done the way an assessor expects to find it.</p>
         <Button as="a" size="sm" variant="onDark" target="_blank" rel="noopener"
-          href={wa('Hi Home Assist, I would like a smart geyser control installed. ')}
+          href={wa('Hi Home Assist, I would like a smart geyser control installed. ', 'SMART-3')}
           iconLeft={<Icon name="message-circle" size={16} color="#fff" />}>Have Home Assist install it</Button>
       </div>
       <div style={{ ...CARD, marginTop: 20, background: 'var(--web-grey-050)' }}>
@@ -492,7 +492,7 @@ function SmartHomesPage({ go }) {
     {/* CTA */}
     <NavyBand eyebrow="Tell us what you have" title="Send us your geyser and your bill, and we will say which of the three is worth it.">
       <Button as="a" size="lg" variant="onDark" target="_blank" rel="noopener"
-        href={wa('Hi Home Assist, I would like to talk about smart geyser control. My geyser is: ')}
+        href={wa('Hi Home Assist, I would like to talk about smart geyser control. My geyser is: ', 'SMART-4')}
         iconLeft={<Icon name="message-circle" size={18} color="#fff" />}>WhatsApp us</Button>
       <Button as="a" size="lg" variant="ghost" href={'tel:' + CH.phoneTel} style={{ color: '#fff', border: '1px solid rgba(255,255,255,.5)' }} iconLeft={<Icon name="phone" size={18} color="#fff" />}>{CH.phone}</Button>
     </NavyBand>

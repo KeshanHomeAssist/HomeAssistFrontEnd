@@ -3259,13 +3259,13 @@ const {
   Card
 } = window.HomeAssistDesignSystem_cf0a2b;
 const CH = {
-  waHome: '+27 71 526 2554',
-  waHomeDigits: '27715262554',
+  waHome: '+27 81 849 5489',
+  waHomeDigits: '27818495489',
   phone: '087 095 5231',
   phoneTel: '+27870955231',
   help: 'help@homeassist.co.za',
-  waBiz: '082 572 8220',
-  waBizDigits: '27825728220',
+  waBiz: '081 849 5489',
+  waBizDigits: '27818495489',
   biz: 'keshan@homeassist.co.za',
   address: '12 Uitvlugt Road, Pinelands, Cape Town, South Africa, 7405',
   portal: 'https://portal.homeassist.co.za/',

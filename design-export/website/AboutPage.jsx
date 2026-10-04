@@ -61,7 +61,7 @@ function AboutPage() {
       intro="WhatsApp is the fastest route for anything urgent. The hotline and help desk are attended during business hours and on call after hours.">
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 20, marginBottom: 20 }}>
         <ChannelCard label="WhatsApp" value={CH.waHome} note="The fastest way to reach us. Available 24/7."
-          action={<Button as="a" variant="navy" href={wa('Hi Home Assist, ')} target="_blank" rel="noopener" iconLeft={<Icon name="message-circle" size={17} color="#fff" />}>Message us</Button>} />
+          action={<Button as="a" variant="navy" href={wa('Hi Home Assist, ', 'ABOUT-1')} target="_blank" rel="noopener" iconLeft={<Icon name="message-circle" size={17} color="#fff" />}>Message us</Button>} />
         <ChannelCard label="Phone" value={CH.phone} note="Speak to a consultant."
           action={<Button as="a" variant="secondary" href={'tel:' + CH.phoneTel} iconLeft={<Icon name="phone" size={17} color="var(--web-navy)" />}>Call now</Button>} />
         <ChannelCard label="Help desk" value={CH.help} note="Customer success and follow-ups on existing jobs."
@@ -83,10 +83,10 @@ function AboutPage() {
         ? <div style={{ ...CARD, borderLeft: '3px solid var(--web-blue)', maxWidth: 760 }}>
           <div style={{ ...LABEL, marginBottom: 8 }}>One step left</div>
           <p style={{ ...BODY, margin: '0 0 16px' }}>WhatsApp has opened with your message filled in. Send it and we will come back to you. If it did not open, use the button below.</p>
-          <Button as="a" variant="navy" href={waLink || wa('Hi Home Assist, ')} target="_blank" rel="noopener">Open WhatsApp with my message</Button>
+          <Button as="a" variant="navy" href={waLink || wa('Hi Home Assist, ', 'ABOUT-2')} target="_blank" rel="noopener">Open WhatsApp with my message</Button>
         </div>
         : <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0,760px) 300px', gap: 24, alignItems: 'stretch' }}>
-          <form onSubmit={e => { e.preventDefault(); setWaLink(whatsappHandoff(e.currentTarget, { intro: 'New message from the Home Assist website.' })); setSent(true); }} style={{ ...CARD, padding: 32 }}>
+          <form onSubmit={e => { e.preventDefault(); setWaLink(whatsappHandoff(e.currentTarget, { intro: 'New message from the Home Assist website.', ref: 'ABOUT-2' })); setSent(true); }} style={{ ...CARD, padding: 32 }}>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20, marginBottom: 20 }}>
             <FieldRow label="Name"><input style={INPUT} required /></FieldRow>
             <FieldRow label="Email"><input style={INPUT} type="email" required /></FieldRow>

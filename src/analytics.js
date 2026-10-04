@@ -62,6 +62,21 @@ function outboundEvent(href) {
 }
 
 /**
+ * Which WhatsApp button this was. Every wa.me link on the site starts its
+ * prefilled message with a ref line — "[HOME-1]" — set in Chrome.jsx, so the
+ * ref the business line sees and the cta_id GA4 records are the same string.
+ * Register `cta_id` as an event-scoped custom dimension in GA4 Admin, or it
+ * will not appear in standard reports (it still reaches explorations/BigQuery).
+ */
+function ctaIdFrom(href) {
+  try {
+    const text = new URL(href).searchParams.get('text') || '';
+    const m = text.match(/^\[([A-Z0-9-]+)\]/);
+    return m ? m[1] : '(none)';
+  } catch (e) { return '(none)'; }
+}
+
+/**
  * One page_view per route, plus one event per outbound CTA click.
  *
  * `page_path` is read from the live URL at click time rather than from a closure,
@@ -86,11 +101,14 @@ export function useAnalytics(React, pathname) {
       if (!link) return;
       const name = outboundEvent(link.getAttribute('href'));
       if (!name) return;
-      send(name, {
+      const href = link.getAttribute('href');
+      const params = {
         page_path: normalisePath(window.location.pathname),
         link_text: (link.textContent || '').trim().slice(0, 100),
-        link_url: link.getAttribute('href'),
-      });
+        link_url: href,
+      };
+      if (name === 'whatsapp_click') params.cta_id = ctaIdFrom(href);
+      send(name, params);
     };
 
     // Capture phase: these links open a new tab or hand off to another app, and

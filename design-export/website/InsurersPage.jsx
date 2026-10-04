@@ -79,7 +79,7 @@ function InsurersBody() {
           <p style={{ ...BODY, color: 'rgba(255,255,255,.85)', fontSize: 17, maxWidth: '58ch', marginBottom: 26 }}>Home Assist takes the incident from first notification to a closed, evidenced, compliant file. Take the whole process, or take the modules you are missing.</p>
           <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
             <Button as="a" size="lg" variant="onDark" href={CH.booking} target="_blank" rel="noopener">Book Free Pilot</Button>
-            <Button as="a" size="lg" variant="ghost" href={wa('Hi Home Assist, I am enquiring about claims management for our book. ', true)} target="_blank" rel="noopener" style={{ color: '#fff', border: '1px solid rgba(255,255,255,.5)' }} iconLeft={<Icon name="message-circle" size={18} color="#fff" />}>WhatsApp us</Button>
+            <Button as="a" size="lg" variant="ghost" href={wa('Hi Home Assist, I am enquiring about claims management for our book. ', 'INSURER-1')} target="_blank" rel="noopener" style={{ color: '#fff', border: '1px solid rgba(255,255,255,.5)' }} iconLeft={<Icon name="message-circle" size={18} color="#fff" />}>WhatsApp us</Button>
           </div>
         </div>
         <div style={{ border: '1px solid rgba(255,255,255,.22)', borderRadius: 4, padding: 28 }}>
@@ -130,7 +130,7 @@ function InsurersBody() {
         <p style={{ ...BODY, maxWidth: '62ch', marginBottom: 20 }}>Meet with us online or in person to discuss how we can help you get control of your property book</p>
         <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
           <Button as="a" size="lg" variant="navy" href={CH.booking} target="_blank" rel="noopener" iconLeft={<Icon name="calendar" size={18} color="#fff" />}>Book a meeting</Button>
-          <Button as="a" size="lg" variant="ghost" href={wa('Hi Home Assist, I would like to book a meeting about our property book. ', true)} target="_blank" rel="noopener">WhatsApp us</Button>
+          <Button as="a" size="lg" variant="ghost" href={wa('Hi Home Assist, I would like to book a meeting about our property book. ', 'INSURER-2')} target="_blank" rel="noopener">WhatsApp us</Button>
         </div>
         <p style={{ ...SMALL, marginTop: 16 }}>Pick a slot that suits you. Thirty minutes, no pack to read first.</p>
       </div>
@@ -167,7 +167,7 @@ function InsurersBody() {
 
     <NavyBand eyebrow="Next step" title="Send us a sample of settled claims. We will verify them and show you what we find.">
       <Button as="a" size="lg" variant="onDark" href={CH.booking} target="_blank" rel="noopener">Book a sample review</Button>
-      <Button as="a" size="lg" variant="ghost" href={wa('Hi Home Assist, we would like to discuss a sample claim review. ', true)} target="_blank" rel="noopener" style={{ color: '#fff', border: '1px solid rgba(255,255,255,.5)' }}>WhatsApp us</Button>
+      <Button as="a" size="lg" variant="ghost" href={wa('Hi Home Assist, we would like to discuss a sample claim review. ', 'INSURER-3')} target="_blank" rel="noopener" style={{ color: '#fff', border: '1px solid rgba(255,255,255,.5)' }}>WhatsApp us</Button>
     </NavyBand>
   </main>;
 }

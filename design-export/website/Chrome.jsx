@@ -1,10 +1,10 @@
 const { Button, Icon, Card } = window.HomeAssistDesignSystem_cf0a2b;
 
 const CH = {
-  waHome: '+27 71 526 2554', waHomeDigits: '27715262554',
+  waHome: '+27 81 849 5489', waHomeDigits: '27818495489',
   phone: '087 095 5231', phoneTel: '+27870955231',
   help: 'help@homeassist.co.za',
-  waBiz: '082 572 8220', waBizDigits: '27825728220',
+  waBiz: '081 849 5489', waBizDigits: '27818495489',
   biz: 'keshan@homeassist.co.za',
   address: '12 Uitvlugt Road, Pinelands, Cape Town, South Africa, 7405',
   portal: 'https://portal.homeassist.co.za/',
@@ -15,7 +15,29 @@ const CH = {
   leonie: 'leonie@homeassist.co.za',
   vimla: 'vimla@homeassist.co.za'
 };
-const wa = (msg, biz) => `https://wa.me/${biz ? CH.waBizDigits : CH.waHomeDigits}?text=${encodeURIComponent(msg)}`;
+/* WhatsApp links — one business line, one ID per button (4 October 2026).
+
+   Every WhatsApp CTA on the site goes to the Home Assist business line and
+   carries a ref: PAGE-n, numbered top to bottom on that page (HOME-1 is the
+   home hero, HOME-6 the service-request form), PAGE-TOP for the header button
+   and PAGE-FOOT for the footer link. The ref is the first line of the
+   prefilled message, so whoever answers the business line can see which page
+   and which button the lead came from — and src/analytics.js reads the same
+   ref back out of the link and sends it to GA4 as `cta_id`. One source of
+   truth: the message and the report can never disagree.
+
+   The full ref list is in the project doc 28-whatsapp-business-line.md. */
+const waText = (msg, ref) => (ref ? '[' + ref + ']\n' : '') + msg;
+const wa = (msg, ref) => `https://wa.me/${CH.waHomeDigits}?text=${encodeURIComponent(waText(msg, ref))}`;
+
+/* Page id → the short code used in WhatsApp refs. Unknown pages (404) are SITE. */
+const PAGE_REF = {
+  home: 'HOME', geyserReplacements: 'GEYSER', leakDetection: 'LEAK', smartHomes: 'SMART',
+  insurers: 'INSURER', propertyManagers: 'PM', managingAgents: 'MA', join: 'JOIN',
+  portal: 'PORTAL', about: 'ABOUT', blog: 'BLOG', terms: 'TERMS', privacy: 'PRIVACY',
+  complaints: 'COMPLAINTS', dataRequest: 'DATA'
+};
+const pageRef = (page, slot) => (PAGE_REF[page] || 'SITE') + '-' + slot;
 
 const mailtoLink = (to, subject) => 'mailto:' + to + '?subject=' + encodeURIComponent(subject);
 
@@ -67,10 +89,10 @@ function formAnswers(form) {
 
 /* Opens WhatsApp with the form's answers as the message body. Returns the URL
    so the page can offer a manual link if the browser blocked the new tab. */
-function whatsappHandoff(form, { biz = false, intro }) {
+function whatsappHandoff(form, { intro, ref }) {
   const answers = formAnswers(form);
   const text = intro + '\n\n' + answers.map(([k, v]) => k + ': ' + v).join('\n');
-  const url = wa(text, biz);
+  const url = wa(text, ref);
   /* GA4: a form hands off through window.open rather than an <a>, so the
      document-level click tracker in src/analytics.js never sees it. Fire the
      same whatsapp_click event here so a submitted form counts exactly like a
@@ -81,7 +103,8 @@ function whatsappHandoff(form, { biz = false, intro }) {
     const params = {
       page_path: (window.location.pathname.replace(/[/]+$/, '') || '/'),
       link_text: 'form: ' + (intro || '').split('\n')[0].slice(0, 80),
-      link_url: url
+      link_url: url,
+      cta_id: ref || '(none)'
     };
     window.dataLayer = window.dataLayer || [];
     window.dataLayer.push(Object.assign({ event: 'whatsapp_click' }, params));
@@ -211,7 +234,7 @@ function Header({ page, go }) {
           AI assistant reads out when somebody asks how to reach us. Both are
           size="sm" so the pair fits where the single button used to sit. */}
       <div style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap' }}>
-        <Button as="a" size="sm" variant="navy" href={wa('Hi Home Assist, I need help with: ')} target="_blank" rel="noopener"
+        <Button as="a" size="sm" variant="navy" href={wa('Hi Home Assist, I need help with: ', pageRef(page, 'TOP'))} target="_blank" rel="noopener"
           iconLeft={<Icon name="message-circle" size={15} color="#fff" />}>WhatsApp</Button>
         <Button as="a" size="sm" variant="secondary" href={'tel:' + CH.phoneTel}
           iconLeft={<Icon name="phone" size={15} color="var(--web-navy)" />}>{CH.phone}</Button>
@@ -220,7 +243,7 @@ function Header({ page, go }) {
   </header>;
 }
 
-function Footer({ go }) {
+function Footer({ go, page }) {
   const col = { display: 'flex', flexDirection: 'column', gap: 8 };
   const link = { font: '400 var(--web-size-small)/1.5 var(--font-core)', color: '#fff', opacity: .82, textDecoration: 'none' };
   const head = { ...LABEL, color: 'var(--web-blue-300)', marginBottom: 6 };
@@ -246,7 +269,7 @@ function Footer({ go }) {
         <a href="#/data-request" onClick={e => { e.preventDefault(); go('dataRequest'); }} style={link}>Data Subject Request</a>
       </div>
       <div style={col}><div style={head}>Contact</div>
-        <div><div style={{ ...head, marginBottom: 2 }}>WhatsApp</div><a href={wa('Hi Home Assist, ')} style={link}>{CH.waHome}</a></div>
+        <div><div style={{ ...head, marginBottom: 2 }}>WhatsApp</div><a href={wa('Hi Home Assist, ', pageRef(page, 'FOOT'))} style={link}>{CH.waHome}</a></div>
         <div><div style={{ ...head, marginBottom: 2 }}>Phone</div><a href={'tel:' + CH.phoneTel} style={link}>{CH.phone}</a></div>
         <div><div style={{ ...head, marginBottom: 2 }}>Email</div><a href={'mailto:' + CH.help} style={link}>{CH.help}</a></div>
         <div><div style={{ ...head, marginBottom: 2 }}>Complaints</div><a href={mailtoLink(CH.complaints, 'Complaint')} style={link}>{CH.complaints}</a></div>
