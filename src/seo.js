@@ -243,6 +243,48 @@ export const ROUTES = {
       },
     ],
   },
+  '/smart-homes/smart-metering': {
+    title: 'Smart Water & Electricity Metering | Home Assist',
+    description:
+      'A smart meter per home, read daily. Fair billing for complexes and estates, leaks caught early, no Wi-Fi needed. One hub reads water and electricity together.',
+    schema: [
+      organization,
+      {
+        '@type': 'Service',
+        name: 'Smart water and electricity metering',
+        provider: { '@id': `${SITE_URL}/#organization` },
+        areaServed: { '@type': 'Country', name: 'South Africa' },
+        serviceType:
+          'Smart utility metering: site survey, meter and reader installation, automatic daily readings and per-unit billing for homes, complexes and estates',
+      },
+      {
+        '@type': 'FAQPage',
+        '@id': `${SITE_URL}/smart-homes/smart-metering#faq`,
+        mainEntity: [
+          {
+            '@type': 'Question',
+            name: 'Does a smart meter reader need my home Wi-Fi?',
+            acceptedAnswer: { '@type': 'Answer', text: 'No. The reading devices transmit on a low-power radio network built for meters, so nothing connects to your router and there is no SIM card per device. A Wi-Fi option exists for special cases and then requires permanent USB-C power.' },
+          },
+          {
+            '@type': 'Question',
+            name: 'Can an old meter without a pulse output be made smart?',
+            acceptedAnswer: { '@type': 'Answer', text: 'Usually, yes. Many older meters can be fitted with a retrofit reed switch that the reading device counts. Where a meter is too old or damaged, a new mechanical or ultrasonic meter is fitted first and the reader connects to that.' },
+          },
+          {
+            '@type': 'Question',
+            name: 'How is a whole complex or estate metered and billed?',
+            acceptedAnswer: { '@type': 'Answer', text: 'A reading device is fitted per unit, readings arrive on the billing platform automatically several times a day, and each owner is billed from their own meter instead of a formula split of the bulk meter. The same daily readings flag the overnight water flow that means a leak.' },
+          },
+          {
+            '@type': 'Question',
+            name: 'How long does the battery of a smart meter reader last?',
+            acceptedAnswer: { '@type': 'Answer', text: 'The sealed single-meter unit is rated for up to five years at three readings a day with adequate signal, and the battery is replaceable by a technician. Weak signal shortens battery life, which is why signal is physically tested at the meter before installation and an external antenna is specified at order where needed.' },
+          },
+        ],
+      },
+    ],
+  },
   '/leak-detection': {
     title: 'Leak Detection in South Africa | Home Assist',
     description:

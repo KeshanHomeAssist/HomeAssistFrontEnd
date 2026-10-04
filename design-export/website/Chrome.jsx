@@ -33,6 +33,7 @@ const wa = (msg, ref) => `https://wa.me/${CH.waHomeDigits}?text=${encodeURICompo
 /* Page id → the short code used in WhatsApp refs. Unknown pages (404) are SITE. */
 const PAGE_REF = {
   home: 'HOME', geyserReplacements: 'GEYSER', leakDetection: 'LEAK', smartHomes: 'SMART',
+  smartMetering: 'METER',
   insurers: 'INSURER', propertyManagers: 'PM', managingAgents: 'MA', join: 'JOIN',
   portal: 'PORTAL', about: 'ABOUT', blog: 'BLOG', terms: 'TERMS', privacy: 'PRIVACY',
   complaints: 'COMPLAINTS', dataRequest: 'DATA'
@@ -142,7 +143,8 @@ const NAV = [
       { id: 'home', label: 'Home page', route: '/' },
       { id: 'geyserReplacements', label: 'Geyser replacements', route: '/geyser-replacements' },
       { id: 'leakDetection', label: 'Leak detection', route: '/leak-detection' },
-      { id: 'smartHomes', label: 'Smart homes', route: '/smart-homes' }
+      { id: 'smartHomes', label: 'Smart homes', route: '/smart-homes' },
+      { id: 'smartMetering', label: 'Smart metering', route: '/smart-homes/smart-metering' }
     ]
   },
   { id: 'propertyManagers', label: 'Property managers', route: '/property-managers' },

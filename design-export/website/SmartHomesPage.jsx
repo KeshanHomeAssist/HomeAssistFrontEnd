@@ -508,6 +508,9 @@ function SmartHomesPage({ go }) {
       <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
         <Button variant="navy" size="lg" onClick={function () { go('geyserReplacements'); }} iconLeft={<Icon name="clipboard-check" size={18} color="#fff" />}>Build a replacement specification</Button>
         <Button variant="secondary" size="lg" onClick={function () { go('leakDetection'); }} iconLeft={<Icon name="search" size={18} color="var(--web-navy)" />}>Leak detection</Button>
+        {/* /smart-homes/smart-metering added 4 October 2026 — the metering leg
+            of the smart homes offer: per-home water and electricity readings. */}
+        <Button variant="secondary" size="lg" onClick={function () { go('smartMetering'); }} iconLeft={<Icon name="gauge" size={18} color="var(--web-navy)" />}>Smart metering</Button>
       </div>
     </Section>
   </main>;

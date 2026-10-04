@@ -17,6 +17,7 @@ import { ManagingAgentsPage } from './site/ManagingAgentsPage.jsx';
 import { LeakDetectionPage } from './site/LeakDetectionPage.jsx';
 import { GeyserReplacementsPage } from './site/GeyserReplacementsPage.jsx';
 import { SmartHomesPage } from './site/SmartHomesPage.jsx';
+import { SmartMeteringPage } from './site/SmartMeteringPage.jsx';
 import { JoinPage } from './site/JoinPage.jsx';
 import { PortalPage } from './site/PortalPage.jsx';
 import { AboutPage } from './site/AboutPage.jsx';
@@ -42,6 +43,7 @@ export const PAGE_PATHS = {
   managingAgents: '/managing-agents',
   geyserReplacements: '/geyser-replacements',
   smartHomes: '/smart-homes',
+  smartMetering: '/smart-homes/smart-metering',
   leakDetection: '/leak-detection',
   join: '/join',
   portal: '/portal',
@@ -259,6 +261,7 @@ export default function App() {
         <Route path="/managing-agents" element={<ManagingAgentsPage go={go} />} />
         <Route path="/geyser-replacements" element={<GeyserReplacementsPage go={go} />} />
         <Route path="/smart-homes" element={<SmartHomesPage go={go} />} />
+        <Route path="/smart-homes/smart-metering" element={<SmartMeteringPage go={go} />} />
         <Route path="/leak-detection" element={<LeakDetectionPage go={go} />} />
         <Route path="/join" element={<JoinPage go={go} />} />
         <Route path="/portal" element={<PortalPage go={go} />} />

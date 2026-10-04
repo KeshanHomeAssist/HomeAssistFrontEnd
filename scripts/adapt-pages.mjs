@@ -44,6 +44,7 @@ const PAGE_EXPORTS = {
   'LeakDetectionPage.jsx': ['LeakDetectionPage'],
   'GeyserReplacementsPage.jsx': ['GeyserReplacementsPage'],
   'SmartHomesPage.jsx': ['SmartHomesPage'],
+  'SmartMeteringPage.jsx': ['SmartMeteringPage'],
   'JoinPage.jsx': ['JoinPage'],
   'PortalPage.jsx': ['PortalPage'],
   'AboutPage.jsx': ['AboutPage'],
