@@ -82,15 +82,9 @@ function InsurersBody() {
             <Button as="a" size="lg" variant="ghost" href={wa('Hi Home Assist, I am enquiring about claims management for our book. ', 'INSURER-1')} target="_blank" rel="noopener" style={{ color: '#fff', border: '1px solid rgba(255,255,255,.5)' }} iconLeft={<Icon name="message-circle" size={18} color="#fff" />}>WhatsApp us</Button>
           </div>
         </div>
-        <div style={{ border: '1px solid rgba(255,255,255,.22)', borderRadius: 4, padding: 28 }}>
-          <Eyebrow onDark>The offer in one line</Eyebrow>
-          <p style={{ ...BODY, color: '#fff', fontSize: 17, margin: 0 }}>Send us a sample of settled claims. We will verify them and show you what we find.</p>
-          <div style={{ height: 1, background: 'rgba(255,255,255,.22)', margin: '22px 0' }}></div>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20 }}>
-            <div><div style={{ font: '700 34px/1 var(--font-core)', color: '#fff' }}>7 days</div><div style={{ ...LABEL, color: 'var(--web-blue-300)', marginTop: 6 }}>Free pilot</div></div>
-            <div><div style={{ font: '700 34px/1 var(--font-core)', color: '#fff' }}>100%</div><div style={{ ...LABEL, color: 'var(--web-blue-300)', marginTop: 6 }}>Incidents verified free for the pilot</div></div>
-          </div>
-        </div>
+        <img src="/assets/illustrations/ops-centre-hero.jpg"
+          alt="A Home Assist agent at the operations centre — claim dashboards on screen, with homes outside the window by day and by night"
+          style={{ width: '100%', height: 'auto', display: 'block', borderRadius: 4 }} />
       </div>
     </section>
 
@@ -107,9 +101,20 @@ function InsurersBody() {
 
     {/* Turnkey banner — sitting straight above the nine modules */}
     <section style={{ background: 'var(--web-navy)' }}>
-      <div style={{ ...WRAP, padding: '44px 40px' }}>
-        <Eyebrow onDark>The model</Eyebrow>
-        <h2 style={{ ...H2, color: '#fff', margin: 0, maxWidth: '26ch' }}>Turnkey or modular management of your property claims book.</h2>
+      <div style={{ ...WRAP, padding: '52px 40px', display: 'grid', gridTemplateColumns: '1.1fr .9fr', gap: 56, alignItems: 'center' }}>
+        <div>
+          <Eyebrow onDark>The model</Eyebrow>
+          <h2 style={{ ...H2, color: '#fff', margin: 0, maxWidth: '26ch' }}>Turnkey or modular management of your property claims book.</h2>
+        </div>
+        <div style={{ border: '1px solid rgba(255,255,255,.22)', borderRadius: 4, padding: 28 }}>
+          <Eyebrow onDark>The offer in one line</Eyebrow>
+          <p style={{ ...BODY, color: '#fff', fontSize: 17, margin: 0 }}>Send us a sample of settled claims. We will verify them and show you what we find.</p>
+          <div style={{ height: 1, background: 'rgba(255,255,255,.22)', margin: '22px 0' }}></div>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20 }}>
+            <div><div style={{ font: '700 34px/1 var(--font-core)', color: '#fff' }}>7 days</div><div style={{ ...LABEL, color: 'var(--web-blue-300)', marginTop: 6 }}>Free pilot</div></div>
+            <div><div style={{ font: '700 34px/1 var(--font-core)', color: '#fff' }}>100%</div><div style={{ ...LABEL, color: 'var(--web-blue-300)', marginTop: 6 }}>Incidents verified free for the pilot</div></div>
+          </div>
+        </div>
       </div>
     </section>
 
