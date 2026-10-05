@@ -75,7 +75,7 @@ function InsurersBody() {
       <div style={{ ...WRAP, padding: '72px 40px', display: 'grid', gridTemplateColumns: '1.1fr .9fr', gap: 56, alignItems: 'center' }}>
         <div>
           <Eyebrow onDark>For insurers, UMAs, binder holders and brokers</Eyebrow>
-          <h1 style={{ ...DISPLAY, color: '#fff', maxWidth: '22ch', marginBottom: 18 }}>Turnkey or modular management of your property claims book.</h1>
+          <h1 style={{ ...DISPLAY, color: '#fff', maxWidth: '22ch', marginBottom: 18 }}>Give every policyholder a benefit they can feel.</h1>
           <p style={{ ...BODY, color: 'rgba(255,255,255,.85)', fontSize: 17, maxWidth: '58ch', marginBottom: 26 }}>Home Assist takes the incident from first notification to a closed, evidenced, compliant file. Take the whole process, or take the modules you are missing.</p>
           <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
             <Button as="a" size="lg" variant="onDark" href={CH.booking} target="_blank" rel="noopener">Book Free Pilot</Button>
@@ -94,13 +94,6 @@ function InsurersBody() {
       </div>
     </section>
 
-    {/* Audience strip */}
-    <div style={{ background: 'var(--web-grey-050)', borderBottom: '1px solid var(--web-grey-100)' }}>
-      <div style={{ ...WRAP, padding: '22px 40px', display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 24 }}>
-        {[['Insurers', 'Whole-book or overflow'], ['UMAs', 'Delegated authority, controlled spend'], ['Binder holders', 'Cell Captives & Shared Risk'], ['Brokers', 'A service answer for your clients']].map(([l, v]) =>
-          <div key={l}><div style={LABEL}>{l}</div><div style={{ ...SMALL, marginTop: 6 }}>{v}</div></div>)}
-      </div>
-    </div>
 
     {/* Problem */}
     <Section eyebrow="The problem" title="The leak is not in the claim. It is in the process."
@@ -112,9 +105,12 @@ function InsurersBody() {
       </div>
     </Section>
 
-    {/* Operations-centre banner — sitting straight above the nine modules */}
-    <section style={{ background: '#fff', lineHeight: 0 }}>
-      <img src="/assets/illustrations/ops-centre-day-night.jpg" alt="The Home Assist operations centre by day and by night — agents on headsets working across claim dashboards, under the words Always here tomorrow and Support today and tomorrow" style={{ width: '100%', height: 'auto', display: 'block' }} />
+    {/* Turnkey banner — sitting straight above the nine modules */}
+    <section style={{ background: 'var(--web-navy)' }}>
+      <div style={{ ...WRAP, padding: '44px 40px' }}>
+        <Eyebrow onDark>The model</Eyebrow>
+        <h2 style={{ ...H2, color: '#fff', margin: 0, maxWidth: '26ch' }}>Turnkey or modular management of your property claims book.</h2>
+      </div>
     </section>
 
     {/* Modules */}
