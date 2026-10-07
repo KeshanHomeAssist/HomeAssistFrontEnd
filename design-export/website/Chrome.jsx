@@ -9,7 +9,7 @@ const CH = {
   address: '12 Uitvlugt Road, Pinelands, Cape Town, South Africa, 7405',
   portal: 'https://portal.homeassist.co.za/',
   register: 'https://portal.homeassist.co.za/Account/Register',
-  booking: 'https://calendar.app.google/9QkhMLKCyLuHyp696',
+  booking: 'https://calendar.google.com/appointments/schedules/AcZssZ1tSq7NDjpwsYM1nkJT1lphxZb8-0N3-YqY_BBf8VnJ64Fhz9usCsahwjdpEMDy1GZSwsi6DEs_',
   complaints: 'complaints@homeassist.co.za',
   rating: 'https://portal.homeassist.co.za/rating',
   leonie: 'leonie@homeassist.co.za',
