@@ -127,13 +127,21 @@ function InsurersBody() {
 
     {/* Book a meeting */}
     <Section eyebrow="Commercial detail" title="Get an offer from Home Assist">
-      <div style={{ ...CARD, padding: 32, maxWidth: 760 }}>
-        <p style={{ ...BODY, maxWidth: '62ch', marginBottom: 20 }}>Meet with us online or in person to discuss how we can help you get control of your property book</p>
-        <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
-          <Button as="a" size="lg" variant="navy" href={CH.booking} target="_blank" rel="noopener" iconLeft={<Icon name="calendar" size={18} color="#fff" />}>Book a meeting</Button>
-          <Button as="a" size="lg" variant="ghost" href={wa('Hi Home Assist, I would like to book a meeting about our property book. ', 'INSURER-2')} target="_blank" rel="noopener">WhatsApp us</Button>
+      <div style={{ display: 'grid', gridTemplateColumns: '1.1fr .9fr', gap: 20, alignItems: 'start' }}>
+        {/* What the broker or insurer gets with Comprehensive membership */}
+        <div style={{ display: 'grid', gap: 20 }}>
+          <LabelCard icon="sun" label="For your clients" title="Sell a difference, not a discount">Solar PV and smart-home cover for your premium book — something your high-end clients can feel.</LabelCard>
+          <LabelCard icon="headset" label="For your cost centre" title="We take the calls. You take the report.">A 24/7 call centre and every warranty follow-up handled end to end — zero admin in your cost centre.</LabelCard>
+          <LabelCard icon="trending-down" label="For your loss ratio" title="50 years of claims knowledge on your loss ratio">Loss-ratio tracking and cost management from domain experts — time back to grow your book, not fight fires.</LabelCard>
         </div>
-        <p style={{ ...SMALL, marginTop: 16 }}>Pick a slot that suits you. Thirty minutes, no pack to read first.</p>
+        <div style={{ ...CARD, padding: 32 }}>
+          <p style={{ ...BODY, maxWidth: '62ch', marginBottom: 20 }}>Meet with us online or in person to discuss how we can help you get control of your property book</p>
+          <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
+            <Button as="a" size="lg" variant="navy" href={CH.booking} target="_blank" rel="noopener" iconLeft={<Icon name="calendar" size={18} color="#fff" />}>Explore an offer</Button>
+            <Button as="a" size="lg" variant="ghost" href={wa('Hi Home Assist, we would like to explore options for our property book. ', 'INSURER-2')} target="_blank" rel="noopener">WhatsApp us</Button>
+          </div>
+          <p style={{ ...SMALL, marginTop: 16 }}>Pick a slot that suits you. Thirty minutes, no pack to read first.</p>
+        </div>
       </div>
     </Section>
 
