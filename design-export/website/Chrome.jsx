@@ -34,6 +34,7 @@ const wa = (msg, ref) => `https://wa.me/${CH.waHomeDigits}?text=${encodeURICompo
 const PAGE_REF = {
   home: 'HOME', geyserReplacements: 'GEYSER', leakDetection: 'LEAK', smartHomes: 'SMART',
   smartMetering: 'METER',
+  rewards: 'REWARDS',
   insurers: 'INSURER', propertyManagers: 'PM', managingAgents: 'MA', join: 'JOIN',
   portal: 'PORTAL', about: 'ABOUT', blog: 'BLOG', terms: 'TERMS', privacy: 'PRIVACY',
   complaints: 'COMPLAINTS', dataRequest: 'DATA'
@@ -258,6 +259,7 @@ function Footer({ go, page }) {
       <div style={col}><div style={head}>For homeowners</div>
         {['Burst geyser', 'Leak detection', 'Burst pipe repair', 'Electrical', 'Building repairs'].map(t =>
           <a key={t} href="#/" onClick={e => { e.preventDefault(); go('home'); }} style={link}>{t}</a>)}
+        <a href="#/rewards" onClick={e => { e.preventDefault(); go('rewards'); }} style={link}>Home Assist Rewards</a>
       </div>
       <div style={col}><div style={head}>For business</div>
         <a href="#/insurers" onClick={e => { e.preventDefault(); go('insurers'); }} style={link}>Insurers and brokers</a>

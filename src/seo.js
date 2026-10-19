@@ -285,6 +285,12 @@ export const ROUTES = {
       },
     ],
   },
+  '/rewards': {
+    title: 'Home Assist Rewards | Win a Solar Geyser Upgrade',
+    description:
+      'Every job Home Assist completes earns an entry. Win a solar geyser upgrade, a smart water meter or a Geyserwise Max. Entries close 15 January 2027. Terms apply.',
+    schema: [organization],
+  },
   '/leak-detection': {
     title: 'Leak Detection in South Africa | Home Assist',
     description:

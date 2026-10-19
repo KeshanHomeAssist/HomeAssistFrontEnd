@@ -45,6 +45,7 @@ const PAGE_EXPORTS = {
   'GeyserReplacementsPage.jsx': ['GeyserReplacementsPage'],
   'SmartHomesPage.jsx': ['SmartHomesPage'],
   'SmartMeteringPage.jsx': ['SmartMeteringPage'],
+  'RewardsPage.jsx': ['RewardsPage'],
   'JoinPage.jsx': ['JoinPage'],
   'PortalPage.jsx': ['PortalPage'],
   'AboutPage.jsx': ['AboutPage'],
