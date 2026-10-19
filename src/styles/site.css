@@ -237,3 +237,14 @@ a:hover {
   .ha-gr-burst { display: none; }
   .ha-gr-progress { transition: none; }
 }
+
+
+/* ---------------------------------------------------------------------------
+   Homepage A/B test (19 October 2026). The variant is chosen in index.html
+   before paint and written to <html data-ab>. A is the default, so with
+   JavaScript off, the switch off, or anything unexpected, visitors get the
+   current homepage.
+   --------------------------------------------------------------------------- */
+[data-ab-show="b"] { display: none; }
+html[data-ab="b"] [data-ab-show="a"] { display: none; }
+html[data-ab="b"] [data-ab-show="b"] { display: block; }

@@ -22,6 +22,57 @@
       gtag('js', new Date());
       gtag('config', 'G-FL8J3DD2DX', { send_page_view: false });
     </script>
+
+    <!-- Homepage A/B test: current hero (A) against the Home Assist Rewards
+         hero (B). Added 19 October 2026.
+
+         Runs here, in the <head>, before the page paints: it picks a version,
+         writes it to <html data-ab="a|b">, and CSS in src/styles/site.css shows
+         one hero panel and hides the other. Both panels are in the prerendered
+         HTML, so there is no flicker and no second URL for Google to index.
+
+         ON / OFF
+           Always on for staging and localhost, so the flow can be reviewed.
+           On www.homeassist.co.za it only runs when REWARDS_LIVE is true.
+           Flip REWARDS_LIVE to true on launch day, and back to false when
+           the draw closes. Off means everyone sees A, the current homepage.
+
+         FORCING A VERSION (for reviewers)
+           ?ab=a   always show A in this browser
+           ?ab=b   always show B in this browser
+           ?ab=reset  forget the choice and draw again
+           The choice is kept in localStorage, so it survives page changes.
+
+         MEASURING
+           Every GA4 event carries ab_variant (a, b or off). Register
+           ab_variant as an event-scoped custom dimension in GA4 Admin, then
+           compare whatsapp_click, phone_click and rewards_click by variant
+           for sessions that landed on /. -->
+    <script>
+      (function () {
+        var REWARDS_LIVE = false;
+        var KEY = 'ha_ab_home';
+        var host = location.hostname;
+        var on = REWARDS_LIVE || host.indexOf('staging.') === 0 || host === 'localhost' || host === '127.0.0.1';
+        var v = 'off';
+        if (on) {
+          try {
+            var q = new URLSearchParams(location.search).get('ab');
+            if (q === 'reset') { localStorage.removeItem(KEY); q = null; }
+            if (q === 'a' || q === 'b') { v = q; localStorage.setItem(KEY, v); }
+            else {
+              var saved = localStorage.getItem(KEY);
+              if (saved === 'a' || saved === 'b') v = saved;
+              else { v = Math.random() < 0.5 ? 'a' : 'b'; localStorage.setItem(KEY, v); }
+            }
+          } catch (e) { v = Math.random() < 0.5 ? 'a' : 'b'; }
+        }
+        document.documentElement.setAttribute('data-ab', v);
+        window.HA_AB = v;
+        gtag('set', { ab_variant: v });
+        gtag('set', 'user_properties', { home_hero_variant: v });
+      })();
+    </script>
     <script type="module" src="/src/main.jsx"></script>
   </head>
   <body>
