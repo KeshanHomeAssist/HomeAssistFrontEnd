@@ -43,6 +43,20 @@ const { Button, Icon } = window.HomeAssistDesignSystem_cf0a2b;
      sonoffafrica.co.za/product/sonoff-32-amp-din-rail-basic-1gsp (DB unit)
      energybee.co.za/guides/best-geyser-timers-south-africa-2026 (DB savings)
 
+   GEYSERWISE MAX ADDED 19 October 2026 on Keshan's instruction, as the third
+   card, with the distribution board unit kept on the right. It is the
+   controller Home Assist fits on solar water heating, it is in the solar
+   prize, and it is a Home Assist Rewards prize in its own right — the
+   /rewards page links to #geyserwise. Specification from retailer-published
+   Geyserwise product information (invertsolar.co.za, read 19 October 2026):
+   keypad display of temperature, time, day, mode and faults; 30-75 C, factory
+   55 C; daily timer with four time settings; error codes E1-E7 (E1-E9 on a
+   pumped solar system); mechanical cut-out at 90 C; differential control for
+   12 V and 220 V pumped solar; 30 A main relay, max 4 kW. The standard Max has
+   no app — phone control is a separate Wi-Fi upgrade — which is why the table
+   says so and the intro no longer claims every device works from a phone.
+   Retail about R1,699. No published savings figure, so no savings badge.
+
    The DB board hardware is confirmed as the Sonoff BASIC-1GSP, a 32 A
    double-pole DIN rail switch — the earlier "held until confirmed" note on the
    comparison table is resolved. */
@@ -115,6 +129,31 @@ const SH_DEVICES = [
     href: 'https://plentify.io/non-solar-households/'
   },
   {
+    id: 'geyserwise',
+    kind: 'When and how hot, from the wall',
+    name: 'Geyserwise Max',
+    made: 'Made by Geyserwise, South Africa',
+    summary: 'An electronic geyser thermostat and timer with a keypad display on the wall. You see the water temperature at a glance and set when, and how hot, the geyser heats.',
+    points: [
+      'Shows the water temperature, time, day, heating mode and any fault on the display',
+      'Daily programmable timer with four time settings',
+      'Temperature set anywhere from 30 to 75 °C, with a factory default of 55 °C',
+      'Flags faults with an error code, and has a mechanical safety cut-out at 90 °C',
+      'Doubles as the controller for a pumped solar water heating system, switching the circulation pump',
+      'A 30 A relay, for elements up to 4 kW'
+    ],
+    claim: null,
+    note: 'One of the three Home Assist Rewards prizes, and the controller included in the solar upgrade prize.',
+    notThis: 'The standard Max has no app and needs no Wi-Fi: you set it on the keypad. Controlling it from a phone needs a separate Wi-Fi upgrade. It does not take power directly from photovoltaic panels.',
+    range: 'The Max is the Geyserwise model built for solar water heating as well as electric geysers. Geyserwise also makes simpler timers and a separate photovoltaic range.',
+    price: 'Around R1,700 retail for the unit, indicative.',
+    monthly: 'No monthly cost.',
+    fitting: 'A plumber, at the cylinder, provided your geyser already has an isolator. The keypad is mounted where you can see it.',
+    image: '/assets/illustrations/smart-geyserwise.webp',
+    imageAlt: 'Illustration of the Geyserwise Max controller with its keypad display, sensor cables and power plug.',
+    href: null
+  },
+  {
     /* Supplied hardware, not a Home Assist product. There is no branded
        solution yet — this is a hardware deal — so the device is described by
        what it does and the wordmark has been removed from the product image.
@@ -150,23 +189,23 @@ const SH_DEVICES = [
    other two change the schedule. Comparing them on a single list of ticks is
    how somebody ends up buying a PV kit when what they wanted was an app. */
 const SH_TABLE = [
-  ['Puts the geyser on a schedule', 'Yes', 'Yes', 'Yes'],
-  ['Controlled from a phone', 'Yes', 'Yes', 'Yes'],
-  ['Reads cylinder temperature', 'Yes', 'Yes', 'No'],
-  ['Detects a leak', 'Fault alerts', 'Yes', 'Limited'],
-  ['Takes DC directly from PV panels', 'Yes', 'No', 'No'],
-  ['Runs through load-shedding', 'Only with PV fitted', 'No', 'No'],
-  ['Needs Wi-Fi', 'Yes', 'Yes, within 10 m', 'Yes'],
-  ['Works if connectivity fails', 'Yes, with mobile app', 'Yes, backup connection', 'Yes, press the button'],
-  ['Fitted at', 'The cylinder', 'The cylinder', 'The DB board'],
-  ['Who installs it', 'Plumber', 'Plumber', 'Electrician'],
-  ['Indicative hardware ex VAT', 'R3,500 - R4,000', 'R849', 'R400 - R650'],
-  ['Monthly cost', 'None', 'R149', 'None']
+  ['Puts the geyser on a schedule', 'Yes', 'Yes', 'Yes', 'Yes'],
+  ['Controlled from a phone', 'Yes', 'Yes', 'With Wi-Fi upgrade', 'Yes'],
+  ['Reads cylinder temperature', 'Yes', 'Yes', 'Yes, on the keypad', 'No'],
+  ['Detects a leak', 'Fault alerts', 'Yes', 'Fault codes', 'Limited'],
+  ['Takes DC directly from PV panels', 'Yes', 'No', 'No', 'No'],
+  ['Runs through load-shedding', 'Only with PV fitted', 'No', 'No', 'No'],
+  ['Needs Wi-Fi', 'Yes', 'Yes, within 10 m', 'No', 'Yes'],
+  ['Works if connectivity fails', 'Yes, with mobile app', 'Yes, backup connection', 'Yes, keypad on the wall', 'Yes, press the button'],
+  ['Fitted at', 'The cylinder', 'The cylinder', 'The cylinder, keypad on the wall', 'The DB board'],
+  ['Who installs it', 'Plumber', 'Plumber', 'Plumber', 'Electrician'],
+  ['Indicative hardware', 'R3,500 - R4,000 ex VAT', 'R849 ex VAT', 'About R1,700 retail', 'R400 - R650 ex VAT'],
+  ['Monthly cost', 'None', 'R149', 'None', 'None']
 ];
 
 const SH_FAQ = [
   ['Which one should I actually buy?',
-   'All three schedule the geyser and show it to you on a phone, so that is not the deciding question. If the bill is the problem and you have roof space, the Elon is the only one that takes water heating off the grid, and it is the biggest single change of the three — but it needs panels, and those are a separate cost and a separate trade. If you want scheduling, temperature and leak detection without going near a roof, the HotBot does that for the lowest upfront cost. If you want the simplest thing, no plumbing work at all and a button you can press when the Wi-Fi is down, the distribution board unit does that.'],
+   'All four schedule the geyser, so that is not the deciding question. If the bill is the problem and you have roof space, the Elon is the only one that takes water heating off the grid, and it is the biggest single change of the three — but it needs panels, and those are a separate cost and a separate trade. If you want scheduling, temperature and leak detection without going near a roof, the HotBot does that for the lowest upfront cost. If you want the simplest thing, no plumbing work at all and a button you can press when the Wi-Fi is down, the distribution board unit does that. If you want to see the water temperature on the wall and set it without an app — or you have, or are adding, solar water heating — the Geyserwise Max does that.'],
   ['Can I have more than one?',
    'Yes, and the combination people ask for most is a PV supply plus a schedule — the Elon deciding where the energy comes from and a controller deciding when the element runs. Tell us what you already have and we will say plainly whether adding the second one is worth it on your setup.'],
   ['Who has to install it, and will I need a certificate of compliance?',
@@ -196,7 +235,7 @@ function ShDeviceCard({ d }) {
     shTrack('smart_learn_more', { device: d.id, open: next });
   }
   const RULE = { borderTop: '1px solid var(--web-grey-100)', paddingTop: 12, marginTop: 12 };
-  return <div style={{ ...CARD, display: 'flex', flexDirection: 'column' }}>
+  return <div id={d.id} style={{ ...CARD, display: 'flex', flexDirection: 'column', scrollMarginTop: 90 }}>
     <div style={{ ...LABEL, color: 'var(--web-blue)', marginBottom: 10 }}>{d.kind}</div>
     {/* One frame for all three. Each source photograph is composed to
         the same 4 by 3 on white, so a tall DIN rail unit and a wide
@@ -216,7 +255,11 @@ function ShDeviceCard({ d }) {
       {d.points.map(function (p) { return <li key={p}>{p}</li>; })}
     </ul>
 
-    {/* The savings badge — same shape on all three tiles, linked to its source. */}
+    {d.note ? <a href="/rewards" style={{ ...SMALL, display: 'block', margin: '0 0 12px', padding: '8px 10px', background: 'var(--web-navy)', color: '#fff', borderRadius: 2, textDecoration: 'none', fontWeight: 600 }}>
+      {d.note} <span style={{ color: 'var(--web-blue-300)' }}>See Home Assist Rewards</span>
+    </a> : null}
+
+    {/* The savings badge — same shape on the tiles that have a published figure, linked to its source. */}
     {d.claim ? (d.claimHref
       ? <a href={d.claimHref} target="_blank" rel="noopener noreferrer"
           style={{ ...BODY, fontSize: 14, display: 'block', color: 'var(--web-grey-700)', textDecoration: 'none', background: 'var(--web-blue-050)', border: '1px solid var(--web-blue-100)', borderRadius: 3, padding: '10px 12px' }}>
@@ -275,12 +318,12 @@ function SmartHomesPage({ go }) {
         <div data-hero-text>
           <Eyebrow onDark>Smart homes</Eyebrow>
           <h1 style={{ ...DISPLAY, color: '#fff', maxWidth: '21ch', marginBottom: 18 }}>Your geyser is the biggest thing on your bill. Control it.</h1>
-          <p style={{ ...BODY, color: 'rgba(255,255,255,.85)', fontSize: 17, maxWidth: '54ch', marginBottom: 26 }}>Three ways to spend less on hot water — one changes where the energy comes from, two change when the element runs. They solve different problems, and this page says which is which rather than ranking them on one list.</p>
+          <p style={{ ...BODY, color: 'rgba(255,255,255,.85)', fontSize: 17, maxWidth: '54ch', marginBottom: 26 }}>Four ways to spend less on hot water — one changes where the energy comes from, three change when and how hot the element runs. They solve different problems, and this page says which is which rather than ranking them on one list.</p>
           <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
             <Button as="a" size="lg" variant="onDark" target="_blank" rel="noopener"
               href={wa('Hi Home Assist, I would like to talk about smart geyser control. ', 'SMART-1')}
               iconLeft={<Icon name="message-circle" size={18} color="#fff" />}>Ask us which one fits</Button>
-            <Button as="a" size="lg" variant="ghost" href="#compare" style={{ color: '#fff', border: '1px solid rgba(255,255,255,.5)' }} iconLeft={<Icon name="table" size={18} color="#fff" />}>Compare the three</Button>
+            <Button as="a" size="lg" variant="ghost" href="#compare" style={{ color: '#fff', border: '1px solid rgba(255,255,255,.5)' }} iconLeft={<Icon name="table" size={18} color="#fff" />}>Compare the four</Button>
           </div>
         </div>
         {/* Drawn for this page rather than lifted from any manufacturer's app —
@@ -323,10 +366,10 @@ function SmartHomesPage({ go }) {
       </div>
     </Section>
 
-    {/* The three devices */}
-    <Section tint eyebrow="The options" title="Three products, and one real difference between them"
-      intro="All three will put your geyser on a schedule and show it to you on a phone. Only the Elon changes where the energy comes from, and that is the decision worth making first — everything else follows from it.">
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 20 }}>
+    {/* The four devices */}
+    <Section tint eyebrow="The options" title="Four products, and one real difference between them"
+      intro="All four put your geyser on a schedule. Three show it to you on a phone; the Geyserwise Max does it on a keypad on the wall, with no Wi-Fi to drop. Only the Elon changes where the energy comes from, and that is the decision worth making first — everything else follows from it.">
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 20 }}>
         {SH_DEVICES.map(function (d) { return <ShDeviceCard key={d.id} d={d} />; })}
       </div>
       {/* Tried and tested — added 8 September 2026 on Keshan's instruction.
@@ -341,7 +384,7 @@ function SmartHomesPage({ go }) {
         <div style={{ display: 'flex', gap: 28, alignItems: 'center', flexWrap: 'wrap' }}>
           <div style={{ flex: '1 1 380px', minWidth: 0 }}>
             <div style={{ ...LABEL, marginBottom: 10 }}>Tried in our own homes</div>
-            <p style={{ ...BODY, fontSize: 14 }}>Home Assist team members have fitted, run and tested all three of these products in their own homes. That is the bar for being on this page: we have watched them cut our own bills, and we know they do what their manufacturers say they do.</p>
+            <p style={{ ...BODY, fontSize: 14 }}>Home Assist team members have fitted, run and tested the Elon Smart, the HotBot and the distribution board controller in their own homes, and the Geyserwise Max is the controller we fit on solar water heating installations. That is the bar for being on this page: we have watched them cut our own bills, and we know they do what their manufacturers say they do.</p>
             <p style={{ ...BODY, fontSize: 14, margin: 0 }}>Each one is approved for safe use in a South African home — Wi-Fi devices are type-approved by ICASA and the hardware meets NRCS compulsory specifications — <strong>provided the installation is done properly</strong>. That is what a Home Assist installer is for: a certificate of compliance is issued for the distribution board controller, and for any photovoltaic connection.</p>
           </div>
           <div style={{ flex: '0 1 auto', display: 'flex', gap: 24, alignItems: 'center', flexWrap: 'wrap' }}>
@@ -353,7 +396,7 @@ function SmartHomesPage({ go }) {
       {/* Whichever device wins, the installation is the part Home Assist owns.
           Said once, under the three tiles, rather than three times inside them. */}
       <div style={{ ...CARD, marginTop: 20, background: 'var(--web-navy)', border: 'none' }}>
-        <div style={{ ...LABEL, color: 'var(--web-blue-300)', marginBottom: 10 }}>One installer for all three</div>
+        <div style={{ ...LABEL, color: 'var(--web-blue-300)', marginBottom: 10 }}>One installer for all four</div>
         <p style={{ ...BODY, color: 'rgba(255,255,255,.88)', fontSize: 15, maxWidth: '76ch' }}>Whichever one you pick, Home Assist supplies the device, sends the right trade for it — plumber, electrician or PV Green Card installer — and handles the certificate of compliance where one is needed. We check the geyser it is going onto before we fit anything, and we manage geyser installations for South African insurers every day, so the installation is done the way an assessor expects to find it.</p>
         <Button as="a" size="sm" variant="onDark" target="_blank" rel="noopener"
           href={wa('Hi Home Assist, I would like a smart geyser control installed. ', 'SMART-3')}
@@ -363,18 +406,18 @@ function SmartHomesPage({ go }) {
         <div style={{ ...LABEL, marginBottom: 10 }}>Before you compare the prices</div>
         <p style={{ ...BODY, fontSize: 14 }}>Hardware prices above are <strong>indicative ranges for the unit only</strong>, and they move with stock and with the exchange rate. Installation is quoted separately once we know what your board and your cylinder look like.</p>
         <p style={{ ...BODY, fontSize: 14 }}><strong>Where an electrician is required, expect a certificate of compliance to be charged for as well.</strong> That is not us adding a line — an electrician who touches your distribution board has to issue one, and it is the document that protects you afterwards. A device fitted by a plumber alone, at a cylinder that already has an isolator, does not attract that cost.</p>
-        <p style={{ ...BODY, fontSize: 14, margin: 0 }}>Savings figures are published claims — the manufacturers&rsquo; own for the Elon Smart and the HotBot, and an independent 2026 guide for the distribution board unit — and each badge links to its source. What any of them saves in your house depends on your tariff, your household&rsquo;s habits and, for the Elon, on your roof and panel array.</p>
+        <p style={{ ...BODY, fontSize: 14, margin: 0 }}>Savings figures are published claims — the manufacturers&rsquo; own for the Elon Smart and the HotBot, and an independent 2026 guide for the distribution board unit — and each badge links to its source. We have not found a published savings figure for the Geyserwise Max, so its tile does not carry one. What any of them saves in your house depends on your tariff, your household&rsquo;s habits and, for the Elon, on your roof and panel array.</p>
       </div>
     </Section>
 
     {/* Comparison */}
     <Section eyebrow="Side by side" title="What each one actually does" id="compare"
-      intro="The first two rows are the same for all three. The rows worth reading are the PV input, load-shedding and what happens when the connection drops.">
+      intro="The first row is the same for all four. The rows worth reading are the PV input, load-shedding and what happens when the connection drops.">
       <div style={{ overflowX: 'auto' }}>
-        <table style={{ borderCollapse: 'collapse', width: '100%', minWidth: 620 }}>
+        <table style={{ borderCollapse: 'collapse', width: '100%', minWidth: 760 }}>
           <thead>
             <tr>
-              {['', 'Elon Smart', 'Plentify HotBot', 'DB breaker'].map(function (h) {
+              {['', 'Elon Smart', 'Plentify HotBot', 'Geyserwise Max', 'DB breaker'].map(function (h) {
                 return <th key={h || 'blank'} style={{ ...LABEL, textAlign: h ? 'center' : 'left', padding: '10px 8px', borderBottom: '2px solid var(--web-navy)', verticalAlign: 'bottom' }}>{h}</th>;
               })}
             </tr>
@@ -393,7 +436,7 @@ function SmartHomesPage({ go }) {
           </tbody>
         </table>
       </div>
-      <p style={{ ...SMALL, marginTop: 14, maxWidth: '76ch' }}>Elon Smart and HotBot rows are from the manufacturers&rsquo; published product information, and distribution board breaker rows from the Sonoff BASIC-1GSP product information, read in September 2026.</p>
+      <p style={{ ...SMALL, marginTop: 14, maxWidth: '76ch' }}>Elon Smart and HotBot rows are from the manufacturers&rsquo; published product information, and distribution board breaker rows from the Sonoff BASIC-1GSP product information, read in September 2026. Geyserwise Max rows are from published Geyserwise product information, read in October 2026.</p>
     </Section>
 
     {/* Running cost — moved here from /geyser-replacements on 30 August 2026.
@@ -448,7 +491,7 @@ function SmartHomesPage({ go }) {
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 20 }}>
         <div style={CARD}>
           <div style={{ ...LABEL, marginBottom: 10 }}>A plumber only</div>
-          <p style={{ ...BODY, fontSize: 14 }}>Both of the devices that sit at the cylinder are plumbing work, provided your geyser already has an isolator. No electrician, and no certificate of compliance charge.</p>
+          <p style={{ ...BODY, fontSize: 14 }}>The three devices that sit at the cylinder are plumbing work, provided your geyser already has an isolator. No electrician, and no certificate of compliance charge.</p>
           <p style={{ ...BODY, fontSize: 14, margin: 0 }}>The electrical point has to be within one metre of the cylinder, and a dedicated breaker on the board has to isolate the geyser completely — which a compliant installation already has.</p>
         </div>
         <div style={CARD}>
@@ -490,7 +533,7 @@ function SmartHomesPage({ go }) {
     </section>
 
     {/* CTA */}
-    <NavyBand eyebrow="Tell us what you have" title="Send us your geyser and your bill, and we will say which of the three is worth it.">
+    <NavyBand eyebrow="Tell us what you have" title="Send us your geyser and your bill, and we will say which of the four is worth it.">
       <Button as="a" size="lg" variant="onDark" target="_blank" rel="noopener"
         href={wa('Hi Home Assist, I would like to talk about smart geyser control. My geyser is: ', 'SMART-4')}
         iconLeft={<Icon name="message-circle" size={18} color="#fff" />}>WhatsApp us</Button>

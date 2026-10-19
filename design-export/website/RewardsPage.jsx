@@ -35,10 +35,19 @@ const { Button, Icon } = window.HomeAssistDesignSystem_cf0a2b;
    Kwikot-branded geyser painted out — the geyser is not part of the prize and
    must not appear in prize imagery. Do not swap in art that shows one.
 
+   NO "FIRST / SECOND / THIRD" (Keshan, 19 October 2026): three prizes, not a
+   ranking. Two depend on the problem we fixed, the third is open to everyone.
+   The rules name them the solar prize, the smart meter prize and the
+   Geyserwise prize, and so does this page.
+
+   PARKER AND ASSOCIATES LOGO: shown with the oversight card. Their written
+   confirmation to oversee the draws (and to the use of their logo) must be
+   on file before production.
+
    CTA REFS: REWARDS-1 (hero), REWARDS-2 (navy band). The two service-page
    buttons are internal links and carry no WhatsApp ref. */
 
-const RW_RULES_UPDATED = '19 October 2026';
+const RW_RULES_UPDATED = '19 October 2026';  // doc rev 34
 
 const RW_FACTS = [
   ['calendar', 'Entries close 15 January 2027'],
@@ -55,7 +64,7 @@ const RW_STEPS = [
 
 const RW_PRIZES = [
   {
-    place: 'First prize',
+    place: 'If we replaced your geyser',
     name: 'Solar geyser upgrade',
     value: 'R15,000 to R20,000',
     who: 'Electric geyser replacement customers',
@@ -68,7 +77,7 @@ const RW_PRIZES = [
     routeLabel: 'Geyser replacements'
   },
   {
-    place: 'Second prize',
+    place: 'If we fixed a burst pipe or leak',
     name: 'Smart water meter',
     value: 'about R4,000',
     who: 'Burst pipe and leak detection customers',
@@ -81,7 +90,7 @@ const RW_PRIZES = [
     routeLabel: 'Leak detection'
   },
   {
-    place: 'Third prize',
+    place: 'Open to every entrant',
     name: 'Geyserwise Max controller',
     value: 'about R2,500',
     who: 'Any entrant, whatever the job',
@@ -91,7 +100,8 @@ const RW_PRIZES = [
     image: '/assets/illustrations/reward-geyserwise.webp',
     imageAlt: 'Illustration of a Geyserwise Max controller with its box, sensor cables and power plug',
     route: null,
-    routeLabel: null
+    href: '/smart-homes#geyserwise',
+    routeLabel: 'See it on our smart homes page'
   }
 ];
 
@@ -120,6 +130,10 @@ function RwPrizeCard({ p, go }) {
         <Button variant="secondary" size="sm" fullWidth onClick={function () { go(p.route); }}
           iconLeft={<Icon name="arrow-right" size={16} color="var(--web-navy)" />}>{p.routeLabel}</Button>
       </div> : null}
+      {p.href ? <div style={{ marginTop: 'auto' }}>
+        <Button variant="secondary" size="sm" fullWidth as="a" href={p.href}
+          iconLeft={<Icon name="arrow-right" size={16} color="var(--web-navy)" />}>{p.routeLabel}</Button>
+      </div> : null}
     </div>
   </div>;
 }
@@ -146,7 +160,7 @@ function RwRules({ go }) {
     <p style={RW_P}>1.4 These rules are prepared under section 36 of the Consumer Protection Act 68 of 2008 and regulation 11. A copy is free on request from help@homeassist.co.za or 087 095 5231, and on www.homeassist.co.za. We keep these rules and the competition records for at least three years.</p>
 
     <h3 style={RW_H}>2. Who can enter and who cannot</h3>
-    <p style={RW_P}>2.1 You can enter if you are 18 or older and Home Assist completed a job at your property during the competition period. This covers insurance claims and private jobs. Electric geyser replacements, and burst pipe repairs (including the leak detection to find the burst), are entered into all draws they qualify for under clause 5.3. Other jobs, including false calls and inspections only (where nothing is wrong, only a component is replaced, or the geyser is under a manufacturer&rsquo;s warranty), are entered into the third prize draw only.</p>
+    <p style={RW_P}>2.1 You can enter if you are 18 or older and Home Assist completed a job at your property during the competition period. This covers insurance claims and private jobs. Electric geyser replacements, and burst pipe repairs (including the leak detection to find the burst), are entered into all draws they qualify for under clause 5.3. Other jobs, including false calls and inspections only (where nothing is wrong, only a component is replaced, or the geyser is under a manufacturer&rsquo;s warranty), are entered into the Geyserwise prize draw only.</p>
     <p style={RW_P}>2.2 You are disqualified, and are not entered at all, if:</p>
     <ul style={RW_LIST}>
       <li>you are an insured customer and your excess has not been paid;</li>
@@ -172,30 +186,30 @@ function RwRules({ go }) {
       <table style={{ borderCollapse: 'collapse', width: '100%', minWidth: 620 }}>
         <thead>
           <tr>
-            {['Place', 'Prize', 'Who can win it', 'Approximate value'].map(function (h) {
+            {['Prize', 'What it is', 'Who can win it', 'Approximate value'].map(function (h) {
               return <th key={h} style={{ ...LABEL, textAlign: 'left', padding: '10px 8px', borderBottom: '2px solid var(--web-navy)' }}>{h}</th>;
             })}
           </tr>
         </thead>
         <tbody>
           {[
-            ['1st', 'Solar geyser upgrade: one or two solar collectors, pipework, valves and installation, fitted to the winner’s existing solar-ready geyser', 'Electric geyser replacement entrants whose property allows a collector', 'R15,000 – R20,000, depending on the installation'],
-            ['2nd', 'Smart water meter, installed, with one year of free monthly readings and hourly consumption tracking', 'Burst pipe and leak detection entrants only', 'About R4,000'],
-            ['3rd', 'Geyserwise Max smart geyser controller, installed', 'Any entrant', 'About R2,500']
+            ['Solar prize', 'Solar geyser upgrade: one or two solar collectors, pipework, valves and installation, fitted to the winner’s existing solar-ready geyser', 'Electric geyser replacement entrants whose property allows a collector', 'R15,000 – R20,000, depending on the installation'],
+            ['Smart meter prize', 'Smart water meter, installed, with one year of free monthly readings and hourly consumption tracking', 'Burst pipe and leak detection entrants only', 'About R4,000'],
+            ['Geyserwise prize', 'Geyserwise Max smart geyser controller, installed', 'Any entrant', 'About R2,500']
           ].map(function (row) {
             return <tr key={row[0]}>{row.map(function (c, i) { return <td key={i} style={RW_TD}>{c}</td>; })}</tr>;
           })}
         </tbody>
       </table>
     </div>
-    <p style={RW_P}>4.1 <strong>First prize includes:</strong> a solar water heating collector sized to your geyser, either evacuated tubes or a flat panel depending on your region; a solar mixing valve for safety; the copper pipework and lagging between the geyser and the collector; a Geyserwise Max controller; all labour and consumables; and a certificate of compliance for the solar installation.</p>
-    <p style={RW_P}>4.2 <strong>First prize does not include:</strong></p>
+    <p style={RW_P}>4.1 <strong>The solar prize includes:</strong> a solar water heating collector sized to your geyser, either evacuated tubes or a flat panel depending on your region; a solar mixing valve for safety; the copper pipework and lagging between the geyser and the collector; a Geyserwise Max controller; all labour and consumables; and a certificate of compliance for the solar installation.</p>
+    <p style={RW_P}>4.2 <strong>The solar prize does not include:</strong></p>
     <ul style={RW_LIST}>
       <li>roof brackets or mounting frames, including the frame needed on a flat roof — these are quoted and paid for by the winner;</li>
       <li>any electrical work needed to bring the property&rsquo;s installation up to standard — this is quoted and paid for by the winner;</li>
       <li>the geyser itself.</li>
     </ul>
-    <p style={RW_P}>4.3 We cannot install a collector on a slate or asbestos roof, or on a property that already has a solar water heating system. Those geyser entrants can win third prize only. Burst pipe entrants cannot win first prize, and geyser entrants cannot win second prize.</p>
+    <p style={RW_P}>4.3 We cannot install a collector on a slate or asbestos roof, or on a property that already has a solar water heating system. Those geyser entrants can win the Geyserwise prize only. Burst pipe entrants cannot win the solar prize, and geyser entrants cannot win the smart meter prize.</p>
     <p style={RW_P}>4.4 Prizes cannot be exchanged for cash or transferred to another person or property.</p>
 
     <h3 style={RW_H}>5. How winners are chosen</h3>
@@ -203,9 +217,9 @@ function RwRules({ go }) {
     <p style={RW_P}>5.2 The draws are overseen and certified by an independent accountant, Parker and Associates Accountants and Business Advisors Inc. (registration number 2018/556586/21), as regulation 11(5) requires.</p>
     <p style={RW_P}>5.3 The three draws are:</p>
     <ol style={RW_LIST}>
-      <li><strong>First prize draw</strong> — from electric geyser replacement entries that can win first prize under clause 4.3.</li>
-      <li><strong>Second prize draw</strong> — from burst pipe and leak detection entries only.</li>
-      <li><strong>Third prize draw</strong> — from all remaining valid entries, excluding the first and second prize winners.</li>
+      <li><strong>Solar prize draw</strong> — from electric geyser replacement entries that can win the solar prize under clause 4.3.</li>
+      <li><strong>Smart meter prize draw</strong> — from burst pipe and leak detection entries only.</li>
+      <li><strong>Geyserwise prize draw</strong> — from all remaining valid entries, excluding the solar and smart meter prize winners.</li>
     </ol>
     <p style={RW_P}>Each draw picks one winner and two reserves, in order.</p>
     <p style={RW_P}>5.4 Before a prize is confirmed we check the entry against clause 2. If an entry fails, or the winner cannot be reached under clause 6.2, the prize goes to the next reserve from the same draw.</p>
@@ -224,7 +238,7 @@ function RwRules({ go }) {
     <p style={RW_P}>7.5 The installed equipment carries the manufacturer&rsquo;s warranty and Home Assist&rsquo;s workmanship warranty, as for any other Home Assist installation.</p>
 
     <h3 style={RW_H}>8. Publicity and filming — your choice</h3>
-    <p style={RW_P}>8.1 We would like to film the first-prize installation and use photos, video and the winner&rsquo;s story in a media release and on our website and social media.</p>
+    <p style={RW_P}>8.1 We would like to film the solar prize installation and use photos, video and the winner&rsquo;s story in a media release and on our website and social media.</p>
     <p style={RW_P}>8.2 Taking part is optional. You may decline any filming, photos or marketing activity, and declining does not affect your prize.</p>
 
     <h3 style={RW_H}>9. Personal information</h3>
@@ -246,32 +260,79 @@ function RwRules({ go }) {
 function RewardsPage({ go }) {
   return <main className="ha-rw">
 
-    {/* Hero */}
-    <section style={{ background: 'var(--web-navy)' }}>
-      <div style={{ ...WRAP, padding: '68px 40px', display: 'grid', gridTemplateColumns: '1.3fr 1fr', gap: 48, alignItems: 'center' }}>
-        <div data-hero-text>
-          <Eyebrow onDark>Home Assist Rewards</Eyebrow>
-          <h1 style={{ ...DISPLAY, color: '#fff', maxWidth: '20ch', marginBottom: 18 }}>Every job we complete earns you an entry.</h1>
-          <p style={{ ...BODY, color: 'rgba(255,255,255,.85)', fontSize: 17, maxWidth: '54ch', marginBottom: 26 }}>Sign off your job and rate us, and you are in the draw for a solar geyser upgrade, a smart water meter or a Geyserwise Max controller. It costs nothing extra, and your job costs exactly the same with or without the draw.</p>
-          <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
-            <Button as="a" size="lg" variant="onDark" href="#prizes"
-              iconLeft={<Icon name="gift" size={18} color="var(--web-navy)" />}>See the prizes</Button>
-            <Button as="a" size="lg" variant="ghost" href="#rules" style={{ color: '#fff', border: '1px solid rgba(255,255,255,.5)' }}
-              iconLeft={<Icon name="file-text" size={18} color="#fff" />}>Read the rules</Button>
-          </div>
+    {/* Hero. Right-hand side is the prize showcase (Keshan, 19 October 2026):
+        the combined prize illustration on the white half, a "prizes worth up
+        to R20,000" flag, and the three prizes listed with who each is for.
+        The entrance motion is a one-off fade and rise, switched off for
+        anyone with reduced motion set. */}
+    <style>{`
+      @keyframes rwRise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+      .ha-rw-show { animation: rwRise .6s ease-out both; }
+      .ha-rw-row { animation: rwRise .5s ease-out both; }
+      .ha-rw-row:nth-child(1) { animation-delay: .25s; }
+      .ha-rw-row:nth-child(2) { animation-delay: .38s; }
+      .ha-rw-row:nth-child(3) { animation-delay: .51s; }
+      @media (prefers-reduced-motion: reduce) { .ha-rw-show, .ha-rw-row { animation: none; } }
+    `}</style>
+    {/* Split hero (Keshan, 19 October 2026): navy on the left for the
+        message, white on the right for the prizes, running edge to edge so
+        the white half flows straight into the white "How to enter" section
+        below. The side padding lines both halves up with the 1200 px column
+        the rest of the site uses. On a phone the grid stacks: navy message
+        first, prizes on white underneath. */}
+    <section style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', background: '#fff' }}>
+      <div data-hero-text style={{ background: 'var(--web-navy)', padding: '64px 48px 64px max(40px, calc((100vw - 1200px) / 2 + 40px))', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+        <Eyebrow onDark>Home Assist Rewards</Eyebrow>
+        <h1 style={{ ...DISPLAY, color: '#fff', maxWidth: '20ch', marginBottom: 18 }}>Every job we complete earns you an entry.</h1>
+        <p style={{ ...BODY, color: 'rgba(255,255,255,.85)', fontSize: 17, maxWidth: '54ch', marginBottom: 26 }}>Sign off your job and rate us, and you are in the draw. Fix a geyser and you could win a solar upgrade; fix a burst pipe or leak and you could win a smart water meter; every entrant has a shot at a Geyserwise Max. It costs nothing extra, and your job costs exactly the same with or without the draw.</p>
+        <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', marginBottom: 28 }}>
+          <Button as="a" size="lg" variant="onDark" href="#prizes"
+            iconLeft={<Icon name="gift" size={18} color="var(--web-navy)" />}>See the prizes</Button>
+          <Button as="a" size="lg" variant="ghost" href="#rules" style={{ color: '#fff', border: '1px solid rgba(255,255,255,.5)' }}
+            iconLeft={<Icon name="file-text" size={18} color="#fff" />}>Read the rules</Button>
         </div>
-        <div>
-          <div style={{ ...LABEL, color: 'var(--web-blue-300)', marginBottom: 14 }}>The draw at a glance</div>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: '10px 20px', maxWidth: 520 }}>
           {RW_FACTS.map(function (row) {
-            return <div key={row[1]} style={{ display: 'flex', gap: 10, alignItems: 'center', marginBottom: 12 }}>
-              <Icon name={row[0]} size={18} color="var(--web-blue-300)" />
-              <span style={{ ...SMALL, color: 'rgba(255,255,255,.9)', fontSize: 15 }}>{row[1]}</span>
+            return <div key={row[1]} style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+              <Icon name={row[0]} size={16} color="var(--web-blue-300)" />
+              <span style={{ ...SMALL, color: 'rgba(255,255,255,.85)', fontSize: 13 }}>{row[1]}</span>
             </div>;
           })}
-          <div style={{ marginTop: 18 }}>
-            <Button as="a" size="sm" variant="onDark" target="_blank" rel="noopener"
-              href={wa('Hi Home Assist, I have a question about entering Home Assist Rewards. ', 'REWARDS-1')}
-              iconLeft={<Icon name="message-circle" size={15} color="var(--web-navy)" />}>Ask us on WhatsApp</Button>
+        </div>
+      </div>
+
+      <div className="ha-rw-show" style={{ background: '#fff', padding: '48px max(40px, calc((100vw - 1200px) / 2 + 40px)) 40px 48px', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+        <div style={{ position: 'relative' }}>
+          <img src="/assets/illustrations/reward-all-prizes.webp" width="1200" height="800"
+            alt="Illustration of the prizes: a smart water meter and reading devices, a flat-panel solar collector, copper pipe, valves and fittings"
+            style={{ width: '100%', height: 'auto', display: 'block' }} />
+          <div style={{ position: 'absolute', top: 0, left: 0, background: 'var(--web-blue)', color: '#fff', padding: '8px 12px', borderRadius: 2 }}>
+            <div style={{ ...LABEL, color: '#fff', fontSize: 11 }}>Three prizes</div>
+            <div style={{ font: '700 20px/1.1 var(--font-core)' }}>Worth up to R20,000</div>
+          </div>
+        </div>
+        <div style={{ borderTop: '3px solid var(--web-blue)', marginTop: 8 }}>
+          {[
+            ['sun', 'Solar geyser upgrade', 'R15,000 to R20,000', 'If we replaced your geyser'],
+            ['droplets', 'Smart water meter + a year of readings', 'about R4,000', 'If we fixed a burst pipe or leak'],
+            ['thermometer', 'Geyserwise Max controller', 'about R2,500', 'Open to every entrant']
+          ].map(function (r) {
+            return <div key={r[1]} className="ha-rw-row" style={{ display: 'flex', gap: 14, alignItems: 'center', padding: '12px 0', borderBottom: '1px solid var(--web-grey-100)' }}>
+              <div style={{ width: 36, height: 36, flex: '0 0 36px', background: 'var(--web-blue-050)', borderRadius: 2, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <Icon name={r[0]} size={18} color="var(--web-blue)" />
+              </div>
+              <div style={{ minWidth: 0, flex: 1 }}>
+                <div style={{ font: '700 15px/1.3 var(--font-core)', color: 'var(--web-navy)' }}>{r[1]}</div>
+                <div style={{ ...SMALL, fontSize: 12, margin: 0 }}>
+                  <strong style={{ color: 'var(--web-blue)' }}>Worth {r[2]}</strong> · {r[3]}
+                </div>
+              </div>
+            </div>;
+          })}
+          <div style={{ padding: '10px 0 0', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>
+            <span style={{ ...SMALL, fontSize: 12, margin: 0 }}>Illustration. Terms apply.</span>
+            <a href={wa('Hi Home Assist, I have a question about entering Home Assist Rewards. ', 'REWARDS-1')} target="_blank" rel="noopener"
+              style={{ ...SMALL, fontSize: 13, fontWeight: 700, color: 'var(--web-blue)', textDecoration: 'none' }}>Ask us on WhatsApp</a>
           </div>
         </div>
       </div>
@@ -286,7 +347,7 @@ function RewardsPage({ go }) {
 
     {/* Prizes */}
     <Section tint id="prizes" eyebrow="The prizes" title="Three prizes, matched to the job you had done"
-      intro="Each prize has its own draw. The solar upgrade goes to a geyser replacement customer, the smart meter to a burst pipe or leak detection customer, and the Geyserwise Max to anyone who enters.">
+      intro="Each prize has its own draw. Two depend on the problem we fixed for you: the solar upgrade goes to a geyser replacement customer, the smart meter to a burst pipe or leak detection customer. The Geyserwise Max is open to everyone who enters.">
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 20 }}>
         {RW_PRIZES.map(function (p) { return <RwPrizeCard key={p.name} p={p} go={go} />; })}
       </div>
@@ -304,7 +365,11 @@ function RewardsPage({ go }) {
         <div style={CARD}>
           <Icon name="shield-check" size={20} color="var(--web-blue)" />
           <div style={{ ...LABEL, margin: '12px 0 8px' }}>Independently overseen</div>
-          <p style={{ ...BODY, fontSize: 14, margin: 0 }}>The draws are overseen and certified by Parker and Associates, an independent firm of accountants, as the Consumer Protection Act requires.</p>
+          <p style={{ ...BODY, fontSize: 14 }}>The draws are overseen and certified by Parker and Associates, an independent firm of accountants, as the Consumer Protection Act requires.</p>
+          <a href="https://parkercorp.co.za/" target="_blank" rel="noopener noreferrer" style={{ display: 'inline-block' }}>
+            <img src="/assets/logo/logo-parker-associates.webp" alt="Parker and Associates, Accountants and Business Advisors" width="500" height="120"
+              style={{ height: 40, width: 'auto', display: 'block' }} />
+          </a>
         </div>
         <div style={CARD}>
           <Icon name="users" size={20} color="var(--web-blue)" />

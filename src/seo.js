@@ -204,7 +204,7 @@ export const ROUTES = {
   '/smart-homes': {
     title: 'Smart Geyser Control & Solar Water Heating | Home Assist',
     description:
-      'Geyser scheduling, leak detection and direct solar PV water heating. The Kwikot Elon Smart, Plentify HotBot and a DB board breaker, compared honestly.',
+      'Geyser scheduling, leak detection and solar water heating. The Kwikot Elon Smart, Plentify HotBot, Geyserwise Max and a DB board unit, compared honestly.',
     schema: [
       organization,
       {
@@ -222,7 +222,7 @@ export const ROUTES = {
           {
             '@type': 'Question',
             name: 'Which smart geyser control should I buy?',
-            acceptedAnswer: { '@type': 'Answer', text: 'It depends what you are trying to fix. The Kwikot Elon Smart feeds DC straight from photovoltaic panels to the geyser element and takes water heating off the grid. The Plentify HotBot puts the element on a schedule, reads the cylinder temperature and detects leaks, from a phone. A distribution board breaker switches the supply on a schedule with a physical override. They solve different problems and are not three versions of the same product.' },
+            acceptedAnswer: { '@type': 'Answer', text: 'It depends what you are trying to fix. The Kwikot Elon Smart feeds DC straight from photovoltaic panels to the geyser element and takes water heating off the grid. The Plentify HotBot puts the element on a schedule, reads the cylinder temperature and detects leaks, from a phone. The Geyserwise Max is an electronic thermostat and timer with a wall keypad that shows the water temperature, and it also controls pumped solar water heating. A distribution board breaker switches the supply on a schedule with a physical override. They solve different problems and are not four versions of the same product.' },
           },
           {
             '@type': 'Question',
