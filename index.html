@@ -23,49 +23,63 @@
       gtag('config', 'G-FL8J3DD2DX', { send_page_view: false });
     </script>
 
-    <!-- Homepage A/B test: current hero (A) against the Home Assist Rewards
-         hero (B). Added 19 October 2026.
+    <!-- Homepage A/B test while Home Assist Rewards is running.
+         Updated 19 October 2026 on Keshan's instruction.
 
-         Runs here, in the <head>, before the page paints: it picks a version,
-         writes it to <html data-ab="a|b">, and CSS in src/styles/site.css shows
-         one hero panel and hides the other. Both panels are in the prerendered
-         HTML, so there is no flicker and no second URL for Google to index.
+         WHAT IS TESTED
+           While the competition is on, every visitor sees a rewards hero, and
+           the test is between the two pictures:
+             b = all three prizes in one picture
+             c = the solar geyser picture (tank lettered WIN WIN WIN)
+           Half get b, half get c. The current homepage (a) is only shown when
+           the competition is switched off.
+
+         HOW IT WORKS
+           Runs here, in the <head>, before the page paints: it picks a version,
+           writes it to <html data-ab="a|b|c">, and CSS in src/styles/site.css
+           shows that hero panel and hides the others. All three panels are in
+           the prerendered HTML, so there is no flicker and one URL for Google.
 
          ON / OFF
            Always on for staging and localhost, so the flow can be reviewed.
            On www.homeassist.co.za it only runs when REWARDS_LIVE is true.
-           Flip REWARDS_LIVE to true on launch day, and back to false when
-           the draw closes. Off means everyone sees A, the current homepage.
+           Flip REWARDS_LIVE to true on launch day, and back to false when the
+           draw closes. Off means everyone sees a, the current homepage.
 
          FORCING A VERSION (for reviewers)
-           ?ab=a   always show A in this browser
-           ?ab=b   always show B in this browser
+           ?ab=b   always show the all-prizes picture in this browser
+           ?ab=c   always show the solar geyser picture in this browser
+           ?ab=a   show the current homepage, as it looks with the competition off
            ?ab=reset  forget the choice and draw again
            The choice is kept in localStorage, so it survives page changes.
+           (The storage key changed from ha_ab_home to ha_ab_home2 when the
+           test changed, so nobody stays on an old assignment.)
 
          MEASURING
-           Every GA4 event carries ab_variant (a, b or off). Register
-           ab_variant as an event-scoped custom dimension in GA4 Admin, then
-           compare whatsapp_click, phone_click and rewards_click by variant
-           for sessions that landed on /. -->
+           Every GA4 event carries ab_variant (b, c, a when forced, or off).
+           Register ab_variant as an event-scoped custom dimension in GA4
+           Admin, then compare rewards_click, whatsapp_click and phone_click
+           for b against c, for sessions that landed on /. -->
     <script>
       (function () {
         var REWARDS_LIVE = false;
-        var KEY = 'ha_ab_home';
+        var KEY = 'ha_ab_home2';
         var host = location.hostname;
         var on = REWARDS_LIVE || host.indexOf('staging.') === 0 || host === 'localhost' || host === '127.0.0.1';
         var v = 'off';
+        function draw() { return Math.random() < 0.5 ? 'b' : 'c'; }
         if (on) {
           try {
             var q = new URLSearchParams(location.search).get('ab');
             if (q === 'reset') { localStorage.removeItem(KEY); q = null; }
-            if (q === 'a' || q === 'b') { v = q; localStorage.setItem(KEY, v); }
+            var ok = { a: 1, b: 1, c: 1 };
+            if (ok[q]) { v = q; localStorage.setItem(KEY, v); }
             else {
               var saved = localStorage.getItem(KEY);
-              if (saved === 'a' || saved === 'b') v = saved;
-              else { v = Math.random() < 0.5 ? 'a' : 'b'; localStorage.setItem(KEY, v); }
+              if (ok[saved]) v = saved;
+              else { v = draw(); localStorage.setItem(KEY, v); }
             }
-          } catch (e) { v = Math.random() < 0.5 ? 'a' : 'b'; }
+          } catch (e) { v = draw(); }
         }
         document.documentElement.setAttribute('data-ab', v);
         window.HA_AB = v;

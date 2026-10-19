@@ -240,11 +240,14 @@ a:hover {
 
 
 /* ---------------------------------------------------------------------------
-   Homepage A/B test (19 October 2026). The variant is chosen in index.html
+   Homepage A/B/C test (19 October 2026). The variant is chosen in index.html
    before paint and written to <html data-ab>. A is the default, so with
    JavaScript off, the switch off, or anything unexpected, visitors get the
    current homepage.
    --------------------------------------------------------------------------- */
-[data-ab-show="b"] { display: none; }
-html[data-ab="b"] [data-ab-show="a"] { display: none; }
-html[data-ab="b"] [data-ab-show="b"] { display: block; }
+[data-ab-show="b"],
+[data-ab-show="c"] { display: none; }
+html[data-ab="b"] [data-ab-show="a"],
+html[data-ab="c"] [data-ab-show="a"] { display: none; }
+html[data-ab="b"] [data-ab-show="b"],
+html[data-ab="c"] [data-ab-show="c"] { display: block; }
