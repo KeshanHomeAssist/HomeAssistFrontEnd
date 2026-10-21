@@ -95,78 +95,6 @@ function CostReveal({ context, lines, children }) {
   </div>;
 }
 
-/* Variant B of the homepage hero: the Home Assist Rewards panel.
-
-   Shows all three prizes, and routes by problem — "Replacing a geyser?" to
-   /geyser-replacements (solar prize), "Burst pipe or leak?" to
-   /leak-detection (smart meter prize). "Terms apply" links to /rewards,
-   which carries the full rules; s36(5) of the CPA needs that link on every
-   promotion of the draw, so do not remove it.
-
-   The two buttons are internal links, so analytics.js does not see them.
-   They send their own rewards_click event (cta_id HOME-RW-GEYSER /
-   HOME-RW-LEAK / HOME-RW-RULES). Track it, but do NOT mark it a key event —
-   the conversion is still the WhatsApp or phone contact that follows. */
-function hrTrack(cta) {
-  if (typeof window === 'undefined' || typeof window.gtag !== 'function') return;
-  window.gtag('event', 'rewards_click', { cta_id: cta, page_path: '/', ab_variant: window.HA_AB });
-}
-
-/* B and C are the same panel; only the picture changes. C leads with the
-   solar prize. Its tank was relettered WIN WIN WIN (the Kwikot branding and
-   the "01" badge were removed) — but a geyser in the picture still suggests
-   a geyser is part of the prize, and it is not, so C carries a one-line
-   caption saying so. Keep that caption if the picture stays. */
-const HR_PICTURES = {
-  b: { src: '/assets/illustrations/reward-all-prizes.webp', w: 1200, h: 800,
-       alt: 'Illustration of the prizes: a smart water meter and reading devices, a flat-panel solar collector, copper pipe, valves and fittings', note: null },
-  c: { src: '/assets/illustrations/reward-solar-headline.webp', w: 1200, h: 849,
-       alt: 'Illustration of a solar water heating panel connected to a geyser lettered WIN WIN WIN, Home Assist Rewards',
-       note: 'Illustration. The solar prize is fitted to your existing geyser; the geyser itself is not included.' }
-};
-
-function HomeRewardsPanel({ go, variant }) {
-  const pic = HR_PICTURES[variant] || HR_PICTURES.b;
-  const prizes = [
-    ['sun', 'Solar geyser upgrade', 'Worth R15,000 to R20,000', 'If we replace your geyser'],
-    ['droplets', 'Smart water meter', 'Worth about R4,000', 'If we fix a burst pipe or leak'],
-    ['thermometer', 'Geyserwise Max controller', 'Worth about R2,500', 'Open to every entrant']
-  ];
-  return <div style={{ border: '1px solid var(--web-grey-100)', borderTop: '4px solid var(--web-blue)', borderRadius: 4, background: '#fff', overflow: 'hidden' }}>
-    <div style={{ padding: '18px 20px 6px' }}>
-      <div style={{ ...LABEL, color: 'var(--web-blue)', marginBottom: 6 }}>Home Assist Rewards</div>
-      <div style={{ font: '700 21px/1.25 var(--font-core)', color: 'var(--web-navy)' }}>Every job we complete earns you an entry.</div>
-    </div>
-    <div style={{ position: 'relative', padding: '0 12px' }}>
-      <img src={pic.src} width={pic.w} height={pic.h} alt={pic.alt}
-        style={{ width: '100%', height: 'auto', display: 'block' }} />
-      <div style={{ position: 'absolute', top: 6, right: 16, background: 'var(--web-navy)', color: '#fff', padding: '6px 10px', borderRadius: 2, font: '700 14px/1.1 var(--font-core)' }}>Worth up to R20,000</div>
-    </div>
-    {pic.note ? <p style={{ ...SMALL, fontSize: 11, margin: '2px 20px 8px', color: 'var(--web-grey-500)' }}>{pic.note}</p> : null}
-    <div style={{ padding: '0 20px' }}>
-      {prizes.map(function (r) {
-        return <div key={r[1]} style={{ display: 'flex', gap: 12, alignItems: 'center', padding: '9px 0', borderTop: '1px solid var(--web-grey-100)' }}>
-          <Icon name={r[0]} size={18} color="var(--web-blue)" />
-          <div style={{ minWidth: 0 }}>
-            <div style={{ font: '700 14px/1.3 var(--font-core)', color: 'var(--web-navy)' }}>{r[1]}</div>
-            <div style={{ ...SMALL, fontSize: 12, margin: 0 }}><strong style={{ color: 'var(--web-blue)' }}>{r[2]}</strong> · {r[3]}</div>
-          </div>
-        </div>;
-      })}
-    </div>
-    <div style={{ padding: '14px 20px 18px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, borderTop: '1px solid var(--web-grey-100)' }}>
-      <Button size="sm" variant="navy" fullWidth onClick={function () { hrTrack('HOME-RW-GEYSER'); go('geyserReplacements'); }}
-        iconLeft={<Icon name="flame" size={15} color="#fff" />}>Replacing a geyser?</Button>
-      <Button size="sm" variant="navy" fullWidth onClick={function () { hrTrack('HOME-RW-LEAK'); go('leakDetection'); }}
-        iconLeft={<Icon name="droplets" size={15} color="#fff" />}>Burst pipe or leak?</Button>
-    </div>
-    <div style={{ padding: '0 20px 16px' }}>
-      <a href="/rewards" onClick={function (e) { e.preventDefault(); hrTrack('HOME-RW-RULES'); go('rewards'); }}
-        style={{ ...SMALL, fontSize: 12, color: 'var(--web-grey-500)' }}>Entries close 15 January 2027. Terms apply — <span style={{ color: 'var(--web-blue)', fontWeight: 700 }}>see the rules</span></a>
-    </div>
-  </div>;
-}
-
 function HomePage({ go }) {
   return <main>
     {/* Hero */}
@@ -188,25 +116,8 @@ function HomePage({ go }) {
           </div>
           <p style={SMALL}>Available 24/7 · Nationwide network · Every job verified</p>
         </div>
-        {/* HERO TEST, 19 October 2026 — only this right-hand panel changes.
-            While the competition is on, visitors get B or C at random (the
-            two rewards pictures). A, the current illustration, shows only
-            when the competition is switched off.
-            (Original note follows.) A/B TEST — only this right-hand panel changes.
-            data-ab-show="a" is the current illustration; "b" is the Home
-            Assist Rewards panel. Which one shows is decided in index.html
-            before paint (see the note there for the on/off switch and the
-            ?ab=a / ?ab=b review links). Both are in the HTML; CSS hides one. */}
-        <div data-ab-show="a">
-          <div style={{ background: '#fff', borderRadius: 4, display: 'grid', placeItems: 'center', minHeight: 340, overflow: 'hidden' }}>
-            <img src="../../assets/illustrations/techman-home-app.gif" alt="A Home Assist technician logging a job on the app outside a home" style={{ width: '100%', height: 'auto', display: 'block' }} />
-          </div>
-        </div>
-        <div data-ab-show="b">
-          <HomeRewardsPanel go={go} variant="b" />
-        </div>
-        <div data-ab-show="c">
-          <HomeRewardsPanel go={go} variant="c" />
+        <div style={{ background: '#fff', borderRadius: 4, display: 'grid', placeItems: 'center', minHeight: 340, overflow: 'hidden' }}>
+          <img src="../../assets/illustrations/techman-home-app.gif" alt="A Home Assist technician logging a job on the app outside a home" style={{ width: '100%', height: 'auto', display: 'block' }} />
         </div>
       </div>
     </section>
