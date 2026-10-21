@@ -380,10 +380,14 @@ function HomePage({ go }) {
             </div>)}
           </div>
           <Button as="a" variant="ghost" fullWidth href="https://www.google.com/search?q=home+assist+technologies" target="_blank" rel="noopener" style={{ marginTop: 18 }}>Read them on Google</Button>
-          <Button as="a" variant="navy" size="lg" fullWidth href={CH.rating} target="_blank" rel="noopener" style={{ marginTop: 10, padding: '0 12px', fontSize: 'var(--size-body)' }} iconLeft={<Icon name="star" size={16} color="#fff" />}>Rate a job we did for you</Button>
-          <p style={{ ...SMALL, marginTop: 10 }}>You will need the seven-digit case number from your SMS or WhatsApp. It is a private rating, and you can change one you have already given.</p>
         </div>
-        <ReviewsCarousel />
+        <div style={{ minWidth: 0 }}>
+          <ReviewsCarousel />
+          <div style={{ marginTop: 16 }}>
+            <Button as="a" variant="navy" size="lg" href={CH.rating} target="_blank" rel="noopener" style={{ padding: '0 20px', fontSize: 'var(--size-body)' }} iconLeft={<Icon name="star" size={16} color="#fff" />}>Rate a job we did for you</Button>
+            <p style={{ ...SMALL, marginTop: 10 }}>You will need the seven-digit case number from your SMS or WhatsApp. It is a private rating, and you can change one you have already given.</p>
+          </div>
+        </div>
       </div>
     </Section>
 
