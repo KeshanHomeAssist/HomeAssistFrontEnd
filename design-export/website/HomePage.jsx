@@ -118,36 +118,37 @@ const HR_PICTURES = {
        note: 'Illustration. The solar prize is fitted to your existing geyser; the geyser itself is not included.' }
 };
 
+/* Simplified 25 October 2026 (Keshan): fewer words, one line per prize.
+   Who can win each prize is said once, under the list, and in full on
+   /rewards. The "Terms apply — see the rules" link must stay (CPA s36(5)). */
 function HomeRewardsPanel({ go, variant }) {
   const pic = HR_PICTURES[variant] || HR_PICTURES.b;
   const prizes = [
-    ['sun', 'Solar geyser upgrade', 'Worth R15,000 to R20,000', 'If we replace your geyser'],
-    ['droplets', 'Smart water meter', 'Worth about R4,000', 'If we fix a burst pipe or leak'],
-    ['thermometer', 'Geyserwise Max controller', 'Worth about R2,500', 'Open to every entrant']
+    ['sun', 'Solar geyser upgrade', 'R15,000 – R20,000'],
+    ['droplets', 'Smart water meter', 'about R4,000'],
+    ['thermometer', 'Geyserwise Max', 'about R2,500']
   ];
   return <div style={{ border: '1px solid var(--web-grey-100)', borderTop: '4px solid var(--web-blue)', borderRadius: 4, background: '#fff', overflow: 'hidden' }}>
-    <div style={{ padding: '18px 20px 6px' }}>
+    <div style={{ padding: '18px 20px 4px' }}>
       <div style={{ ...LABEL, color: 'var(--web-blue)', marginBottom: 6 }}>Home Assist Rewards</div>
-      <div style={{ font: '700 21px/1.25 var(--font-core)', color: 'var(--web-navy)' }}>Every job we complete earns you an entry.</div>
+      <div style={{ font: '700 22px/1.2 var(--font-core)', color: 'var(--web-navy)' }}>Win one of three prizes.</div>
     </div>
     <div style={{ position: 'relative', padding: '0 12px' }}>
       <img src={pic.src} width={pic.w} height={pic.h} alt={pic.alt}
         style={{ width: '100%', height: 'auto', display: 'block' }} />
-      <div style={{ position: 'absolute', top: 6, right: 16, background: 'var(--web-navy)', color: '#fff', padding: '6px 10px', borderRadius: 2, font: '700 14px/1.1 var(--font-core)' }}>Worth up to R20,000</div>
     </div>
-    {pic.note ? <p style={{ ...SMALL, fontSize: 11, margin: '2px 20px 8px', color: 'var(--web-grey-500)' }}>{pic.note}</p> : null}
+    {pic.note ? <p style={{ ...SMALL, fontSize: 11, margin: '2px 20px 6px', color: 'var(--web-grey-500)' }}>{pic.note}</p> : null}
     <div style={{ padding: '0 20px' }}>
       {prizes.map(function (r) {
-        return <div key={r[1]} style={{ display: 'flex', gap: 12, alignItems: 'center', padding: '9px 0', borderTop: '1px solid var(--web-grey-100)' }}>
-          <Icon name={r[0]} size={18} color="var(--web-blue)" />
-          <div style={{ minWidth: 0 }}>
-            <div style={{ font: '700 14px/1.3 var(--font-core)', color: 'var(--web-navy)' }}>{r[1]}</div>
-            <div style={{ ...SMALL, fontSize: 12, margin: 0 }}><strong style={{ color: 'var(--web-blue)' }}>{r[2]}</strong> · {r[3]}</div>
-          </div>
+        return <div key={r[1]} style={{ display: 'flex', gap: 10, alignItems: 'center', padding: '8px 0', borderTop: '1px solid var(--web-grey-100)' }}>
+          <Icon name={r[0]} size={17} color="var(--web-blue)" />
+          <span style={{ font: '700 15px/1.3 var(--font-core)', color: 'var(--web-navy)', flex: 1 }}>{r[1]}</span>
+          <span style={{ font: '700 14px/1.3 var(--font-core)', color: 'var(--web-blue)', whiteSpace: 'nowrap' }}>{r[2]}</span>
         </div>;
       })}
+      <p style={{ ...SMALL, fontSize: 12, margin: '2px 0 0', paddingTop: 8, borderTop: '1px solid var(--web-grey-100)' }}>Every completed job is an entry. Solar for geyser replacements, the meter for leak jobs, the Geyserwise for everyone.</p>
     </div>
-    <div style={{ padding: '14px 20px 18px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, borderTop: '1px solid var(--web-grey-100)' }}>
+    <div style={{ padding: '14px 20px 10px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
       <Button size="sm" variant="navy" fullWidth onClick={function () { hrTrack('HOME-RW-GEYSER'); go('geyserReplacements'); }}
         iconLeft={<Icon name="flame" size={15} color="#fff" />}>Replacing a geyser?</Button>
       <Button size="sm" variant="navy" fullWidth onClick={function () { hrTrack('HOME-RW-LEAK'); go('leakDetection'); }}
@@ -155,7 +156,7 @@ function HomeRewardsPanel({ go, variant }) {
     </div>
     <div style={{ padding: '0 20px 16px' }}>
       <a href="/rewards" onClick={function (e) { e.preventDefault(); hrTrack('HOME-RW-RULES'); go('rewards'); }}
-        style={{ ...SMALL, fontSize: 12, color: 'var(--web-grey-500)' }}>Entries close 15 January 2027. Terms apply — <span style={{ color: 'var(--web-blue)', fontWeight: 700 }}>see the rules</span></a>
+        style={{ ...SMALL, fontSize: 12, color: 'var(--web-grey-500)' }}>Entries 1 November 2026 to 15 January 2027. Terms apply — <span style={{ color: 'var(--web-blue)', fontWeight: 700 }}>see the rules</span></a>
     </div>
   </div>;
 }
@@ -166,6 +167,18 @@ function HomePage({ go }) {
     <section style={{ borderBottom: '1px solid var(--web-grey-100)' }}>
       <div style={{ ...WRAP, padding: '64px 40px 56px', display: 'grid', gridTemplateColumns: '1.15fr .85fr', gap: 56, alignItems: 'center' }}>
         <div>
+          {/* ENTER & WIN flag (Keshan, 25 October 2026). A pennant pointing
+              right, at the prize panel, that nudges towards it and flashes
+              blue/navy about once a second — well under the 3-flashes-a-second
+              accessibility limit, and still for anyone with reduced motion
+              set. Shows only while the rewards hero is showing (data-ab b or
+              c; CSS in site.css), never on the existing homepage. Clicking it
+              opens /rewards. */}
+          <a href="/rewards" className="ha-rw-badge" data-ab-rewards aria-label="Enter and win: see the Home Assist Rewards prizes"
+            onClick={function (e) { e.preventDefault(); hrTrack('HOME-RW-BADGE'); go('rewards'); }}>
+            <Icon name="gift" size={24} color="#fff" />
+            <span>Enter &amp; Win</span>
+          </a>
           <Eyebrow>24/7 home emergency response</Eyebrow>
           <h1 style={{ ...DISPLAY, maxWidth: '20ch', marginBottom: 18 }}>Burst geyser, leaking pipe or no power? Get a verified artisan to your home.</h1>
           <p style={{ ...BODY, fontSize: 17, maxWidth: '58ch', marginBottom: 24 }}>Home Assist connects South African homeowners with vetted plumbers, electricians and building contractors. Send us a message on WhatsApp and we will find the right person for the job.</p>

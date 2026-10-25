@@ -20,10 +20,10 @@ const { Button, Icon } = window.HomeAssistDesignSystem_cf0a2b;
    update RW_RULES_UPDATED. The doc is the master; this page is the copy.
 
    OPEN [CONFIRM] PLACEHOLDERS (verify-build warns on each one):
-   - launch date (rules 1.2)         — the day this page goes live
    - draw date, time and place (5.1)
    - winner contact window (6.1)
-   - installation month (7.1)
+   (Launch 1 November 2026 and installation from 1 February 2027 confirmed
+   by Keshan on 25 October 2026.)
    Do not deploy to production with any of them still showing.
 
    PRIZE VALUES are Keshan's cost figures (19 October 2026): Geyserwise Max
@@ -47,12 +47,12 @@ const { Button, Icon } = window.HomeAssistDesignSystem_cf0a2b;
    CTA REFS: REWARDS-1 (hero), REWARDS-2 (navy band). The two service-page
    buttons are internal links and carry no WhatsApp ref. */
 
-const RW_RULES_UPDATED = '19 October 2026';  // doc rev 34
+const RW_RULES_UPDATED = '25 October 2026';  // doc rev 36
 
 const RW_FACTS = [
-  ['calendar', 'Entries close 15 January 2027'],
+  ['calendar', 'Entries 1 November 2026 to 15 January 2027'],
   ['shuffle', 'Three separate random draws'],
-  ['megaphone', 'Winners announced by 31 January 2027'],
+  ['megaphone', 'Winners announced by 31 January 2027, prizes installed from 1 February'],
   ['shield-check', 'Overseen by an independent accountant']
 ];
 
@@ -67,10 +67,10 @@ const RW_PRIZES = [
     place: 'If we replaced your geyser',
     name: 'Solar geyser upgrade',
     value: 'R15,000 to R20,000',
-    who: 'Electric geyser replacement customers',
+    who: 'Customers whose electric geyser we replaced. Geyser repairs and maintenance go into the Geyserwise draw.',
     summary: 'One or two solar collectors, the pipework, valves and installation, fitted to your existing solar-ready geyser. Your hot water heats from the sun first and the element only tops up.',
-    includes: 'Collector sized to your geyser (evacuated tubes or flat panel, depending on your region), solar mixing valve, copper pipework and lagging, a Geyserwise Max controller, all labour and consumables, and a certificate of compliance.',
-    excludes: 'Roof brackets or mounting frames, any electrical upgrade work, and the geyser itself. Not possible on slate or asbestos roofs, or where solar is already installed.',
+    includes: 'Collector sized to your geyser (evacuated tubes or flat panel, depending on your region), roof brackets or mounting frames, solar mixing valve, copper pipework and lagging, any electrical work needed, a Geyserwise Max controller, all labour and consumables, and a certificate of compliance.',
+    excludes: 'The geyser itself. If your roof or site is not suitable for a collector (slate or asbestos roofs, solar already installed, no safe roof space or heavy shading), your entry moves into the Geyserwise draw instead.',
     image: '/assets/illustrations/reward-solar.webp',
     imageAlt: 'Illustration of a flat-panel solar collector with copper pipe, fittings and valves',
     route: 'geyserReplacements',
@@ -95,7 +95,7 @@ const RW_PRIZES = [
     value: 'about R2,500',
     who: 'Any entrant, whatever the job',
     summary: 'A Geyserwise Max smart geyser controller, installed. Shows your water temperature and lets you set heating times, so the element is not running when nobody needs hot water.',
-    includes: 'The controller, its sensors and cabling, and installation.',
+    includes: 'The controller, its sensors and cabling, installation, and any electrical work needed to fit it.',
     excludes: null,
     image: '/assets/illustrations/reward-geyserwise.webp',
     imageAlt: 'Illustration of a Geyserwise Max controller with its box, sensor cables and power plug',
@@ -155,12 +155,12 @@ function RwRules({ go }) {
 
     <h3 style={RW_H}>1. Promoter and competition period</h3>
     <p style={RW_P}>1.1 The promoter is Home Assist Technologies Proprietary Limited, registration number 2016/243716/07, 12 Uitvlugt Road, Pinelands, Cape Town, 7405 (&ldquo;Home Assist&rdquo;, &ldquo;we&rdquo;, &ldquo;us&rdquo;).</p>
-    <p style={RW_P}>1.2 The competition runs from 00:01 on <Confirm>launch date</Confirm> to 23:59 on 15 January 2027 (the &ldquo;closing date&rdquo;). There are three draws, one for each prize (clause 5.3). Only qualifying jobs (clause 2.1) completed in that period count.</p>
+    <p style={RW_P}>1.2 The competition runs from 00:01 on 1 November 2026 to 23:59 on 15 January 2027 (the &ldquo;closing date&rdquo;). There are three draws, one for each prize (clause 5.3). Only qualifying jobs (clause 2.1) completed in that period count.</p>
     <p style={RW_P}>1.3 The competition is open in South Africa wherever Home Assist completes jobs.</p>
     <p style={RW_P}>1.4 These rules are prepared under section 36 of the Consumer Protection Act 68 of 2008 and regulation 11. A copy is free on request from help@homeassist.co.za or 087 095 5231, and on www.homeassist.co.za. We keep these rules and the competition records for at least three years.</p>
 
     <h3 style={RW_H}>2. Who can enter and who cannot</h3>
-    <p style={RW_P}>2.1 You can enter if you are 18 or older and Home Assist completed a job at your property during the competition period. This covers insurance claims and private jobs. Electric geyser replacements, and burst pipe repairs (including the leak detection to find the burst), are entered into all draws they qualify for under clause 5.3. Other jobs, including false calls and inspections only (where nothing is wrong, only a component is replaced, or the geyser is under a manufacturer&rsquo;s warranty), are entered into the Geyserwise prize draw only.</p>
+    <p style={RW_P}>2.1 You can enter if you are 18 or older and Home Assist completed a job at your property during the competition period. This covers insurance claims and private jobs. Electric geyser replacements, and burst pipe repairs (including the leak detection to find the burst), are entered into all draws they qualify for under clause 5.3. Geyser repairs and maintenance where the geyser is not replaced (for example a new element, thermostat or valve) are entered into the Geyserwise prize draw only. So are all other jobs, including false calls and inspections only (where nothing is wrong, or the geyser is under a manufacturer&rsquo;s warranty).</p>
     <p style={RW_P}>2.2 You are disqualified, and are not entered at all, if:</p>
     <ul style={RW_LIST}>
       <li>you are an insured customer and your excess has not been paid;</li>
@@ -202,18 +202,14 @@ function RwRules({ go }) {
         </tbody>
       </table>
     </div>
-    <p style={RW_P}>4.1 <strong>The solar prize includes:</strong> a solar water heating collector sized to your geyser, either evacuated tubes or a flat panel depending on your region; a solar mixing valve for safety; the copper pipework and lagging between the geyser and the collector; a Geyserwise Max controller; all labour and consumables; and a certificate of compliance for the solar installation.</p>
-    <p style={RW_P}>4.2 <strong>The solar prize does not include:</strong></p>
-    <ul style={RW_LIST}>
-      <li>roof brackets or mounting frames, including the frame needed on a flat roof — these are quoted and paid for by the winner;</li>
-      <li>any electrical work needed to bring the property&rsquo;s installation up to standard — this is quoted and paid for by the winner;</li>
-      <li>the geyser itself.</li>
-    </ul>
-    <p style={RW_P}>4.3 We cannot install a collector on a slate or asbestos roof, or on a property that already has a solar water heating system. Those geyser entrants can win the Geyserwise prize only. Burst pipe entrants cannot win the solar prize, and geyser entrants cannot win the smart meter prize.</p>
+    <p style={RW_P}>4.1 <strong>The solar prize includes:</strong> a solar water heating collector sized to your geyser, either evacuated tubes or a flat panel depending on your region; roof brackets or mounting frames, including the frame needed on a flat roof; a solar mixing valve for safety; the copper pipework and lagging between the geyser and the collector; any electrical work needed for the installation; a Geyserwise Max controller; all labour and consumables; and a certificate of compliance for the solar installation.</p>
+    <p style={RW_P}>4.2 <strong>The solar prize does not include the geyser itself.</strong> It is fitted to the winner&rsquo;s existing solar-ready geyser.</p>
+    <p style={RW_P}>4.3 A collector cannot be installed on a slate or asbestos roof, on a property that already has a solar water heating system, or where the roof or site is unsuitable — for example a roof that cannot safely carry the collector, no suitable roof space, or heavy shading. An entrant whose property is unsuitable is moved into the Geyserwise prize draw instead. Burst pipe entrants cannot win the solar prize, and geyser entrants cannot win the smart meter prize.</p>
     <p style={RW_P}>4.4 Prizes cannot be exchanged for cash or transferred to another person or property.</p>
+    <p style={RW_P}>4.5 <strong>The Geyserwise prize includes</strong> the controller, its sensors and cabling, installation, and any electrical work needed to install it.</p>
 
     <h3 style={RW_H}>5. How winners are chosen</h3>
-    <p style={RW_P}>5.1 After the closing date, three separate random draws are held at <Confirm>date, time and place</Confirm> before 31 January 2027. Skill and job rating play no part.</p>
+    <p style={RW_P}>5.1 After the closing date, the three random draws are held before 31 January 2027, at <Confirm>date, time and place</Confirm>. The solar prize draw is held first, and the site check under clause 7.2 is completed for the solar winner (and any reserve who replaces them) before the Geyserwise prize draw, so that an entrant moved under clause 4.3 can take part in it. Skill and job rating play no part.</p>
     <p style={RW_P}>5.2 The draws are overseen and certified by an independent accountant, Parker and Associates Accountants and Business Advisors Inc. (registration number 2018/556586/21), as regulation 11(5) requires.</p>
     <p style={RW_P}>5.3 The three draws are:</p>
     <ol style={RW_LIST}>
@@ -231,8 +227,8 @@ function RwRules({ go }) {
     <p style={RW_P}>6.3 Results are announced on the Home Assist Facebook page by 31 January 2027. We publish the winner&rsquo;s first name and suburb only, unless the winner agrees to more.</p>
 
     <h3 style={RW_H}>7. Receiving the prize and installation</h3>
-    <p style={RW_P}>7.1 Prizes are installed from <Confirm>February 2027</Confirm>, on a date agreed with each winner.</p>
-    <p style={RW_P}>7.2 Before installation we do a site check of the roof and the electrical installation. If brackets or electrical work are needed (clause 4.2), we give the winner a written quote first. The winner may accept it or decline the work.</p>
+    <p style={RW_P}>7.1 Prizes are installed from 1 February 2027, on a date agreed with each winner.</p>
+    <p style={RW_P}>7.2 Before a solar prize is installed we do a site check of the roof, the site and the electrical installation. Brackets, frames and any electrical work are included in the prize (clause 4.1). If the roof or site is unsuitable under clause 4.3, the solar prize passes to the next reserve from the same draw, and that entrant is moved into the Geyserwise prize draw.</p>
     <p style={RW_P}>7.3 An adult who can give access must be at the property on the installation day.</p>
     <p style={RW_P}>7.4 The winner signs an acknowledgement on receipt of the prize, with their ID number and the date.</p>
     <p style={RW_P}>7.5 The installed equipment carries the manufacturer&rsquo;s warranty and Home Assist&rsquo;s workmanship warranty, as for any other Home Assist installation.</p>
@@ -284,7 +280,7 @@ function RewardsPage({ go }) {
       <div data-hero-text style={{ background: 'var(--web-navy)', padding: '64px 48px 64px max(40px, calc((100vw - 1200px) / 2 + 40px))', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
         <Eyebrow onDark>Home Assist Rewards</Eyebrow>
         <h1 style={{ ...DISPLAY, color: '#fff', maxWidth: '20ch', marginBottom: 18 }}>Every job we complete earns you an entry.</h1>
-        <p style={{ ...BODY, color: 'rgba(255,255,255,.85)', fontSize: 17, maxWidth: '54ch', marginBottom: 26 }}>Sign off your job and rate us, and you are in the draw. Fix a geyser and you could win a solar upgrade; fix a burst pipe or leak and you could win a smart water meter; every entrant has a shot at a Geyserwise Max. It costs nothing extra, and your job costs exactly the same with or without the draw.</p>
+        <p style={{ ...BODY, color: 'rgba(255,255,255,.85)', fontSize: 17, maxWidth: '54ch', marginBottom: 26 }}>Sign off your job and rate us, and you are in the draw. Have your geyser replaced and you could win a solar upgrade; have a burst pipe or leak fixed and you could win a smart water meter; every entrant has a shot at a Geyserwise Max. It costs nothing extra, and your job costs exactly the same with or without the draw.</p>
         <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', marginBottom: 28 }}>
           <Button as="a" size="lg" variant="onDark" href="#prizes"
             iconLeft={<Icon name="gift" size={18} color="var(--web-navy)" />}>See the prizes</Button>
