@@ -113,21 +113,34 @@ function hrTrack(cta) {
 const HR_MSG = 'Hi Home Assist, I need a geyser replaced and I would like to enter Home Assist Rewards. ';
 
 function HomeRewardsPanel({ go }) {
+  /* Prize first (Keshan, 3 Nov 2026): the controller picture and value lead;
+     the wheel is a small side element. */
   return <div style={{ border: '1px solid var(--web-grey-100)', borderTop: '4px solid var(--web-blue)', borderRadius: 4, background: '#fff', overflow: 'hidden' }}>
-    <div style={{ padding: '18px 20px 8px', textAlign: 'center' }}>
+    <div style={{ padding: '18px 20px 6px' }}>
       <div style={{ ...LABEL, color: 'var(--web-blue)', marginBottom: 6 }}>Home Assist Rewards · festive thank-you</div>
-      <div style={{ font: '700 22px/1.2 var(--font-core)', color: 'var(--web-navy)' }}>Replace your geyser. Spin to win a smart geyser controller.</div>
+      <div style={{ font: '700 22px/1.2 var(--font-core)', color: 'var(--web-navy)' }}>Replace your geyser and you could win a smart geyser controller, fitted free.</div>
     </div>
-    <div style={{ padding: '4px 20px 0' }}>
-      <RewardsWheel size={250} onResult={function () { hrTrack('HOME-RW-SPIN'); }} />
-    </div>
-    <div style={{ margin: '14px 20px 0', padding: '12px 14px', border: '1px solid var(--web-grey-100)', borderRadius: 4, display: 'flex', gap: 14, alignItems: 'center' }}>
-      <img src="../../assets/illustrations/smart-dbboard-32a.jpg" width="960" height="720" alt="Home Assist smart geyser controller on a distribution board rail"
-        style={{ width: 84, height: 63, objectFit: 'cover', borderRadius: 3, flex: '0 0 84px' }} />
-      <div style={{ minWidth: 0 }}>
-        <div style={{ font: '700 15px/1.3 var(--font-core)', color: 'var(--web-navy)' }}>Smart geyser controller, fitted free · worth R1,500+</div>
-        <div style={{ ...SMALL, fontSize: 12, margin: 0 }}>Saves more than R300 a month, based on our own installations. Five a month, plus five R100 coffee vouchers.</div>
+    <div style={{ padding: '10px 20px 0', display: 'grid', gridTemplateColumns: '150px 1fr', gap: 18, alignItems: 'center' }}>
+      <img src="../../assets/illustrations/smart-dbboard-unit.jpg" width="420" height="660" alt="Home Assist smart geyser controller on a distribution board rail"
+        style={{ width: '100%', height: 'auto', borderRadius: 4, border: '1px solid var(--web-grey-100)', display: 'block' }} />
+      <div>
+        <div style={{ display: 'inline-block', background: 'var(--web-navy)', color: '#fff', padding: '8px 12px', borderRadius: 2, marginBottom: 10 }}>
+          <div style={{ ...LABEL, color: 'var(--web-blue-300)', fontSize: 10, marginBottom: 2 }}>Five every month</div>
+          <div style={{ font: '700 18px/1.1 var(--font-core)' }}>Worth R1,500+ · fitted free</div>
+        </div>
+        <ul style={{ ...BODY, fontSize: 14, margin: 0, paddingLeft: 18, display: 'flex', flexDirection: 'column', gap: 4 }}>
+          <li>Installed by a qualified electrician, with a certificate of compliance</li>
+          <li>Your geyser on a schedule, from your phone</li>
+          <li><strong>Saves more than R300 a month</strong>, based on our own installations</li>
+          <li>Plus five R100 coffee vouchers every month</li>
+        </ul>
       </div>
+    </div>
+    <div style={{ padding: '12px 20px 0', display: 'flex', gap: 14, alignItems: 'center' }}>
+      <div style={{ width: 110, flex: '0 0 110px' }}>
+        <RewardsWheel size={110} compact onResult={function () { hrTrack('HOME-RW-SPIN'); }} />
+      </div>
+      <div style={{ ...SMALL, fontSize: 13, margin: 0 }}>Every geyser we replace in November, December and January goes into that month&rsquo;s draw. Winners are drawn on 4 December, 8 January and 5 February, and controllers are fitted within 15 days.</div>
     </div>
     <div style={{ padding: '14px 20px 10px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
       <Button as="a" size="sm" variant="navy" fullWidth target="_blank" rel="noopener" href={wa(HR_MSG, 'HOME-RW-1')}

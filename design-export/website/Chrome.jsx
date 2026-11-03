@@ -393,7 +393,7 @@ function rwPolar(cx, cy, r, deg) {
   return [cx + r * Math.cos(t), cy + r * Math.sin(t)];
 }
 
-function RewardsWheel({ size, onResult }) {
+function RewardsWheel({ size, onResult, compact }) {
   const [rot, setRot] = React.useState(0);
   const [spinning, setSpinning] = React.useState(false);
   const [result, setResult] = React.useState(null);
@@ -440,18 +440,24 @@ function RewardsWheel({ size, onResult }) {
         style={{ transform: `rotate(${rot}deg)`, transition: spinning ? 'transform 4s cubic-bezier(.17,.67,.12,1)' : 'none', display: 'block', filter: 'drop-shadow(0 6px 18px rgba(24,45,85,.18))' }}>
         <circle cx="200" cy="200" r="198" fill="#fff" />
         {parts}
-        {labels}
+        {compact ? null : labels}
         <circle cx="200" cy="200" r="190" fill="none" stroke="#fff" strokeWidth="6" />
         <circle cx="200" cy="200" r="30" fill="#fff" stroke="var(--web-navy)" strokeWidth="4" />
       </svg>
+      {compact ? <button type="button" onClick={spin} disabled={spinning} aria-label="Spin the wheel for show"
+        style={{ position: 'absolute', inset: 0, background: 'transparent', border: 0, cursor: spinning ? 'default' : 'pointer' }} /> : null}
     </div>
-    <button type="button" onClick={spin} disabled={spinning} className="ha-rw-spinbtn"
-      style={{ marginTop: 14, padding: '12px 26px', border: 0, borderRadius: 4, background: spinning ? 'var(--web-grey-500)' : 'var(--web-navy)', color: '#fff', font: '700 16px/1 var(--font-core)', cursor: spinning ? 'default' : 'pointer' }}>
-      {spinning ? 'Spinning…' : 'Spin the wheel'}
-    </button>
-    <div style={{ ...SMALL, marginTop: 10, minHeight: 20 }} aria-live="polite">
-      {result ? <span><strong style={{ color: 'var(--web-navy)' }}>{result}.</strong> That is what you could win.</span> : 'Spins for show. Winners are drawn by case number once a month.'}
-    </div>
+    {compact
+      ? <div style={{ ...SMALL, fontSize: 11, marginTop: 6, lineHeight: 1.3 }} aria-live="polite">{result ? <strong style={{ color: 'var(--web-navy)' }}>{result}</strong> : 'Tap to spin, for show'}</div>
+      : <div>
+          <button type="button" onClick={spin} disabled={spinning} className="ha-rw-spinbtn"
+            style={{ marginTop: 14, padding: '12px 26px', border: 0, borderRadius: 4, background: spinning ? 'var(--web-grey-500)' : 'var(--web-navy)', color: '#fff', font: '700 16px/1 var(--font-core)', cursor: spinning ? 'default' : 'pointer' }}>
+            {spinning ? 'Spinning…' : 'Spin the wheel'}
+          </button>
+          <div style={{ ...SMALL, marginTop: 10, minHeight: 20 }} aria-live="polite">
+            {result ? <span><strong style={{ color: 'var(--web-navy)' }}>{result}.</strong> That is what you could win.</span> : 'Spins for show. Winners are drawn by case number once a month.'}
+          </div>
+        </div>}
   </div>;
 }
 
