@@ -253,7 +253,7 @@ html[data-ab="b"] [data-ab-show="b"],
 html[data-ab="c"] [data-ab-show="c"] { display: block; }
 
 
-/* ENTER & WIN flag above the homepage hero (25 October 2026). A pennant
+/* SPIN & WIN flag (3 November 2026; was ENTER & WIN). A pennant
    pointing right, at the prize panel; it nudges towards the prizes and
    flashes blue/navy about once a second. Hidden unless the rewards hero is
    showing. */
@@ -261,6 +261,7 @@ html[data-ab="c"] [data-ab-show="c"] { display: block; }
 html[data-ab="b"] [data-ab-rewards],
 html[data-ab="c"] [data-ab-rewards] { display: inline-flex; }
 .ha-rw-badge {
+  display: inline-flex;
   align-items: center;
   gap: 12px;
   margin-bottom: 22px;

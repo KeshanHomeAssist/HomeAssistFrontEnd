@@ -143,7 +143,7 @@ const SH_DEVICES = [
       'A 30 A relay, for elements up to 4 kW'
     ],
     claim: null,
-    note: 'One of the three Home Assist Rewards prizes, and the controller included in the solar upgrade prize.',
+    note: null,
     notThis: 'The standard Max has no app and needs no Wi-Fi: you set it on the keypad. Controlling it from a phone needs a separate Wi-Fi upgrade. It does not take power directly from photovoltaic panels.',
     range: 'The Max is the Geyserwise model built for solar water heating as well as electric geysers. Geyserwise also makes simpler timers and a separate photovoltaic range.',
     price: 'Around R1,700 retail for the unit, indicative.',
@@ -163,6 +163,7 @@ const SH_DEVICES = [
     kind: 'When the element runs',
     name: 'Distribution board geyser controller',
     made: 'Supplied and installed by Home Assist',
+    note: 'This is the Home Assist Rewards prize: five fitted free every month, Nov–Jan, for geyser replacement customers.',
     summary: 'A compact smart breaker fitted inside your distribution board by a qualified electrician. No plumbing changes and no mess — installed in under an hour.',
     points: [
       'Puts the geyser on a schedule so it heats outside peak tariff hours',

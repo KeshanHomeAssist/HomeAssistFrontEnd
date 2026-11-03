@@ -361,4 +361,108 @@ function Confirm({ children }) {
   return <span style={{ ...LABEL, color: 'var(--web-blue)', border: '1px solid var(--web-blue-100)', background: 'var(--web-blue-050)', padding: '2px 6px', borderRadius: 2, whiteSpace: 'nowrap' }}>[CONFIRM{children ? ' ' + children : ''}]</span>;
 }
 
-Object.assign(window, { CH, wa, mailtoLink, whatsappHandoff, NAV, WRAP, LABEL, H1, H2, H3, DISPLAY, BODY, SMALL, CARD, INPUT, Eyebrow, Section, Header, Footer, NavyBand, LabelCard, Stat, Steps, Accordion, FieldRow, ChannelCard, Confirm });
+
+/* ---------------------------------------------------------------------------
+   Home Assist Rewards prize wheel (3 November 2026).
+
+   Decorative, not a game. Winners are drawn once a month with the internal
+   draw tool, overseen by Parker and Associates. This wheel shows the two
+   prizes and spins for show when tapped; it always lands on a prize segment
+   and never awards anything. Shared by the homepage hero (variant B) and
+   /rewards. Keep the "spins for show" line wherever it is used.
+
+   Segments: 8, alternating prize and "Spin again" so neighbours never merge.
+   Colours are brand only: blue, navy, blue-050. Motion is a 4 s ease-out
+   spin; with reduced motion set, the pointer result shows without spinning.
+   --------------------------------------------------------------------------- */
+const RW_SEGMENTS = [
+  { label: 'Smart geyser controller', short: ['Smart geyser', 'controller'], kind: 'ctrl' },
+  { label: 'Spin again', short: ['Spin', 'again'], kind: 'again' },
+  { label: 'R100 coffee voucher', short: ['R100 coffee', 'voucher'], kind: 'coffee' },
+  { label: 'Spin again', short: ['Spin', 'again'], kind: 'again' },
+  { label: 'Smart geyser controller', short: ['Smart geyser', 'controller'], kind: 'ctrl' },
+  { label: 'Spin again', short: ['Spin', 'again'], kind: 'again' },
+  { label: 'R100 coffee voucher', short: ['R100 coffee', 'voucher'], kind: 'coffee' },
+  { label: 'Spin again', short: ['Spin', 'again'], kind: 'again' }
+];
+const RW_FILL = { ctrl: 'var(--web-blue)', coffee: 'var(--web-navy)', again: 'var(--web-blue-050)' };
+const RW_TEXT = { ctrl: '#fff', coffee: '#fff', again: 'var(--web-navy)' };
+
+function rwPolar(cx, cy, r, deg) {
+  const t = (deg - 90) * Math.PI / 180;
+  return [cx + r * Math.cos(t), cy + r * Math.sin(t)];
+}
+
+function RewardsWheel({ size, onResult }) {
+  const [rot, setRot] = React.useState(0);
+  const [spinning, setSpinning] = React.useState(false);
+  const [result, setResult] = React.useState(null);
+  const n = RW_SEGMENTS.length, seg = 360 / n;
+  const px = size || 320;
+
+  function spin() {
+    if (spinning) return;
+    const prizes = RW_SEGMENTS.map((s, i) => s.kind === 'again' ? -1 : i).filter(i => i >= 0);
+    const win = prizes[Math.floor(Math.random() * prizes.length)];
+    const centre = win * seg + seg / 2;
+    const jitter = (Math.random() - 0.5) * seg * 0.6;
+    const turns = 5 + Math.floor(Math.random() * 3);
+    const target = turns * 360 + (360 - centre - jitter);
+    const base = rot - (rot % 360);
+    const reduce = typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    setResult(null);
+    setSpinning(true);
+    setRot(base + target);
+    const done = function () { setSpinning(false); setResult(RW_SEGMENTS[win].label); if (onResult) onResult(RW_SEGMENTS[win].label); };
+    if (reduce) done(); else setTimeout(done, 4200);
+  }
+
+  let paths = '';
+  const parts = RW_SEGMENTS.map((s, i) => {
+    const a0 = i * seg, a1 = (i + 1) * seg;
+    const [x0, y0] = rwPolar(200, 200, 190, a0), [x1, y1] = rwPolar(200, 200, 190, a1);
+    return <path key={i} d={`M200 200 L${x0} ${y0} A190 190 0 0 1 ${x1} ${y1} Z`} fill={RW_FILL[s.kind]} stroke="#fff" strokeWidth="3" />;
+  });
+  const labels = RW_SEGMENTS.map((s, i) => {
+    const mid = i * seg + seg / 2;
+    /* Radial labels: each reads from the centre outwards along its segment. */
+    return <g key={i} transform={`rotate(${mid} 200 200) translate(200 200) rotate(-90)`}>
+      <text fontFamily="var(--font-core)" fontSize="17" fontWeight="700" fill={RW_TEXT[s.kind]} textAnchor="start" dominantBaseline="middle">
+        {s.short.map((l, k) => <tspan key={k} x="46" dy={k === 0 ? -9 : 19}>{l}</tspan>)}
+      </text>
+    </g>;
+  });
+
+  return <div style={{ textAlign: 'center' }}>
+    <div style={{ position: 'relative', width: px, height: px, margin: '0 auto' }}>
+      <div style={{ position: 'absolute', top: -6, left: '50%', transform: 'translateX(-50%)', zIndex: 2, width: 0, height: 0, borderLeft: '14px solid transparent', borderRight: '14px solid transparent', borderTop: '28px solid var(--web-navy)' }} />
+      <svg viewBox="0 0 400 400" width={px} height={px} role="img" aria-label="Prize wheel showing a smart geyser controller and a R100 coffee voucher"
+        style={{ transform: `rotate(${rot}deg)`, transition: spinning ? 'transform 4s cubic-bezier(.17,.67,.12,1)' : 'none', display: 'block', filter: 'drop-shadow(0 6px 18px rgba(24,45,85,.18))' }}>
+        <circle cx="200" cy="200" r="198" fill="#fff" />
+        {parts}
+        {labels}
+        <circle cx="200" cy="200" r="190" fill="none" stroke="#fff" strokeWidth="6" />
+        <circle cx="200" cy="200" r="30" fill="#fff" stroke="var(--web-navy)" strokeWidth="4" />
+      </svg>
+    </div>
+    <button type="button" onClick={spin} disabled={spinning} className="ha-rw-spinbtn"
+      style={{ marginTop: 14, padding: '12px 26px', border: 0, borderRadius: 4, background: spinning ? 'var(--web-grey-500)' : 'var(--web-navy)', color: '#fff', font: '700 16px/1 var(--font-core)', cursor: spinning ? 'default' : 'pointer' }}>
+      {spinning ? 'Spinning…' : 'Spin the wheel'}
+    </button>
+    <div style={{ ...SMALL, marginTop: 10, minHeight: 20 }} aria-live="polite">
+      {result ? <span><strong style={{ color: 'var(--web-navy)' }}>{result}.</strong> That is what you could win.</span> : 'Spins for show. Winners are drawn by case number once a month.'}
+    </div>
+  </div>;
+}
+
+/* Flashing SPIN & WIN sign. Pulses about once a second (well under the
+   3-flashes-a-second accessibility limit) and holds still for reduced
+   motion; the CSS lives in src/styles/site.css (.ha-rw-badge). */
+function SpinWinSign({ onClick, href }) {
+  return <a href={href || '/rewards'} className="ha-rw-badge" onClick={onClick} aria-label="Spin and win: see the Home Assist Rewards prizes">
+    <Icon name="gift" size={24} color="#fff" />
+    <span>Spin &amp; Win</span>
+  </a>;
+}
+
+Object.assign(window, { CH, wa, mailtoLink, whatsappHandoff, NAV, WRAP, LABEL, H1, H2, H3, DISPLAY, BODY, SMALL, CARD, INPUT, Eyebrow, Section, Header, Footer, NavyBand, LabelCard, Stat, Steps, Accordion, FieldRow, ChannelCard, Confirm, RewardsWheel, SpinWinSign });

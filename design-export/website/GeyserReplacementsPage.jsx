@@ -382,6 +382,20 @@ function GeyserReplacementsPage({ go }) {
       </div>
     </section>
 
+    {/* Home Assist Rewards strip (3 November 2026). Every geyser replacement
+        in Nov–Jan enters that month's draw: five smart geyser controllers
+        (fitted free, with COC) and five R100 coffee vouchers a month. The
+        "Terms apply" link to /rewards is required (CPA s36(5)). */}
+    <div style={{ background: 'var(--web-blue-050)', borderTop: '1px solid var(--web-grey-100)', borderBottom: '1px solid var(--web-grey-100)' }}>
+      <div style={{ ...WRAP, padding: '18px 40px', display: 'flex', gap: 18, alignItems: 'center', flexWrap: 'wrap' }}>
+        <SpinWinSign onClick={function (e) { e.preventDefault(); go('rewards'); }} />
+        <div style={{ flex: 1, minWidth: 260 }}>
+          <div style={{ font: '700 17px/1.3 var(--font-core)', color: 'var(--web-navy)' }}>Replace your geyser in November, December or January and you could win a free smart geyser controller.</div>
+          <div style={{ ...SMALL, margin: '4px 0 0' }}>Five fitted free every month, worth R1,500+, plus five R100 coffee vouchers. Draws on 4 December, 8 January and 5 February. <a href="/rewards" onClick={function (e) { e.preventDefault(); go('rewards'); }} style={{ color: 'var(--web-blue)', fontWeight: 700 }}>Terms apply — see the rules</a></div>
+        </div>
+      </div>
+    </div>
+
     {/* Five safety factors */}
     <Section eyebrow="What makes an installation safe" title="Five things a compliant geyser installation has"
       intro="If any one of these is missing, the installation is not finished — whatever it cost and whoever signed it off.">

@@ -27,9 +27,9 @@
          Updated 25 October 2026 on Keshan's instruction: ONE test only —
            a = the existing homepage (technician illustration, no badge)
            b = the rewards hero (flashing ENTER & WIN flag + prize panel)
-         Half of visitors get each. Version c (the solar geyser picture) is
-         no longer drawn, but stays in the code and can still be viewed with
-         ?ab=c, so it can be swapped in later by changing draw() below.
+         Half of visitors get each. (Version 2 of the competition, 3 Nov 2026:
+         the rewards hero is now the spin-and-win panel for the smart geyser
+         controller draw.)
 
          STAGING ONLY. This test never runs on production (main) unless
          REWARDS_LIVE is set to true there on purpose.
@@ -48,7 +48,6 @@
          FORCING A VERSION (for reviewers)
            ?ab=a   existing homepage
            ?ab=b   rewards hero
-           ?ab=c   rewards hero with the solar geyser picture (not in the test)
            ?ab=reset  forget the choice and draw again
            (Storage key is now ha_ab_home3, so everyone is re-drawn into the
            new a/b test.)
@@ -70,7 +69,7 @@
           try {
             var q = new URLSearchParams(location.search).get('ab');
             if (q === 'reset') { localStorage.removeItem(KEY); q = null; }
-            var ok = { a: 1, b: 1, c: 1 };
+            var ok = { a: 1, b: 1 };
             if (ok[q]) { v = q; localStorage.setItem(KEY, v); }
             else {
               var saved = localStorage.getItem(KEY);

@@ -89,74 +89,56 @@ function CostReveal({ context, lines, children }) {
 }
 
 /* Variant B of the homepage hero: the Home Assist Rewards panel.
+   Version 2, 3 November 2026 (Keshan): a festive thank-you to geyser
+   replacement customers. Every month, five Sonoff 32 A smart geyser
+   controllers (installed by a qualified electrician, with a COC, worth
+   R1,500+) and five R100 coffee vouchers. Three rounds, Nov–Jan.
 
-   Shows all three prizes, and routes by problem — "Replacing a geyser?" to
-   /geyser-replacements (solar prize), "Burst pipe or leak?" to
-   /leak-detection (smart meter prize). "Terms apply" links to /rewards,
-   which carries the full rules; s36(5) of the CPA needs that link on every
-   promotion of the draw, so do not remove it.
+   The wheel (RewardsWheel, Chrome.jsx) is decorative; the real draw is the
+   internal draw tool, overseen by Parker and Associates. The branded
+   distribution board illustration is used here on purpose (Keshan: branded
+   picture on the prize panel, the real Sonoff photo on /rewards).
 
-   The two buttons are internal links, so analytics.js does not see them.
-   They send their own rewards_click event (cta_id HOME-RW-GEYSER /
-   HOME-RW-LEAK / HOME-RW-RULES). Track it, but do NOT mark it a key event —
-   the conversion is still the WhatsApp or phone contact that follows. */
+   "Terms apply — see the rules" links to /rewards, which carries the full
+   rules; CPA s36(5) needs that link on every promotion. Do not remove it.
+
+   The buttons send a rewards_click event (cta_id HOME-RW-1 for the WhatsApp
+   button, HOME-RW-RULES for the rules link). Track it, but do NOT mark it a
+   key event — the conversion is still the WhatsApp contact. */
 function hrTrack(cta) {
   if (typeof window === 'undefined' || typeof window.gtag !== 'function') return;
   window.gtag('event', 'rewards_click', { cta_id: cta, page_path: '/', ab_variant: window.HA_AB });
 }
 
-/* B and C are the same panel; only the picture changes. C leads with the
-   solar prize. Its tank was relettered WIN WIN WIN (the Kwikot branding and
-   the "01" badge were removed) — but a geyser in the picture still suggests
-   a geyser is part of the prize, and it is not, so C carries a one-line
-   caption saying so. Keep that caption if the picture stays. */
-const HR_PICTURES = {
-  b: { src: '/assets/illustrations/reward-all-prizes.webp', w: 1200, h: 800,
-       alt: 'Illustration of the prizes: a smart water meter and reading devices, a flat-panel solar collector, copper pipe, valves and fittings', note: null },
-  c: { src: '/assets/illustrations/reward-solar-headline.webp', w: 1200, h: 849,
-       alt: 'Illustration of a solar water heating panel connected to a geyser lettered WIN WIN WIN, Home Assist Rewards',
-       note: 'Illustration. The solar prize is fitted to your existing geyser; the geyser itself is not included.' }
-};
+const HR_MSG = 'Hi Home Assist, I need a geyser replaced and I would like to enter Home Assist Rewards. ';
 
-/* Simplified 25 October 2026 (Keshan): fewer words, one line per prize.
-   Who can win each prize is said once, under the list, and in full on
-   /rewards. The "Terms apply — see the rules" link must stay (CPA s36(5)). */
-function HomeRewardsPanel({ go, variant }) {
-  const pic = HR_PICTURES[variant] || HR_PICTURES.b;
-  const prizes = [
-    ['sun', 'Solar geyser upgrade', 'R15,000 – R20,000'],
-    ['droplets', 'Smart water meter', 'about R4,000'],
-    ['thermometer', 'Geyserwise Max', 'about R2,500']
-  ];
+function HomeRewardsPanel({ go }) {
   return <div style={{ border: '1px solid var(--web-grey-100)', borderTop: '4px solid var(--web-blue)', borderRadius: 4, background: '#fff', overflow: 'hidden' }}>
-    <div style={{ padding: '18px 20px 4px' }}>
-      <div style={{ ...LABEL, color: 'var(--web-blue)', marginBottom: 6 }}>Home Assist Rewards</div>
-      <div style={{ font: '700 22px/1.2 var(--font-core)', color: 'var(--web-navy)' }}>Win one of three prizes.</div>
+    <div style={{ padding: '18px 20px 8px', textAlign: 'center' }}>
+      <div style={{ ...LABEL, color: 'var(--web-blue)', marginBottom: 6 }}>Home Assist Rewards · festive thank-you</div>
+      <div style={{ font: '700 22px/1.2 var(--font-core)', color: 'var(--web-navy)' }}>Replace your geyser. Spin to win a smart geyser controller.</div>
     </div>
-    <div style={{ position: 'relative', padding: '0 12px' }}>
-      <img src={pic.src} width={pic.w} height={pic.h} alt={pic.alt}
-        style={{ width: '100%', height: 'auto', display: 'block' }} />
+    <div style={{ padding: '4px 20px 0' }}>
+      <RewardsWheel size={250} onResult={function () { hrTrack('HOME-RW-SPIN'); }} />
     </div>
-    {pic.note ? <p style={{ ...SMALL, fontSize: 11, margin: '2px 20px 6px', color: 'var(--web-grey-500)' }}>{pic.note}</p> : null}
-    <div style={{ padding: '0 20px' }}>
-      {prizes.map(function (r) {
-        return <div key={r[1]} style={{ display: 'flex', gap: 10, alignItems: 'center', padding: '8px 0', borderTop: '1px solid var(--web-grey-100)' }}>
-          <Icon name={r[0]} size={17} color="var(--web-blue)" />
-          <span style={{ font: '700 15px/1.3 var(--font-core)', color: 'var(--web-navy)', flex: 1 }}>{r[1]}</span>
-          <span style={{ font: '700 14px/1.3 var(--font-core)', color: 'var(--web-blue)', whiteSpace: 'nowrap' }}>{r[2]}</span>
-        </div>;
-      })}
-      <p style={{ ...SMALL, fontSize: 12, margin: '2px 0 0', paddingTop: 8, borderTop: '1px solid var(--web-grey-100)' }}>Every completed job is an entry. Solar for geyser replacements, the meter for leak jobs, the Geyserwise for everyone.</p>
+    <div style={{ margin: '14px 20px 0', padding: '12px 14px', border: '1px solid var(--web-grey-100)', borderRadius: 4, display: 'flex', gap: 14, alignItems: 'center' }}>
+      <img src="../../assets/illustrations/smart-dbboard-32a.jpg" width="960" height="720" alt="Home Assist smart geyser controller on a distribution board rail"
+        style={{ width: 84, height: 63, objectFit: 'cover', borderRadius: 3, flex: '0 0 84px' }} />
+      <div style={{ minWidth: 0 }}>
+        <div style={{ font: '700 15px/1.3 var(--font-core)', color: 'var(--web-navy)' }}>Smart geyser controller, fitted free · worth R1,500+</div>
+        <div style={{ ...SMALL, fontSize: 12, margin: 0 }}>Saves more than R300 a month, based on our own installations. Five a month, plus five R100 coffee vouchers.</div>
+      </div>
     </div>
     <div style={{ padding: '14px 20px 10px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
-      <Button size="sm" variant="navy" fullWidth onClick={function () { hrTrack('HOME-RW-GEYSER'); go('geyserReplacements'); }}
-        iconLeft={<Icon name="flame" size={15} color="#fff" />}>Replacing a geyser?</Button>
-      <Button size="sm" variant="navy" fullWidth onClick={function () { hrTrack('HOME-RW-LEAK'); go('leakDetection'); }}
-        iconLeft={<Icon name="droplets" size={15} color="#fff" />}>Burst pipe or leak?</Button>
+      <Button as="a" size="sm" variant="navy" fullWidth target="_blank" rel="noopener" href={wa(HR_MSG, 'HOME-RW-1')}
+        onClick={function () { hrTrack('HOME-RW-1'); }}
+        iconLeft={<Icon name="message-circle" size={15} color="#fff" />}>Replacing a geyser? WhatsApp us</Button>
+      <Button size="sm" variant="secondary" fullWidth onClick={function () { hrTrack('HOME-RW-RULES'); go('rewards'); }}
+        iconLeft={<Icon name="arrow-right" size={15} color="var(--web-navy)" />}>How the draw works</Button>
     </div>
     <div style={{ padding: '0 20px 16px' }}>
       <a href="/rewards" onClick={function (e) { e.preventDefault(); hrTrack('HOME-RW-RULES'); go('rewards'); }}
-        style={{ ...SMALL, fontSize: 12, color: 'var(--web-grey-500)' }}>Entries 1 November 2026 to 15 January 2027. Terms apply — <span style={{ color: 'var(--web-blue)', fontWeight: 700 }}>see the rules</span></a>
+        style={{ ...SMALL, fontSize: 12, color: 'var(--web-grey-500)' }}>Geyser replacements completed 1 November 2026 to 31 January 2027. Terms apply — <span style={{ color: 'var(--web-blue)', fontWeight: 700 }}>see the rules</span></a>
     </div>
   </div>;
 }
@@ -167,18 +149,12 @@ function HomePage({ go }) {
     <section style={{ borderBottom: '1px solid var(--web-grey-100)' }}>
       <div style={{ ...WRAP, padding: '64px 40px 56px', display: 'grid', gridTemplateColumns: '1.15fr .85fr', gap: 56, alignItems: 'center' }}>
         <div>
-          {/* ENTER & WIN flag (Keshan, 25 October 2026). A pennant pointing
-              right, at the prize panel, that nudges towards it and flashes
-              blue/navy about once a second — well under the 3-flashes-a-second
-              accessibility limit, and still for anyone with reduced motion
-              set. Shows only while the rewards hero is showing (data-ab b or
-              c; CSS in site.css), never on the existing homepage. Clicking it
-              opens /rewards. */}
-          <a href="/rewards" className="ha-rw-badge" data-ab-rewards aria-label="Enter and win: see the Home Assist Rewards prizes"
-            onClick={function (e) { e.preventDefault(); hrTrack('HOME-RW-BADGE'); go('rewards'); }}>
-            <Icon name="gift" size={24} color="#fff" />
-            <span>Enter &amp; Win</span>
-          </a>
+          {/* SPIN & WIN flag (3 November 2026). Shows only while the rewards
+              hero is showing (data-ab b; CSS in site.css), never on the
+              existing homepage. Clicking it opens /rewards. */}
+          <span data-ab-rewards>
+            <SpinWinSign onClick={function (e) { e.preventDefault(); hrTrack('HOME-RW-BADGE'); go('rewards'); }} />
+          </span>
           <Eyebrow>24/7 home emergency response</Eyebrow>
           <h1 style={{ ...DISPLAY, maxWidth: '20ch', marginBottom: 18 }}>Burst geyser, leaking pipe or no power? Get a verified artisan to your home.</h1>
           <p style={{ ...BODY, fontSize: 17, maxWidth: '58ch', marginBottom: 24 }}>Home Assist connects South African homeowners with vetted plumbers, electricians and building contractors. Send us a message on WhatsApp and we will find the right person for the job.</p>
@@ -209,10 +185,7 @@ function HomePage({ go }) {
           </div>
         </div>
         <div data-ab-show="b">
-          <HomeRewardsPanel go={go} variant="b" />
-        </div>
-        <div data-ab-show="c">
-          <HomeRewardsPanel go={go} variant="c" />
+          <HomeRewardsPanel go={go} />
         </div>
       </div>
     </section>
