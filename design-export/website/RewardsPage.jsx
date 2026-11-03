@@ -21,8 +21,8 @@ const { Button, Icon } = window.HomeAssistDesignSystem_cf0a2b;
    Competition Rules", rev 37, 3 November 2026. The doc is the master; if it
    changes, change RwRules below word for word and bump RW_RULES_UPDATED.
 
-   OPEN [CONFIRM] PLACEHOLDER (verify-build warns): draw time and place
-   (rules 5.1). Fill it before production.
+   No open [CONFIRM] placeholders. Draws are online at 11:00 with Parker and
+   Associates (Keshan, 3 Nov 2026).
 
    THE WHEEL (RewardsWheel, in Chrome.jsx) is decorative on this page. The
    real draw uses the internal draw tool, overseen by Parker and Associates,
@@ -39,7 +39,7 @@ const { Button, Icon } = window.HomeAssistDesignSystem_cf0a2b;
 
    CTA REFS: REWARDS-1 (hero), REWARDS-2 (navy band). */
 
-const RW_RULES_UPDATED = '3 November 2026';  // doc rev 37
+const RW_RULES_UPDATED = '3 November 2026';  // doc rev 38
 
 const RW_MSG = 'Hi Home Assist, I need a geyser replaced and I would like to enter Home Assist Rewards. ';
 
@@ -123,7 +123,7 @@ function RwRules({ go }) {
       <li>December 2026 round: Friday 8 January 2027</li>
       <li>January 2027 round: Friday 5 February 2027</li>
     </ul>
-    <p style={RW_P}>Each draw is held at <Confirm>time and place</Confirm>. Skill plays no part.</p>
+    <p style={RW_P}>Each draw is held online at 11:00 on the draw date, on a video call with Parker and Associates present. Skill plays no part.</p>
     <p style={RW_P}>5.2 The draws are overseen and certified by an independent accountant, Parker and Associates Accountants and Business Advisors Inc. (registration number 2018/556586/21), as regulation 11(5) requires.</p>
     <p style={RW_P}>5.3 In each draw, entries are drawn one at a time at random, and a prize wheel with two prize segments, smart geyser controller and coffee voucher, and spin-again segments decides which prize the drawn entry wins. Drawing continues until five controllers and five coffee vouchers have been awarded, and then three reserves for each prize, in order. Once a prize has five winners, its segments count as spin again. No entry is drawn twice, and no entrant wins more than one prize in a round.</p>
     <p style={RW_P}>5.4 Before a prize is confirmed we check the entry against clause 2. If an entry fails, the winner cannot be reached under clause 6.2, or the property cannot take the controller under clause 4.2, the prize goes to the next reserve for that prize.</p>
