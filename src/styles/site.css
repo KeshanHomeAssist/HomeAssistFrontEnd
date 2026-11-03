@@ -237,3 +237,53 @@ a:hover {
   .ha-gr-burst { display: none; }
   .ha-gr-progress { transition: none; }
 }
+
+
+/* ---------------------------------------------------------------------------
+   Homepage A/B/C test (19 October 2026). The variant is chosen in index.html
+   before paint and written to <html data-ab>. A is the default, so with
+   JavaScript off, the switch off, or anything unexpected, visitors get the
+   current homepage.
+   --------------------------------------------------------------------------- */
+[data-ab-show="b"],
+[data-ab-show="c"] { display: none; }
+html[data-ab="b"] [data-ab-show="a"],
+html[data-ab="c"] [data-ab-show="a"] { display: none; }
+html[data-ab="b"] [data-ab-show="b"],
+html[data-ab="c"] [data-ab-show="c"] { display: block; }
+
+
+/* SPIN & WIN flag (3 November 2026; was ENTER & WIN). A pennant
+   pointing right, at the prize panel; it nudges towards the prizes and
+   flashes blue/navy about once a second. Hidden unless the rewards hero is
+   showing. */
+[data-ab-rewards] { display: none; }
+html[data-ab="b"] [data-ab-rewards],
+html[data-ab="c"] [data-ab-rewards] { display: inline-flex; }
+.ha-rw-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 22px;
+  padding: 14px 52px 14px 22px;
+  background: var(--web-blue);
+  color: #fff;
+  font: 800 24px/1 var(--font-core);
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  text-decoration: none;
+  clip-path: polygon(0 0, calc(100% - 30px) 0, 100% 50%, calc(100% - 30px) 100%, 0 100%);
+  animation: ha-rw-flag 1.2s ease-in-out infinite;
+  will-change: transform;
+}
+.ha-rw-badge:hover { animation-play-state: paused; background: var(--web-navy); }
+@keyframes ha-rw-flag {
+  0%, 100% { transform: translateX(0);    background: var(--web-blue); }
+  50%      { transform: translateX(16px); background: var(--web-navy); }
+}
+@media (max-width: 720px) {
+  .ha-rw-badge { font-size: 20px; padding: 12px 44px 12px 18px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ha-rw-badge { animation: none; }
+}

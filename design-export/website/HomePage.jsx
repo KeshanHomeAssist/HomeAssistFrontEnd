@@ -95,12 +95,86 @@ function CostReveal({ context, lines, children }) {
   </div>;
 }
 
+/* Variant B of the homepage hero: the Home Assist Rewards panel.
+   Version 2, 3 November 2026 (Keshan): a festive thank-you to geyser
+   replacement customers. Every month, five Sonoff 32 A smart geyser
+   controllers (installed by a qualified electrician, with a COC, worth
+   R1,500+) and five R100 coffee vouchers. Three rounds, Nov–Jan.
+
+   The wheel (RewardsWheel, Chrome.jsx) is decorative; the real draw is the
+   internal draw tool, overseen by Parker and Associates. The branded
+   distribution board illustration is used here on purpose (Keshan: branded
+   picture on the prize panel, the real Sonoff photo on /rewards).
+
+   "Terms apply — see the rules" links to /rewards, which carries the full
+   rules; CPA s36(5) needs that link on every promotion. Do not remove it.
+
+   The buttons send a rewards_click event (cta_id HOME-RW-1 for the WhatsApp
+   button, HOME-RW-RULES for the rules link). Track it, but do NOT mark it a
+   key event — the conversion is still the WhatsApp contact. */
+function hrTrack(cta) {
+  if (typeof window === 'undefined' || typeof window.gtag !== 'function') return;
+  window.gtag('event', 'rewards_click', { cta_id: cta, page_path: '/', ab_variant: window.HA_AB });
+}
+
+const HR_MSG = 'Hi Home Assist, I need a geyser replaced and I would like to enter Home Assist Rewards. ';
+
+function HomeRewardsPanel({ go }) {
+  /* Prize first (Keshan, 3 Nov 2026): the controller picture and value lead;
+     the wheel is a small side element. */
+  return <div style={{ border: '1px solid var(--web-grey-100)', borderTop: '4px solid var(--web-blue)', borderRadius: 4, background: '#fff', overflow: 'hidden' }}>
+    <div style={{ padding: '18px 20px 6px' }}>
+      <div style={{ ...LABEL, color: 'var(--web-blue)', marginBottom: 6 }}>Home Assist Rewards · festive thank-you</div>
+      <div style={{ font: '700 22px/1.2 var(--font-core)', color: 'var(--web-navy)' }}>Replace your geyser and you could win a smart geyser controller, fitted free.</div>
+    </div>
+    <div style={{ padding: '10px 20px 0', display: 'grid', gridTemplateColumns: '150px 1fr', gap: 18, alignItems: 'center' }}>
+      <img src="../../assets/illustrations/smart-dbboard-unit.jpg" width="420" height="660" alt="Home Assist smart geyser controller on a distribution board rail"
+        style={{ width: '100%', height: 'auto', borderRadius: 4, border: '1px solid var(--web-grey-100)', display: 'block' }} />
+      <div>
+        <div style={{ display: 'inline-block', background: 'var(--web-navy)', color: '#fff', padding: '8px 12px', borderRadius: 2, marginBottom: 10 }}>
+          <div style={{ ...LABEL, color: 'var(--web-blue-300)', fontSize: 10, marginBottom: 2 }}>Five every month</div>
+          <div style={{ font: '700 18px/1.1 var(--font-core)' }}>Worth R1,500+ · fitted free</div>
+        </div>
+        <ul style={{ ...BODY, fontSize: 14, margin: 0, paddingLeft: 18, display: 'flex', flexDirection: 'column', gap: 4 }}>
+          <li>Installed by a qualified electrician, with a certificate of compliance</li>
+          <li>Your geyser on a schedule, from your phone</li>
+          <li><strong>Saves more than R300 a month</strong>, based on our own installations</li>
+          <li>Plus five R100 coffee vouchers every month</li>
+        </ul>
+      </div>
+    </div>
+    <div style={{ padding: '12px 20px 0', display: 'flex', gap: 14, alignItems: 'center' }}>
+      <div style={{ width: 110, flex: '0 0 110px' }}>
+        <RewardsWheel size={110} compact onResult={function () { hrTrack('HOME-RW-SPIN'); }} />
+      </div>
+      <div style={{ ...SMALL, fontSize: 13, margin: 0 }}>Every geyser we replace in November, December and January goes into that month&rsquo;s draw. Winners are drawn on 4 December, 8 January and 5 February, and controllers are fitted within 15 days.</div>
+    </div>
+    <div style={{ padding: '14px 20px 10px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+      <Button as="a" size="sm" variant="navy" fullWidth target="_blank" rel="noopener" href={wa(HR_MSG, 'HOME-RW-1')}
+        onClick={function () { hrTrack('HOME-RW-1'); }}
+        iconLeft={<Icon name="message-circle" size={15} color="#fff" />}>Replacing a geyser? WhatsApp us</Button>
+      <Button size="sm" variant="secondary" fullWidth onClick={function () { hrTrack('HOME-RW-RULES'); go('rewards'); }}
+        iconLeft={<Icon name="arrow-right" size={15} color="var(--web-navy)" />}>How the draw works</Button>
+    </div>
+    <div style={{ padding: '0 20px 16px' }}>
+      <a href="/rewards" onClick={function (e) { e.preventDefault(); hrTrack('HOME-RW-RULES'); go('rewards'); }}
+        style={{ ...SMALL, fontSize: 12, color: 'var(--web-grey-500)' }}>Geyser replacements completed 1 November 2026 to 31 January 2027. Terms apply — <span style={{ color: 'var(--web-blue)', fontWeight: 700 }}>see the rules</span></a>
+    </div>
+  </div>;
+}
+
 function HomePage({ go }) {
   return <main>
     {/* Hero */}
     <section style={{ borderBottom: '1px solid var(--web-grey-100)' }}>
       <div style={{ ...WRAP, padding: '64px 40px 56px', display: 'grid', gridTemplateColumns: '1.15fr .85fr', gap: 56, alignItems: 'center' }}>
         <div>
+          {/* SPIN & WIN flag (3 November 2026). Shows only while the rewards
+              hero is showing (data-ab b; CSS in site.css), never on the
+              existing homepage. Clicking it opens /rewards. */}
+          <span data-ab-rewards>
+            <SpinWinSign onClick={function (e) { e.preventDefault(); hrTrack('HOME-RW-BADGE'); go('rewards'); }} />
+          </span>
           <Eyebrow>24/7 home emergency response</Eyebrow>
           <h1 style={{ ...DISPLAY, maxWidth: '20ch', marginBottom: 18 }}>Burst geyser, leaking pipe or no power? Get a verified artisan to your home.</h1>
           <p style={{ ...BODY, fontSize: 17, maxWidth: '58ch', marginBottom: 24 }}>Home Assist connects South African homeowners with vetted plumbers, electricians and building contractors. Send us a message on WhatsApp and we will find the right person for the job.</p>
@@ -116,8 +190,22 @@ function HomePage({ go }) {
           </div>
           <p style={SMALL}>Available 24/7 · Nationwide network · Every job verified</p>
         </div>
-        <div style={{ background: '#fff', borderRadius: 4, display: 'grid', placeItems: 'center', minHeight: 340, overflow: 'hidden' }}>
-          <img src="../../assets/illustrations/techman-home-app.gif" alt="A Home Assist technician logging a job on the app outside a home" style={{ width: '100%', height: 'auto', display: 'block' }} />
+        {/* HERO TEST, 19 October 2026 — only this right-hand panel changes.
+            While the competition is on, visitors get B or C at random (the
+            two rewards pictures). A, the current illustration, shows only
+            when the competition is switched off.
+            (Original note follows.) A/B TEST — only this right-hand panel changes.
+            data-ab-show="a" is the current illustration; "b" is the Home
+            Assist Rewards panel. Which one shows is decided in index.html
+            before paint (see the note there for the on/off switch and the
+            ?ab=a / ?ab=b review links). Both are in the HTML; CSS hides one. */}
+        <div data-ab-show="a">
+          <div style={{ background: '#fff', borderRadius: 4, display: 'grid', placeItems: 'center', minHeight: 340, overflow: 'hidden' }}>
+            <img src="../../assets/illustrations/techman-home-app.gif" alt="A Home Assist technician logging a job on the app outside a home" style={{ width: '100%', height: 'auto', display: 'block' }} />
+          </div>
+        </div>
+        <div data-ab-show="b">
+          <HomeRewardsPanel go={go} />
         </div>
       </div>
     </section>

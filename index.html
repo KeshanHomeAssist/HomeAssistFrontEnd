@@ -22,6 +22,85 @@
       gtag('js', new Date());
       gtag('config', 'G-FL8J3DD2DX', { send_page_view: false });
     </script>
+
+    <!-- Homepage A/B test for Home Assist Rewards.
+         Updated 25 October 2026 on Keshan's instruction: ONE test only —
+           a = the existing homepage (technician illustration, no badge)
+           b = the rewards hero (flashing ENTER & WIN flag + prize panel)
+         Half of visitors get each. (Version 2 of the competition, 3 Nov 2026:
+         the rewards hero is now the spin-and-win panel for the smart geyser
+         controller draw.)
+
+         STAGING ONLY. This test never runs on production (main) unless
+         REWARDS_LIVE is set to true there on purpose.
+
+         HOW IT WORKS
+           Runs here, in the <head>, before the page paints: it picks a version,
+           writes it to <html data-ab="a|b|c">, and CSS in src/styles/site.css
+           shows that hero panel and hides the others. All panels are in the
+           prerendered HTML, so there is no flicker and one URL for Google.
+
+         ON / OFF
+           Always on for staging and localhost, so the flow can be reviewed.
+           On www.homeassist.co.za it only runs when REWARDS_LIVE is true.
+           Off means everyone sees a, the existing homepage.
+
+         FORCING A VERSION (for reviewers)
+           ?ab=a   existing homepage
+           ?ab=b   rewards hero
+           ?ab=reset  forget the choice and draw again
+           (Storage key is now ha_ab_home3, so everyone is re-drawn into the
+           new a/b test.)
+
+         MEASURING
+           Every GA4 event carries ab_variant (a, b, or off). Register
+           ab_variant as an event-scoped custom dimension in GA4 Admin, then
+           compare whatsapp_click, phone_click and rewards_click for a against
+           b, for sessions that landed on /. -->
+    <script>
+      (function () {
+        var REWARDS_LIVE = false;
+        var KEY = 'ha_ab_home3';
+        var host = location.hostname;
+        var on = REWARDS_LIVE || host.indexOf('staging.') === 0 || host === 'localhost' || host === '127.0.0.1';
+        var v = 'off';
+        function draw() { return Math.random() < 0.5 ? 'a' : 'b'; }
+        if (on) {
+          try {
+            var q = new URLSearchParams(location.search).get('ab');
+            if (q === 'reset') { localStorage.removeItem(KEY); q = null; }
+            var ok = { a: 1, b: 1 };
+            if (ok[q]) { v = q; localStorage.setItem(KEY, v); }
+            else {
+              var saved = localStorage.getItem(KEY);
+              if (ok[saved]) v = saved;
+              else { v = draw(); localStorage.setItem(KEY, v); }
+            }
+          } catch (e) { v = draw(); }
+        }
+        document.documentElement.setAttribute('data-ab', v);
+        window.HA_AB = v;
+        gtag('set', { ab_variant: v });
+        gtag('set', 'user_properties', { home_hero_variant: v });
+      })();
+    </script>
+
+       <!-- Microsoft Clarity: separate projects for www and staging -->
+    <script type="text/javascript">
+      (function(){
+        var ids = {
+          "www.homeassist.co.za": "tfaqvhbz1j",
+          "staging.homeassist.co.za": "z45r5llzrl"
+        };
+        var id = ids[location.hostname];
+        if (!id) return;
+        (function(c,l,a,r,i,t,y){
+            c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+            t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+            y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+        })(window, document, "clarity", "script", id);
+      })();
+    </script>
     <script type="module" src="/src/main.jsx"></script>
   </head>
   <body>

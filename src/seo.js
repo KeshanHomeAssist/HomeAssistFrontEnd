@@ -286,9 +286,9 @@ export const ROUTES = {
     ],
   },
   '/rewards': {
-    title: 'Home Assist Rewards | Win a Solar Geyser Upgrade',
+    title: 'Home Assist Rewards | Replace Your Geyser, Spin to Win',
     description:
-      'Every job Home Assist completes earns an entry. Win a solar geyser upgrade, a smart water meter or a Geyserwise Max. Entries close 15 January 2027. Terms apply.',
+      'Replace your geyser with Home Assist in Nov, Dec or Jan and you could win a smart geyser controller, fitted free, or a R100 coffee voucher. Five of each every month. Terms apply.',
     schema: [organization],
   },
   '/leak-detection': {
