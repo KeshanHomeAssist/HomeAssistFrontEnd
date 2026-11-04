@@ -23,8 +23,16 @@ import { Icon } from './ds';
  *     the hero A/B test is read on hero-button codes only
  *   - /join: no option buttons, one link; the provider types their trade
  *
- * Not built yet: the desktop on-site chat. Desktop visitors still get WhatsApp
- * (WhatsApp Web) until a chat tool is chosen; check the GA4 device split first.
+ * Phone and desktop behave differently (decided 4 Nov 2026):
+ *   - phone (touch screen): each option is a one-tap wa.me link
+ *   - desktop (mouse): picking an option shows a QR code to scan with the
+ *     phone, so the chat opens in the WhatsApp app with the code already in
+ *     the message; "open WhatsApp on this computer" stays as a fallback link.
+ *     A scan can't be seen by GA4, so showing the QR fires whatsapp_qr_shown
+ *     with the same cta_id (not a key event; compare it with whatsapp_click).
+ *
+ * Numbers: customers go to the members line (081 849 5489); technicians on
+ * /join go to the operations line (071 526 2554).
  */
 
 const DELAY_MS = 6000;
@@ -70,6 +78,7 @@ const BUBBLE_COPY = {
   '/managing-agents': B2B,
   '/join': {
     greeting: "Want to work with Home Assist? What's your trade?",
+    ops: true,
     options: [{ label: 'Start a chat', ref: 'SITE-BUBBLE-JOIN', msg: "Hi Home Assist, I'd like to join your network. My trade is: " }],
   },
 };
@@ -95,6 +104,39 @@ function markClosed() {
   try { window.sessionStorage.setItem(CLOSED_KEY, '1'); } catch (e) { /* private mode: closes for this page only */ }
 }
 
+// Desktop = a real mouse and hover. Touch laptops with a trackpad count as desktop, which is right:
+// they don't have WhatsApp installed as an app the way a phone does.
+function isDesktop() {
+  if (typeof window === 'undefined' || !window.matchMedia) return false;
+  return window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+}
+
+// QR code as an SVG path. The library only loads on desktop, so phones never download it.
+function QrCode({ text }) {
+  const [svg, setSvg] = React.useState(null);
+  React.useEffect(() => {
+    let live = true;
+    import('qrcode-generator').then((mod) => {
+      const qrcode = mod.default || mod;
+      const qr = qrcode(0, 'M');
+      qr.addData(unescape(encodeURIComponent(text)));
+      qr.make();
+      const n = qr.getModuleCount();
+      let d = '';
+      for (let r = 0; r < n; r++) for (let c = 0; c < n; c++) if (qr.isDark(r, c)) d += 'M' + c + ' ' + r + 'h1v1h-1z';
+      if (live) setSvg({ n, d });
+    });
+    return () => { live = false; };
+  }, [text]);
+  if (!svg) return <div className="ha-bubble-qr" aria-hidden="true" />;
+  return (
+    <svg className="ha-bubble-qr" viewBox={'-2 -2 ' + (svg.n + 4) + ' ' + (svg.n + 4)} role="img" aria-label="QR code that opens this chat in WhatsApp on your phone" shapeRendering="crispEdges">
+      <rect x="-2" y="-2" width={svg.n + 4} height={svg.n + 4} fill="#fff" />
+      <path d={svg.d} fill="#182D55" />
+    </svg>
+  );
+}
+
 // Someone filling in a form (the geyser configurator, the service request) should not be interrupted.
 function typingInForm() {
   const el = typeof document !== 'undefined' ? document.activeElement : null;
@@ -105,11 +147,18 @@ export function WhatsAppBubble({ pathname }) {
   const path = normalise(pathname);
   const copy = BUBBLE_COPY[path] || DEFAULT_COPY;
   const [open, setOpen] = React.useState(false);
+  const [desktop, setDesktop] = React.useState(false);
+  const [picked, setPicked] = React.useState(null);
   const cardId = 'ha-bubble-card';
+  const digits = copy.ops ? CH.waOpsDigits : CH.waHomeDigits;
+  const number = copy.ops ? CH.waOps : CH.waHome;
+
+  React.useEffect(() => { setDesktop(isDesktop()); }, []);
 
   // New page: fold the card away and re-arm the timer, unless it was dismissed this session.
   React.useEffect(() => {
     setOpen(false);
+    setPicked(null);
     if (HIDDEN.has(path) || isClosed()) return undefined;
     let timer;
     const tryOpen = () => {
@@ -122,10 +171,17 @@ export function WhatsAppBubble({ pathname }) {
     return () => clearTimeout(timer);
   }, [path]);
 
+  // Desktop with a single option: go straight to its QR code.
+  const shownOption = desktop ? (picked || (copy.options.length === 1 ? copy.options[0] : null)) : null;
+  React.useEffect(() => {
+    if (open && shownOption) track('whatsapp_qr_shown', { page_path: path, cta_id: shownOption.ref });
+  }, [open, shownOption && shownOption.ref, path]);
+
   if (HIDDEN.has(path)) return null;
 
   const close = () => {
     setOpen(false);
+    setPicked(null);
     markClosed();
     track('bubble_closed', { page_path: path });
   };
@@ -144,21 +200,41 @@ export function WhatsAppBubble({ pathname }) {
             <Icon name="x" size={16} />
           </button>
           <p className="ha-bubble-greeting">{copy.greeting}</p>
-          <div className="ha-bubble-options">
-            {copy.options.map((o) => (
-              <a
-                key={o.ref}
-                className="ha-bubble-option"
-                href={wa(o.msg, o.ref)}
-                target="_blank"
-                rel="noopener"
-                onClick={() => setOpen(false)}
-              >
-                {o.label}
+          {shownOption ? (
+            <div className="ha-bubble-desktop">
+              {copy.options.length > 1 && <p className="ha-bubble-picked">{shownOption.label}</p>}
+              <QrCode text={wa(shownOption.msg, shownOption.ref, digits)} />
+              <p className="ha-bubble-scan">Scan with your phone's camera to continue in WhatsApp.</p>
+              <a className="ha-bubble-link" href={wa(shownOption.msg, shownOption.ref, digits)} target="_blank" rel="noopener">
+                Or open WhatsApp on this computer
               </a>
-            ))}
-          </div>
-          <p className="ha-bubble-note">Opens WhatsApp on {CH.waBiz}, answered 24 hours a day.</p>
+              {copy.options.length > 1 && (
+                <button type="button" className="ha-bubble-back" onClick={() => setPicked(null)}>Choose a different option</button>
+              )}
+            </div>
+          ) : (
+            <div className="ha-bubble-options">
+              {copy.options.map((o) =>
+                desktop ? (
+                  <button key={o.ref} type="button" className="ha-bubble-option" onClick={() => setPicked(o)}>
+                    {o.label}
+                  </button>
+                ) : (
+                  <a
+                    key={o.ref}
+                    className="ha-bubble-option"
+                    href={wa(o.msg, o.ref, digits)}
+                    target="_blank"
+                    rel="noopener"
+                    onClick={() => setOpen(false)}
+                  >
+                    {o.label}
+                  </a>
+                )
+              )}
+            </div>
+          )}
+          <p className="ha-bubble-note">WhatsApp {number}, answered 24 hours a day.</p>
         </div>
       )}
       <button
