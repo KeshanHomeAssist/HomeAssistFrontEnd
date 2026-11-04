@@ -394,3 +394,13 @@ html[data-ab="c"] [data-ab-rewards] { display: inline-flex; }
   .ha-bubble-card { animation: none; }
 }
 @media print { .ha-bubble { display: none; } }
+
+/* Chat bubble, desktop QR view. */
+button.ha-bubble-option { width: 100%; text-align: left; font: inherit; font-weight: 600; font-size: 15px; cursor: pointer; }
+.ha-bubble-desktop { display: flex; flex-direction: column; align-items: center; text-align: center; }
+.ha-bubble-picked { margin: -4px 0 10px; align-self: flex-start; font-size: 14px; font-weight: 600; color: var(--web-blue); }
+.ha-bubble-qr { display: block; width: 176px; height: 176px; border: 1px solid var(--web-grey-100); border-radius: 8px; background: #fff; }
+.ha-bubble-scan { margin: 10px 0 6px; font-size: 13px; line-height: 1.45; color: var(--web-grey-700); max-width: 26ch; }
+.ha-bubble-link { font-size: 13px; font-weight: 600; color: var(--web-blue); }
+.ha-bubble-back { margin-top: 8px; border: 0; background: none; padding: 6px; font: inherit; font-size: 13px; color: var(--web-grey-500); text-decoration: underline; cursor: pointer; }
+.ha-bubble-link:focus-visible, .ha-bubble-back:focus-visible { outline: 3px solid var(--web-blue); outline-offset: 2px; }
