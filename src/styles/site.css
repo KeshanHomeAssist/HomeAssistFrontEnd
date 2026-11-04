@@ -287,3 +287,120 @@ html[data-ab="c"] [data-ab-rewards] { display: inline-flex; }
 @media (prefers-reduced-motion: reduce) {
   .ha-rw-badge { animation: none; }
 }
+
+/* ---------------------------------------------------------------------------
+   WhatsApp chat bubble (src/WhatsAppBubble.jsx, Nov 2026).
+   Green is WhatsApp's own, so the button is recognisable at a glance; the card
+   stays in the site's navy-on-white so it reads as Home Assist speaking.
+   --------------------------------------------------------------------------- */
+.ha-bubble {
+  position: fixed;
+  right: calc(20px + env(safe-area-inset-right, 0px));
+  bottom: calc(20px + env(safe-area-inset-bottom, 0px));
+  z-index: 30;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 12px;
+  pointer-events: none;
+}
+.ha-bubble > * { pointer-events: auto; }
+
+.ha-bubble-button {
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  border: 0;
+  background: #25D366;
+  color: #fff;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(24,45,85,.18), 0 8px 20px rgba(24,45,85,.16);
+}
+.ha-bubble-button:hover { background: #1EBE5A; }
+.ha-bubble-button:focus-visible,
+.ha-bubble-option:focus-visible,
+.ha-bubble-close:focus-visible { outline: 3px solid var(--web-blue); outline-offset: 2px; }
+
+.ha-bubble-card {
+  position: relative;
+  width: min(320px, calc(100vw - 40px));
+  background: #fff;
+  border: 1px solid var(--web-grey-100);
+  border-radius: 14px 14px 4px 14px;
+  box-shadow: 0 2px 6px rgba(24,45,85,.10), 0 12px 32px rgba(24,45,85,.14);
+  padding: 18px 18px 14px;
+  color: var(--web-navy);
+  transform-origin: bottom right;
+  animation: ha-bubble-in .28s cubic-bezier(.2,.8,.2,1);
+}
+@keyframes ha-bubble-in {
+  from { opacity: 0; transform: translateY(8px) scale(.96); }
+  to   { opacity: 1; transform: none; }
+}
+
+.ha-bubble-close {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 36px;
+  height: 36px;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--web-grey-500);
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+}
+.ha-bubble-close:hover { background: var(--web-grey-050); color: var(--web-navy); }
+
+.ha-bubble-greeting {
+  margin: 0 28px 14px 0;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.ha-bubble-options { display: flex; flex-direction: column; gap: 8px; }
+.ha-bubble-option {
+  display: flex;
+  align-items: center;
+  min-height: var(--web-tap-min, 44px);
+  padding: 0 14px;
+  border: 1px solid var(--web-blue-100);
+  border-radius: 10px;
+  background: var(--web-blue-050);
+  color: var(--web-navy);
+  font-weight: 600;
+  font-size: 15px;
+  text-decoration: none;
+}
+.ha-bubble-option:hover { background: var(--web-blue-100); border-color: var(--web-blue-300); }
+
+.ha-bubble-note {
+  margin: 12px 0 0;
+  font-size: 12px;
+  line-height: 1.45;
+  color: var(--web-grey-500);
+}
+
+@media (max-width: 480px) {
+  .ha-bubble { right: calc(14px + env(safe-area-inset-right, 0px)); bottom: calc(14px + env(safe-area-inset-bottom, 0px)); }
+  .ha-bubble-button { width: 54px; height: 54px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ha-bubble-card { animation: none; }
+}
+@media print { .ha-bubble { display: none; } }
+
+/* Chat bubble, desktop QR view. */
+button.ha-bubble-option { width: 100%; text-align: left; font: inherit; font-weight: 600; font-size: 15px; cursor: pointer; }
+.ha-bubble-desktop { display: flex; flex-direction: column; align-items: center; text-align: center; }
+.ha-bubble-picked { margin: -4px 0 10px; align-self: flex-start; font-size: 14px; font-weight: 600; color: var(--web-blue); }
+.ha-bubble-qr { display: block; width: 176px; height: 176px; border: 1px solid var(--web-grey-100); border-radius: 8px; background: #fff; }
+.ha-bubble-scan { margin: 10px 0 6px; font-size: 13px; line-height: 1.45; color: var(--web-grey-700); max-width: 26ch; }
+.ha-bubble-link { font-size: 13px; font-weight: 600; color: var(--web-blue); }
+.ha-bubble-back { margin-top: 8px; border: 0; background: none; padding: 6px; font: inherit; font-size: 13px; color: var(--web-grey-500); text-decoration: underline; cursor: pointer; }
+.ha-bubble-link:focus-visible, .ha-bubble-back:focus-visible { outline: 3px solid var(--web-blue); outline-offset: 2px; }

@@ -26,6 +26,7 @@ import { BlogPage, POSTS } from './site/BlogPage.jsx';
 import { TermsPage, PrivacyPage, ComplaintsPage, DataRequestPage } from './site/LegalPage.jsx';
 import { slugify, ROUTES, articleMeta } from './seo.js';
 import { useAnalytics } from './analytics.js';
+import { WhatsAppBubble } from './WhatsAppBubble.jsx';
 
 /**
  * The design prototype navigated with a `go('insurers')` callback against
@@ -278,6 +279,7 @@ export default function App() {
         <Route path="*" element={<NotFound />} />
       </Routes>
       <Footer go={go} page={page} />
+      <WhatsAppBubble pathname={location.pathname} />
     </>
   );
 }

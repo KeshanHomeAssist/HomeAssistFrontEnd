@@ -88,7 +88,7 @@ function JoinPage() {
 
     <NavyBand eyebrow="Register" title="Register on the portal and start receiving work in your area.">
       <Button as="a" size="lg" variant="onDark" href={CH.register} target="_blank" rel="noopener">Register on the portal</Button>
-      <div style={{ ...SMALL, color: 'rgba(255,255,255,.75)', alignSelf: 'center', maxWidth: '34ch' }}>Questions before you register? WhatsApp {CH.waHome} or email support@homeassist.co.za.</div>
+      <div style={{ ...SMALL, color: 'rgba(255,255,255,.75)', alignSelf: 'center', maxWidth: '34ch' }}>Questions before you register? WhatsApp <a href={wa('Hi Home Assist, I have a question before I register.', 'JOIN-1', CH.waOpsDigits)} target="_blank" rel="noopener" style={{ color: '#fff', fontWeight: 600 }}>{CH.waOps}</a> or email support@homeassist.co.za.</div>
     </NavyBand>
 
     <Section tint narrow eyebrow="Questions" title="Provider questions">
