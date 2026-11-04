@@ -13,6 +13,19 @@ const HOME_FAQ = [
 ];
 
 const GOOGLE_REVIEWS = [
+  ['Neria Moncho', 5, 'November 2026', 'Am very happy with the service received. My geyser was replaced the same day.', ''],
+  ['Chris Lourens', 5, 'November 2026', 'Prompt and efficient service', ''],
+  ['Liezl Dreyden', 5, 'October 2026', 'Aneeqah did an excellent job assisting the whole time while we were working on the claim.', ''],
+  ['Thomas Cramer', 5, 'October 2026', 'The technician were friendly and professional.', ''],
+  ['Meyer Labuschagne', 5, 'October 2026', 'Thank you for the quick assistance and install of our geyser, it was done fast and efficient.', ''],
+  ['Tasneem Rajie', 5, 'October 2026', 'As soon I lodged my insurance claim, I received a call and my issue was resolved same-day. Most amazing service!', ''],
+  ['Elreeza Farmer', 5, 'October 2026', 'I am very very happy with the service I have received. From the first call to the last finalising everything. All within 24hours.. Wow', 'Thanks. That\u2019s our goal.'],
+  ['Veronica Du toit', 5, 'October 2026', 'Very quick response. Supplier used was there within 2 hours and everything was fixed. Great service', ''],
+  ['Granthom Van Wyk', 5, 'October 2026', 'Exceptional service', ''],
+  ['Naushad Gatta', 5, 'October 2026', 'Great efficient service. Keep up the great service', ''],
+  ['Mbalenhle Thomo', 5, 'October 2026', 'Our geyser was causing a leakage through the roof, they were precise about the diagnosis. Not to mention fast, professional and kind. It took less than 2 hours for Layters plumbing to replace it', ''],
+  ['Mercia Burgess', 5, 'October 2026', 'I find your technician extremely efficient, friendly, knowledgeable, and always right on time, within 30min, he appears and has all his equipment ready for installation. The service is just amazing!!', ''],
+  ['Vivian Buckham', 5, 'October 2026', 'Geyser replacement - team arrived on time, quick response to the request. Worked neatly & clean. Job done... thanks for the good service', 'We will pass on the word to the team'],
   ['Dorothy Mlindi', 5, 'October 2026', 'Home Assist team is very reliable, quick to respond to client request and the issue was resolved speedily, within a few hours i had a new geyser functioning properly. Many thanks and keep up the good work', ''],
   ['Jizelle Joseph', 5, 'October 2026', 'The claim was attended to immediately. I didnt have to wait for my new geyser to be installed. The plumbers were friendly and worked quickly and neatly. Thank u for excellent service.', ''],
   ['Sanette Henning', 5, 'October 2026', 'Work was done quickly and professionally. Very satisfied.', 'Happy to be of service'],
@@ -20,14 +33,10 @@ const GOOGLE_REVIEWS = [
   ['JP Meyer', 5, 'October 2026', 'Fantastic promt service.', 'Great news'],
   ['Dhiren Singh', 5, 'October 2026', 'Very efficient and professional assuring the best professional to get the job done', ''],
   ['Carl Bure', 5, 'October 2026', 'I had quick and efficient service from them.', ''],
-  ['Tertia Pretoruis', 5, 'September 2026', 'MJ Brink Plumbing from Veltdrift replaced my geyser within a few hours after I reported it.', 'Great news'],
-  ['Anneline Coopsamy', 5, 'a year ago', 'The plumbers were excellent. Installation was quick. Service was impeccable. I am very happy with the services rendered.', 'Happy to be of service'],
-  ['Sebastian Vries', 5, 'a year ago', 'Very happy with the service. Best company ever!!', 'Thank you'],
-  ['Renita Swart', 5, 'a year ago', 'Always satisfied with your service.', 'Thank you'],
-  ['Matshidiso Taunyane', 5, 'a year ago', 'The assistance on replacing the geyser was very efficient and a good job, we are also very grateful for the short turnaround in assistance after incident was reported.', 'Thank you']
+  ['Tertia Pretoruis', 5, 'September 2026', 'MJ Brink Plumbing from Veltdrift replaced my geyser within a few hours after I reported it.', 'Great news']
 ];
 
-const GOOGLE_SUMMARY = { rating: '4,7', count: 23, bars: [[5, 19], [4, 2], [3, 1], [2, 0], [1, 1]] };
+const GOOGLE_SUMMARY = { rating: '4,8', count: 40, bars: [[5, 36], [4, 2], [3, 1], [2, 0], [1, 1]] };
 
 function Stars({ n, half = false, size = 15 }) {
   /* Solid filled stars. The design-system Icon renders lucide's outline star
