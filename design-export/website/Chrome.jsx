@@ -5,6 +5,8 @@ const CH = {
   phone: '087 095 5231', phoneTel: '+27870955231',
   help: 'help@homeassist.co.za',
   waBiz: '081 849 5489', waBizDigits: '27818495489',
+  /* Operations line: technicians and service providers (/join). Customers stay on waHome, the members line. */
+  waOps: '071 526 2554', waOpsDigits: '27715262554',
   biz: 'keshan@homeassist.co.za',
   address: '12 Uitvlugt Road, Pinelands, Cape Town, South Africa, 7405',
   portal: 'https://portal.homeassist.co.za/',
@@ -28,7 +30,11 @@ const CH = {
 
    The full ref list is in the project doc 28-whatsapp-business-line.md. */
 const waText = (msg, ref) => (ref ? '[' + ref + ']\n' : '') + msg;
-const wa = (msg, ref) => `https://wa.me/${CH.waHomeDigits}?text=${encodeURIComponent(waText(msg, ref))}`;
+const wa = (msg, ref, digits) => `https://wa.me/${digits || CH.waHomeDigits}?text=${encodeURIComponent(waText(msg, ref))}`;
+/* Technician-facing pages route WhatsApp to the operations line instead of the members line. */
+const OPS_PAGES = new Set(['join']);
+const waDigitsFor = (page) => (OPS_PAGES.has(page) ? CH.waOpsDigits : CH.waHomeDigits);
+const waNumberFor = (page) => (OPS_PAGES.has(page) ? CH.waOps : CH.waHome);
 
 /* Page id → the short code used in WhatsApp refs. Unknown pages (404) are SITE. */
 const PAGE_REF = {
@@ -237,7 +243,7 @@ function Header({ page, go }) {
           AI assistant reads out when somebody asks how to reach us. Both are
           size="sm" so the pair fits where the single button used to sit. */}
       <div style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap' }}>
-        <Button as="a" size="sm" variant="navy" href={wa('Hi Home Assist, I need help with: ', pageRef(page, 'TOP'))} target="_blank" rel="noopener"
+        <Button as="a" size="sm" variant="navy" href={wa('Hi Home Assist, I need help with: ', pageRef(page, 'TOP'), waDigitsFor(page))} target="_blank" rel="noopener"
           iconLeft={<Icon name="message-circle" size={15} color="#fff" />}>WhatsApp</Button>
         <Button as="a" size="sm" variant="secondary" href={'tel:' + CH.phoneTel}
           iconLeft={<Icon name="phone" size={15} color="var(--web-navy)" />}>{CH.phone}</Button>
@@ -273,7 +279,7 @@ function Footer({ go, page }) {
         <a href="#/data-request" onClick={e => { e.preventDefault(); go('dataRequest'); }} style={link}>Data Subject Request</a>
       </div>
       <div style={col}><div style={head}>Contact</div>
-        <div><div style={{ ...head, marginBottom: 2 }}>WhatsApp</div><a href={wa('Hi Home Assist, ', pageRef(page, 'FOOT'))} style={link}>{CH.waHome}</a></div>
+        <div><div style={{ ...head, marginBottom: 2 }}>WhatsApp</div><a href={wa('Hi Home Assist, ', pageRef(page, 'FOOT'), waDigitsFor(page))} style={link}>{waNumberFor(page)}</a></div>
         <div><div style={{ ...head, marginBottom: 2 }}>Phone</div><a href={'tel:' + CH.phoneTel} style={link}>{CH.phone}</a></div>
         <div><div style={{ ...head, marginBottom: 2 }}>Email</div><a href={'mailto:' + CH.help} style={link}>{CH.help}</a></div>
         <div><div style={{ ...head, marginBottom: 2 }}>Complaints</div><a href={mailtoLink(CH.complaints, 'Complaint')} style={link}>{CH.complaints}</a></div>
