@@ -136,12 +136,9 @@ export const ROUTES = {
   '/insurers': {
     title: 'Property Claims Management for Insurers, UMAs and Brokers | Home Assist',
     description:
-      'Turnkey property claims management for South African insurers, UMAs and brokers. Surge FNOL capacity, incident verification, pro-forma costing and COC collection — built to bring the loss ratio down.',
-    // Behind Cloudflare Access — Googlebot cannot answer a one-time PIN, so the
-    // page is unreachable to crawlers. Keeping it in the sitemap would just
-    // report a soft error in Search Console. Remove this if the page is split
-    // into a public overview plus a gated commercial section.
-    noindex: true,
+      'Hand your property claims book to Home Assist and stop running it yourself. 24/7 FNOL, vetted providers, verified work and a closed, compliant file on every claim — turnkey or by module, for South African insurers, UMAs and brokers.',
+    // Public since 6 November 2026 — the Cloudflare Access gate (one-time PIN)
+    // was removed so the page can rank and brokers can be sent straight to it.
     schema: [
       organization,
       {

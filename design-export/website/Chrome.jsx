@@ -12,6 +12,10 @@ const CH = {
   portal: 'https://portal.homeassist.co.za/',
   register: 'https://portal.homeassist.co.za/Account/Register',
   booking: 'https://calendar.google.com/appointments/schedules/AcZssZ1tSq7NDjpwsYM1nkJT1lphxZb8-0N3-YqY_BBf8VnJ64Fhz9usCsahwjdpEMDy1GZSwsi6DEs_',
+  /* Insurer and broker channel (6 November 2026): /insurers books straight into
+     Keshan's calendar and its WhatsApp buttons go to his mobile, not the members line. */
+  bookingKeshan: 'https://calendar.app.google/PzVmxMxv44a5Ceh29',
+  waKeshan: '082 572 8220', waKeshanDigits: '27825728220',
   complaints: 'complaints@homeassist.co.za',
   rating: 'https://portal.homeassist.co.za/rating',
   leonie: 'leonie@homeassist.co.za',
@@ -33,8 +37,10 @@ const waText = (msg, ref) => (ref ? '[' + ref + ']\n' : '') + msg;
 const wa = (msg, ref, digits) => `https://wa.me/${digits || CH.waHomeDigits}?text=${encodeURIComponent(waText(msg, ref))}`;
 /* Technician-facing pages route WhatsApp to the operations line instead of the members line. */
 const OPS_PAGES = new Set(['join']);
-const waDigitsFor = (page) => (OPS_PAGES.has(page) ? CH.waOpsDigits : CH.waHomeDigits);
-const waNumberFor = (page) => (OPS_PAGES.has(page) ? CH.waOps : CH.waHome);
+/* Insurer-facing pages route WhatsApp to Keshan directly. */
+const KESHAN_PAGES = new Set(['insurers']);
+const waDigitsFor = (page) => (OPS_PAGES.has(page) ? CH.waOpsDigits : KESHAN_PAGES.has(page) ? CH.waKeshanDigits : CH.waHomeDigits);
+const waNumberFor = (page) => (OPS_PAGES.has(page) ? CH.waOps : KESHAN_PAGES.has(page) ? CH.waKeshan : CH.waHome);
 
 /* Page id → the short code used in WhatsApp refs. Unknown pages (404) are SITE. */
 const PAGE_REF = {

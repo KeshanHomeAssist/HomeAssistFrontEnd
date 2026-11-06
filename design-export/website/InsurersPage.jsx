@@ -6,8 +6,8 @@ const MODULES = [
   ['Module 03', 'Resultant Incident Management', 'hammer', 'We understand the importance of getting out fast to stop damage and limit the foot traffic through private homes. We control the cost, the quality and the providers entering the home — carpenters, painters, electricians and builders. We vet everyone and track their progress through to sign-off.'],
   ['Module 04', 'Governance, Compliance & POPIA', 'scale', ['Governance and compliance means every provider on your book is properly vetted before they are allocated a single job: contracted to Home Assist, licensed and registered where the trade requires it, tax compliant, B-BBEE compliant, and carrying the public liability cover the work demands.', 'POPIA governs the sharing of personal customer information. Home Assist systems and processes are designed in line with the Act, so your internal team is not adding to your risk of a fine from the Information Regulator.', '- Vetted, contracted and licensed providers', '- Tax and B-BBEE compliance verified', '- Public liability cover confirmed before allocation', '- POPIA-aligned data handling with an audit trail']],
   ['Module 05', 'Cyber Security & Fraud', 'lock', ['System-to-system integration reduces the risk of your team being phished and customer data being shared with nefarious actors. The claim moves between platforms rather than through an inbox.', 'We can provide a risk assessment on your systems once the integration with Home Assist takes place, to give you a view of how big the quantum of risk is. This is normally included in our float pricing model, with live monitoring of malicious actors and the reduced risk once you start to work with Home Assist.', 'On the claim model this carries an additional cost. The assessment can still be done without any integration, and live monitoring attracts a monthly cost.', 'AI fraud indicators have been introduced to catch the fraudulent creation of documents, pictures and fake credentials.']],
-  ['Module 06', 'Post-Claim Underwriting', 'trending-up', ['Every claim is a property survey you have already paid for. We feed verified incident data back into underwriting — the true condition and age of the installation, whether the failure was sudden or long-neglected, and whether the property has claimed for this peril before. The next renewal is priced on what we found, not on what was declared.', 'Examples:', '- Cyber security risk of connected devices like IP cameras', '- Roof structures like thatch confirmed', '- Solar geysers & heat pumps', '- Corroded pipes', '- No surge protection']],
-  ['Module 07', 'Incident Verification', 'shield-check', 'Award-winning AI powered solution for brokers, insurers and homeowners who want to use their own people to handle a fix. We make sure they get what they pay for, that installations are safe and compliant, and that the person signing off the job is who they say they are.'],
+  ['Module 06', 'Post-Claim Underwriting', 'trending-up', 'soon', ['Every claim is a property survey you have already paid for. We feed verified incident data back into underwriting — the true condition and age of the installation, whether the failure was sudden or long-neglected, and whether the property has claimed for this peril before. The next renewal is priced on what we found, not on what was declared.', 'Examples:', '- Cyber security risk of connected devices like IP cameras', '- Roof structures like thatch confirmed', '- Solar geysers & heat pumps', '- Corroded pipes', '- No surge protection']],
+  ['Module 07', 'Incident Verification', 'shield-check', 'soon', 'Award-winning AI powered solution for brokers, insurers and homeowners who want to use their own people to handle a fix. We make sure they get what they pay for, that installations are safe and compliant, and that the person signing off the job is who they say they are.'],
   ['Module 08', 'Smart Home Devices', 'wifi', ['Since 2016 we have grown a connected-device platform working with smart geyser controllers and smart metering. Giving insurers a future property book that shifts from reactive to proactive.', 'Homeowner details captured at installation, so claims register in seconds.', 'Hardware faults reported before the failure, cutting wasted call-outs.', '- Smart geyser controllers', '- Smart metering']],
   ['Module 09', 'Perform+ SME Development', 'graduation-cap', 'Home Assist is a Level 1 B-BBEE contributor. We started in 2013 with a single vehicle servicing repairs daily, so we understand what it takes to grow a small business. Perform+ works with accredited supplier development partners to lift artisan skills across the country and directs your corporate spend to earn the B-BBEE recognition it is due.']
 ];
@@ -19,7 +19,9 @@ const PROOF_ARCHIVE = [
   ['Thin file', 'Claim submitted with no photographs and an unlogged certificate.']
 ];
 
-function ModuleCard({ number, title, icon, lines, open, onToggle }) {
+const SOON = 'soon';
+
+function ModuleCard({ number, title, icon, lines, soon, open, onToggle }) {
   const id = number.toLowerCase().replace(/\s+/g, '-');
   return <div style={{ ...CARD, padding: 0, overflow: 'hidden', borderColor: open ? 'var(--web-blue-100)' : 'var(--web-grey-100)' }}>
     <button type="button" onClick={onToggle} aria-expanded={open} aria-controls={id + '-panel'}
@@ -31,6 +33,7 @@ function ModuleCard({ number, title, icon, lines, open, onToggle }) {
       <span>
         <span style={{ ...LABEL, display: 'block', color: 'var(--web-grey-500)', marginBottom: 4 }}>{number}</span>
         <span style={{ ...H3, display: 'block', margin: 0 }}>{title}</span>
+        {soon ? <span style={{ ...LABEL, display: 'block', color: '#C62828', marginTop: 4 }}>Coming soon</span> : null}
       </span>
       <span style={{ display: 'grid', placeItems: 'center', transform: open ? 'rotate(180deg)' : 'none', transition: 'transform 180ms cubic-bezier(.2,0,.2,1)' }}>
         <Icon name="chevron-down" size={20} color="var(--web-navy)" />
@@ -49,10 +52,10 @@ function ModuleCard({ number, title, icon, lines, open, onToggle }) {
    the lot, and captured the address nowhere. It looked like a gate without
    being one.
 
-   Cloudflare Access now protects /insurers. It verifies the address with a
-   one-time PIN before the page is served at all, and logs every entry with a
-   timestamp — so the commercial detail is genuinely private, and you know
-   exactly who read it. */
+   Cloudflare Access (one-time PIN) then protected /insurers from 16 August to
+   6 November 2026. It was removed so the page is public, indexable and can be
+   linked straight from broker emails. Every CTA on this page books into
+   Keshan's calendar (CH.bookingKeshan) and WhatsApps his mobile (CH.waKeshan). */
 
 function InsurersPage() {
   return <InsurersBody />;
@@ -75,11 +78,11 @@ function InsurersBody() {
       <div style={{ ...WRAP, padding: '72px 40px', display: 'grid', gridTemplateColumns: '1.1fr .9fr', gap: 56, alignItems: 'center' }}>
         <div>
           <Eyebrow onDark>For insurers, UMAs, binder holders and brokers</Eyebrow>
-          <h1 style={{ ...DISPLAY, color: '#fff', maxWidth: '22ch', marginBottom: 18 }}>Give every policyholder a benefit they can feel.</h1>
-          <p style={{ ...BODY, color: 'rgba(255,255,255,.85)', fontSize: 17, maxWidth: '58ch', marginBottom: 26 }}>Home Assist takes the incident from first notification to a closed, evidenced, compliant file. Take the whole process, or take the modules you are missing.</p>
+          <h1 style={{ ...DISPLAY, color: '#fff', maxWidth: '22ch', marginBottom: 18 }}>Hand us your property claims book. Then stop worrying about it.</h1>
+          <p style={{ ...BODY, color: 'rgba(255,255,255,.85)', fontSize: 17, maxWidth: '58ch', marginBottom: 26 }}>A turnkey service you hand over once. Home Assist runs the call centre, the providers, the verification and the compliance file, and sends you the report. Take the whole book, or take the modules you are missing.</p>
           <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
-            <Button as="a" size="lg" variant="onDark" href={CH.booking} target="_blank" rel="noopener">Book Free Pilot</Button>
-            <Button as="a" size="lg" variant="ghost" href={wa('Hi Home Assist, I am enquiring about claims management for our book. ', 'INSURER-1')} target="_blank" rel="noopener" style={{ color: '#fff', border: '1px solid rgba(255,255,255,.5)' }} iconLeft={<Icon name="message-circle" size={18} color="#fff" />}>WhatsApp us</Button>
+            <Button as="a" size="lg" variant="onDark" href={CH.bookingKeshan} target="_blank" rel="noopener">Book Free Pilot</Button>
+            <Button as="a" size="lg" variant="ghost" href={wa('Hi Keshan, I am enquiring about Home Assist managing our property claims book. ', 'INSURER-1', CH.waKeshanDigits)} target="_blank" rel="noopener" style={{ color: '#fff', border: '1px solid rgba(255,255,255,.5)' }} iconLeft={<Icon name="message-circle" size={18} color="#fff" />}>WhatsApp us</Button>
           </div>
         </div>
         <img src="/assets/illustrations/ops-centre-hero.jpg"
@@ -90,12 +93,12 @@ function InsurersBody() {
 
 
     {/* Problem */}
-    <Section eyebrow="The problem" title="The leak is not in the claim. It is in the process."
-      intro="Property claims leak value in places that never show up on the claim form: work that was never verified, certificates that were written but never logged, prices accepted because nobody had a benchmark, and providers who price delay into every quote because they are paid at 60 or 90 days.">
+    <Section eyebrow="Why hand it over" title="A property claims book is a full-time operation. It does not have to be yours."
+      intro="Every claim needs someone answering the phone at two in the morning, a provider who actually arrives, a price somebody has benchmarked, a certificate that gets logged and a file an auditor will accept. Running that inside your own team costs people, time and attention you would rather spend writing business. Home Assist has run it for insurers and brokers since 2013.">
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 20 }}>
-        <LabelCard icon="file-search" label="Unverified work" title="The invoice is checked, the work is not">Photographs, serial numbers and certificates are rarely reconciled against what was invoiced.</LabelCard>
-        <LabelCard icon="shield-alert" label="Compliance exposure" title="A certificate that was never logged">An unlogged COC leaves the insurer carrying the compliance risk long after the claim is closed.</LabelCard>
-        <LabelCard icon="clock" label="Cost of delay" title="Slow payment is priced in">Providers paid at 60 or 90 days build the wait into the rate. The book pays for it on every job.</LabelCard>
+        <LabelCard icon="headset" label="One hand-over" title="Give us the book. We run it.">First notification, allocation, the work on site, the paperwork and the follow-ups. Your team is not in the loop unless you want to be.</LabelCard>
+        <LabelCard icon="shield-check" label="One file per claim" title="Closed, evidenced, compliant">Before and after photographs, a benchmarked quote, a verified invoice and a logged certificate on every claim, so nothing comes back to bite you.</LabelCard>
+        <LabelCard icon="trending-down" label="One report" title="You see the numbers, not the noise">Cost per claim, provider performance and the loss ratio on your book, retrievable from the portal whenever you want them.</LabelCard>
       </div>
     </Section>
 
@@ -121,7 +124,11 @@ function InsurersBody() {
     {/* Modules */}
     <Section tint eyebrow="What we do" title="Nine modules. Take all of them, or take the gaps." intro="Click any module to open it.">
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 20, alignItems: 'start' }}>
-        {MODULES.map(([m, t, ic, d]) => <ModuleCard key={m} number={m} title={t} icon={ic} lines={Array.isArray(d) ? d : [d]} open={openModule === m} onToggle={() => toggleModule(m, t)} />)}
+        {MODULES.map(([m, t, ic, ...rest]) => {
+          const soon = rest[0] === SOON;
+          const d = soon ? rest[1] : rest[0];
+          return <ModuleCard key={m} number={m} title={t} icon={ic} soon={soon} lines={Array.isArray(d) ? d : [d]} open={openModule === m} onToggle={() => toggleModule(m, t)} />;
+        })}
       </div>
     </Section>
 
@@ -137,8 +144,8 @@ function InsurersBody() {
         <div style={{ ...CARD, padding: 32 }}>
           <p style={{ ...BODY, maxWidth: '62ch', marginBottom: 20 }}>Meet with us online or in person to discuss how we can help you get control of your property book</p>
           <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
-            <Button as="a" size="lg" variant="navy" href={CH.booking} target="_blank" rel="noopener" iconLeft={<Icon name="calendar" size={18} color="#fff" />}>Explore an offer</Button>
-            <Button as="a" size="lg" variant="ghost" href={wa('Hi Home Assist, we would like to explore options for our property book. ', 'INSURER-2')} target="_blank" rel="noopener">WhatsApp us</Button>
+            <Button as="a" size="lg" variant="navy" href={CH.bookingKeshan} target="_blank" rel="noopener" iconLeft={<Icon name="calendar" size={18} color="#fff" />}>Explore an offer</Button>
+            <Button as="a" size="lg" variant="ghost" href={wa('Hi Keshan, we would like to explore an offer for our property book. ', 'INSURER-2', CH.waKeshanDigits)} target="_blank" rel="noopener">WhatsApp us</Button>
           </div>
           <p style={{ ...SMALL, marginTop: 16 }}>Pick a slot that suits you. Thirty minutes, no pack to read first.</p>
         </div>
@@ -175,8 +182,8 @@ function InsurersBody() {
     </section>
 
     <NavyBand eyebrow="Next step" title="Send us a sample of settled claims. We will verify them and show you what we find.">
-      <Button as="a" size="lg" variant="onDark" href={CH.booking} target="_blank" rel="noopener">Book a sample review</Button>
-      <Button as="a" size="lg" variant="ghost" href={wa('Hi Home Assist, we would like to discuss a sample claim review. ', 'INSURER-3')} target="_blank" rel="noopener" style={{ color: '#fff', border: '1px solid rgba(255,255,255,.5)' }}>WhatsApp us</Button>
+      <Button as="a" size="lg" variant="onDark" href={CH.bookingKeshan} target="_blank" rel="noopener">Book a sample review</Button>
+      <Button as="a" size="lg" variant="ghost" href={wa('Hi Keshan, we would like to discuss a sample claim review. ', 'INSURER-3', CH.waKeshanDigits)} target="_blank" rel="noopener" style={{ color: '#fff', border: '1px solid rgba(255,255,255,.5)' }}>WhatsApp us</Button>
     </NavyBand>
   </main>;
 }
