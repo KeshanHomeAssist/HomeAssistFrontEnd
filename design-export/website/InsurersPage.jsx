@@ -81,13 +81,17 @@ function InsurersBody() {
           <h1 style={{ ...DISPLAY, color: '#fff', maxWidth: '22ch', marginBottom: 18 }}>Hand us your property claims book. Then stop worrying about it.</h1>
           <p style={{ ...BODY, color: 'rgba(255,255,255,.85)', fontSize: 17, maxWidth: '58ch', marginBottom: 26 }}>A turnkey service you hand over once. Home Assist runs the call centre, the providers, the verification and the compliance file, and sends you the report. Take the whole book, or take the modules you are missing.</p>
           <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
-            <Button as="a" size="lg" variant="onDark" href={CH.bookingKeshan} target="_blank" rel="noopener">Book Free Pilot</Button>
+            <Button as="a" size="lg" variant="onDark" href={CH.bookingKeshan} target="_blank" rel="noopener">Ask about piloting options</Button>
             <Button as="a" size="lg" variant="ghost" href={wa('Hi Keshan, I am enquiring about Home Assist managing our property claims book. ', 'INSURER-1', CH.waKeshanDigits)} target="_blank" rel="noopener" style={{ color: '#fff', border: '1px solid rgba(255,255,255,.5)' }} iconLeft={<Icon name="message-circle" size={18} color="#fff" />}>WhatsApp us</Button>
           </div>
         </div>
-        <img src="/assets/illustrations/ops-centre-hero.jpg"
-          alt="A Home Assist agent at the operations centre — claim dashboards on screen, with homes outside the window by day and by night"
-          style={{ width: '100%', height: 'auto', display: 'block', borderRadius: 4 }} />
+        {/* Explainer video (V5, 39s, voice-over). Autoplays muted with captions so it
+            reads without sound; controls let the visitor unmute. Plain HTML string so
+            React 18 does not strip the muted/playsinline attributes on hydration. */}
+        <div style={{ borderRadius: 4, overflow: 'hidden', lineHeight: 0, border: '1px solid rgba(255,255,255,.22)', background: '#000' }}
+          dangerouslySetInnerHTML={{
+            __html: '<video controls autoplay muted loop playsinline preload="metadata" crossorigin="anonymous" poster="/assets/illustrations/insurers-explainer-poster.jpg" aria-label="Home Assist explainer: from the first message to hot water" style="width:100%;height:auto;display:block"><source src="/assets/illustrations/insurers-explainer.mp4" type="video/mp4"><track kind="captions" src="/assets/illustrations/insurers-explainer.vtt" srclang="en" label="English" default></video>'
+          }} />
       </div>
     </section>
 
@@ -109,13 +113,16 @@ function InsurersBody() {
           <Eyebrow onDark>The model</Eyebrow>
           <h2 style={{ ...H2, color: '#fff', margin: 0, maxWidth: '26ch' }}>Turnkey or modular management of your property claims book.</h2>
         </div>
-        <div style={{ border: '1px solid rgba(255,255,255,.22)', borderRadius: 4, padding: 28 }}>
-          <Eyebrow onDark>The offer in one line</Eyebrow>
-          <p style={{ ...BODY, color: '#fff', fontSize: 17, margin: 0 }}>Send us a sample of settled claims. We will verify them and show you what we find.</p>
+        <div className="ha-pilot-flash" style={{ border: '1px solid rgba(255,255,255,.22)', borderRadius: 4, padding: 28 }}>
+          <Eyebrow onDark>Piloting options</Eyebrow>
+          <p style={{ ...BODY, color: '#fff', fontSize: 17, margin: 0 }}>Ask us about our piloting options.</p>
           <div style={{ height: 1, background: 'rgba(255,255,255,.22)', margin: '22px 0' }}></div>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20 }}>
-            <div><div style={{ font: '700 34px/1 var(--font-core)', color: '#fff' }}>7 days</div><div style={{ ...LABEL, color: 'var(--web-blue-300)', marginTop: 6 }}>Free pilot</div></div>
-            <div><div style={{ font: '700 34px/1 var(--font-core)', color: '#fff' }}>100%</div><div style={{ ...LABEL, color: 'var(--web-blue-300)', marginTop: 6 }}>Incidents verified free for the pilot</div></div>
+            <div><div className="ha-pilot-number" style={{ font: '700 34px/1 var(--font-core)', color: '#fff' }}>3 months</div><div style={{ ...LABEL, color: 'var(--web-blue-300)', marginTop: 6 }}>Rebating of fees</div></div>
+            <div><div className="ha-pilot-number" style={{ font: '700 34px/1 var(--font-core)', color: '#fff' }}>1 month</div><div style={{ ...LABEL, color: 'var(--web-blue-300)', marginTop: 6 }}>Free cash settlement processing</div></div>
+          </div>
+          <div style={{ marginTop: 22 }}>
+            <Button as="a" size="lg" variant="onDark" href={CH.bookingKeshan} target="_blank" rel="noopener">Ask about piloting options</Button>
           </div>
         </div>
       </div>

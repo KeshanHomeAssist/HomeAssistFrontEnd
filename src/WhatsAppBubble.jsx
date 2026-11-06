@@ -32,7 +32,9 @@ import { Icon } from './ds';
  *     with the same cta_id (not a key event; compare it with whatsapp_click).
  *
  * Numbers: customers go to the members line (081 849 5489); technicians on
- * /join go to the operations line (071 526 2554).
+ * /join go to the operations line (071 526 2554); brokers and insurers on
+ * /insurers go to Keshan's mobile (082 572 8220), after 20 seconds rather
+ * than 6 so they can watch the explainer first (decided 6 Nov 2026).
  */
 
 const DELAY_MS = 6000;
@@ -41,6 +43,18 @@ const CLOSED_KEY = 'ha_bubble_closed';
 // Pages where a sales prompt does not belong.
 const HIDDEN = new Set(['/portal', '/terms', '/privacy-policy', '/complaints', '/data-request']);
 
+const INSURERS = {
+  greeting: "Hi, I'm Keshan, founder of Home Assist. Brokers and insurers, pick one and it comes straight to my phone.",
+  keshan: true,
+  delay: 20000,
+  options: [
+    { label: 'Book a pilot', ref: 'SITE-BUBBLE-INS-PILOT', msg: "Hi Keshan, I'd like to book a pilot and hear about the piloting options." },
+    { label: 'Find out more about Home Assist', ref: 'SITE-BUBBLE-INS-MORE', msg: "Hi Keshan, I'd like to find out more about Home Assist." },
+    { label: 'Book a visit', ref: 'SITE-BUBBLE-INS-VISIT', msg: "Hi Keshan, I'd like to book a visit. I'm based in:" },
+    { label: 'Claim a free R100 coffee voucher for brokers', ref: 'SITE-BUBBLE-INS-COFFEE', msg: "Hi Keshan, I'd like to claim the free R100 coffee voucher for brokers. My brokerage is:" },
+    { label: 'How do I enter my clients into Smart Geyser Rewards?', ref: 'SITE-BUBBLE-INS-REWARDS', msg: 'Hi Keshan, how do I enter my clients into the Smart Geyser Rewards draw?' },
+  ],
+};
 const B2B = {
   greeting: 'Want to see how we would run your claims? Ask us anything.',
   options: [{ label: 'Start a chat', ref: 'SITE-BUBBLE-B2B', msg: "Hi, I'd like to discuss your claims management offering." }],
@@ -73,7 +87,7 @@ const BUBBLE_COPY = {
     greeting: 'Replacing your geyser? You could win a smart controller. Ask us how.',
     options: [{ label: 'Start a chat', ref: 'SITE-BUBBLE-REWARDS', msg: "Hi, I'd like to know more about the Rewards draw." }],
   },
-  '/insurers': B2B,
+  '/insurers': INSURERS,
   '/property-managers': B2B,
   '/managing-agents': B2B,
   '/join': {
@@ -150,8 +164,9 @@ export function WhatsAppBubble({ pathname }) {
   const [desktop, setDesktop] = React.useState(false);
   const [picked, setPicked] = React.useState(null);
   const cardId = 'ha-bubble-card';
-  const digits = copy.ops ? CH.waOpsDigits : CH.waHomeDigits;
-  const number = copy.ops ? CH.waOps : CH.waHome;
+  const digits = copy.ops ? CH.waOpsDigits : copy.keshan ? CH.waKeshanDigits : CH.waHomeDigits;
+  const number = copy.ops ? CH.waOps : copy.keshan ? CH.waKeshan : CH.waHome;
+  const delay = copy.delay || DELAY_MS;
 
   React.useEffect(() => { setDesktop(isDesktop()); }, []);
 
@@ -167,7 +182,7 @@ export function WhatsAppBubble({ pathname }) {
       setOpen(true);
       track('bubble_shown', { page_path: path, trigger: 'auto' });
     };
-    timer = setTimeout(tryOpen, DELAY_MS);
+    timer = setTimeout(tryOpen, delay);
     return () => clearTimeout(timer);
   }, [path]);
 
@@ -234,7 +249,7 @@ export function WhatsAppBubble({ pathname }) {
               )}
             </div>
           )}
-          <p className="ha-bubble-note">WhatsApp {number}, answered 24 hours a day.</p>
+          <p className="ha-bubble-note">{copy.keshan ? 'Keshan Patel, founder — WhatsApp ' + number + '.' : 'WhatsApp ' + number + ', answered 24 hours a day.'}</p>
         </div>
       )}
       <button
