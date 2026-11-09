@@ -118,8 +118,8 @@ function InsurersBody() {
           <p style={{ ...BODY, color: '#fff', fontSize: 17, margin: 0 }}>Ask us about our piloting options.</p>
           <div style={{ height: 1, background: 'rgba(255,255,255,.22)', margin: '22px 0' }}></div>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20 }}>
-            <div><div className="ha-pilot-number" style={{ font: '700 34px/1 var(--font-core)', color: '#fff' }}>3 months</div><div style={{ ...LABEL, color: 'var(--web-blue-300)', marginTop: 6 }}>Rebating of fees</div></div>
-            <div><div className="ha-pilot-number" style={{ font: '700 34px/1 var(--font-core)', color: '#fff' }}>1 month</div><div style={{ ...LABEL, color: 'var(--web-blue-300)', marginTop: 6 }}>Free cash settlement processing</div></div>
+            <div><div className="ha-pilot-number" style={{ font: '700 34px/1 var(--font-core)', color: '#fff' }}>3 months</div><div style={{ ...LABEL, color: 'var(--web-blue-300)', marginTop: 6 }}>Free cash settlement processing</div></div>
+            <div><div className="ha-pilot-number" style={{ font: '700 34px/1 var(--font-core)', color: '#fff' }}>1 month</div><div style={{ ...LABEL, color: 'var(--web-blue-300)', marginTop: 6 }}>Rebating of fees on claims</div></div>
           </div>
           <div style={{ marginTop: 22 }}>
             <Button as="a" size="lg" variant="onDark" href={CH.bookingKeshan} target="_blank" rel="noopener">Ask about piloting options</Button>
