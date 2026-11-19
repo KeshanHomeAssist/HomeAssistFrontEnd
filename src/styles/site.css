@@ -442,3 +442,41 @@ button.ha-bubble-option { width: 100%; text-align: left; font: inherit; font-wei
   .ha-marquee-track { animation: none; flex-wrap: wrap; width: 100%; }
   .ha-marquee-set[aria-hidden="true"] { display: none; }
 }
+
+/* ---------------------------------------------------------------------------
+   Service Request button (20 Nov 2026). The first button in every hero and
+   in the header: a ring drawn just outside the button and a soft blue glow
+   that breathes about once every two seconds, so the eye lands on it before
+   the WhatsApp and call buttons. The design-system Button sets box-shadow
+   inline; an animation outranks inline styles, which is why the glow is
+   animated rather than set. Holds still for reduced motion.
+   --------------------------------------------------------------------------- */
+.ha-sr {
+  position: relative;
+  outline: 2px solid var(--web-blue-300);
+  outline-offset: 3px;
+  animation: ha-sr-glow 2s ease-in-out infinite;
+  will-change: box-shadow;
+}
+.ha-sr:hover, .ha-sr:focus-visible {
+  animation-play-state: paused;
+  outline-color: var(--web-blue);
+}
+@keyframes ha-sr-glow {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(109,148,201,.6), 0 0 12px 2px rgba(37,98,172,.35); }
+  50%      { box-shadow: 0 0 0 7px rgba(109,148,201,0), 0 0 28px 8px rgba(37,98,172,.65); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ha-sr { animation: none; box-shadow: 0 0 18px 4px rgba(37,98,172,.5) !important; }
+}
+
+/* WhatsApp buttons in WhatsApp's own green (20 Nov 2026), so they read as
+   WhatsApp at a glance next to the navy and white buttons. !important because
+   the Button component colours itself inline, including on hover. */
+.ha-wa {
+  background: #25D366 !important;
+  color: #fff !important;
+  border-color: transparent !important;
+  box-shadow: 0 1px 2px rgba(0,0,0,.12) !important;
+}
+.ha-wa:hover { background: #1DB954 !important; }

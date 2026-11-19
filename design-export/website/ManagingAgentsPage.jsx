@@ -127,8 +127,9 @@ function ManagingAgentsPage() {
           <h1 style={{ ...DISPLAY, color: '#fff', maxWidth: '24ch', marginBottom: 18 }}>Thirty schemes. One standard. One number to compare them on.</h1>
           <p style={{ ...BODY, color: 'rgba(255,255,255,.85)', fontSize: 17, maxWidth: '54ch', marginBottom: 26 }}>One route for incidents, claims and utilities across the whole portfolio. Every invoice verified, every certificate logged, every approval recorded — without replacing the providers each scheme already uses.</p>
           <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
+            <ServiceRequestButton onDark source="managing-agents-hero-popup" code="MA-SR" heading="Leave your number and we call you about a free pilot." />
             <Button as="a" size="lg" variant="onDark" href={CH.booking} target="_blank" rel="noopener">Book Free Pilot</Button>
-            <Button as="a" size="lg" variant="ghost" href={wa('Hi Home Assist, I manage a portfolio of schemes and would like to discuss the free pilot on one block. ', 'MA-1')} target="_blank" rel="noopener" style={{ color: '#fff', border: '1px solid rgba(255,255,255,.5)' }} iconLeft={<Icon name="message-circle" size={18} color="#fff" />}>WhatsApp us</Button>
+            <Button as="a" size="lg" variant="navy" className="ha-wa" href={wa('Hi Home Assist, I manage a portfolio of schemes and would like to discuss the free pilot on one block. ', 'MA-1')} target="_blank" rel="noopener" iconLeft={<Icon name="message-circle" size={18} color="#fff" />}>WhatsApp us</Button>
           </div>
         </div>
       </div>

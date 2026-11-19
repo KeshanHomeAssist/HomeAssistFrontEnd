@@ -153,7 +153,7 @@ function HomeRewardsPanel({ go }) {
       </ul>
     </div>
     <div style={{ padding: '14px 20px 10px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
-      <Button as="a" size="sm" variant="navy" fullWidth target="_blank" rel="noopener" href={wa(HR_MSG, 'HOME-RW-1')}
+      <Button as="a" size="sm" variant="navy" className="ha-wa" fullWidth target="_blank" rel="noopener" href={wa(HR_MSG, 'HOME-RW-1')}
         onClick={function () { hrTrack('HOME-RW-1'); }}
         iconLeft={<Icon name="message-circle" size={15} color="#fff" />}>Replacing a geyser? WhatsApp us</Button>
       <Button size="sm" variant="secondary" fullWidth onClick={function () { hrTrack('HOME-RW-RULES'); go('rewards'); }}
@@ -169,9 +169,7 @@ function HomeRewardsPanel({ go }) {
 /* The hero's "Service Request" button opens the shared QuickRequest popup
    (Chrome.jsx) with the home page's sheet source and code. */
 function HomePage({ go }) {
-  const [quickOpen, setQuickOpen] = React.useState(false);
   return <main>
-    <QuickRequest open={quickOpen} onClose={() => setQuickOpen(false)} source="home-quick-popup" code="HOME-7" />
     {/* Hero */}
     <section style={{ borderBottom: '1px solid var(--web-grey-100)' }}>
       <div style={{ ...WRAP, padding: '64px 40px 56px', display: 'grid', gridTemplateColumns: '1.15fr .85fr', gap: 56, alignItems: 'center' }}>
@@ -186,13 +184,13 @@ function HomePage({ go }) {
           <h1 style={{ ...DISPLAY, maxWidth: '20ch', marginBottom: 18 }}>Burst geyser, leaking pipe or no power? Get a verified artisan to your home.</h1>
           <p style={{ ...BODY, fontSize: 17, maxWidth: '58ch', marginBottom: 24 }}>Home Assist connects South African homeowners with vetted plumbers, electricians and building contractors. Send us a message on WhatsApp and we will find the right person for the job.</p>
           <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', marginBottom: 16 }}>
-            <Button as="a" size="lg" variant="navy" href={wa('Hi Home Assist, I need help with: ', 'HOME-1')} target="_blank" rel="noopener"
+            {/* 20 Nov 2026: Service Request first (shared glowing button,
+                opens the name + number pop-up, source home-quick-popup / HOME-7),
+                then WhatsApp in WhatsApp green, then the hotline. */}
+            <ServiceRequestButton source="home-quick-popup" code="HOME-7" />
+            <Button as="a" size="lg" variant="navy" className="ha-wa" href={wa('Hi Home Assist, I need help with: ', 'HOME-1')} target="_blank" rel="noopener"
               iconLeft={<Icon name="message-circle" size={19} color="#fff" />}>WhatsApp us now</Button>
             <Button as="a" size="lg" variant="secondary" href={'tel:' + CH.phoneTel} iconLeft={<Icon name="phone" size={17} color="var(--web-navy)" />}>Call {CH.phone}</Button>
-            {/* Opens the quick popup (name and number). The href still points
-                at the full form, so with JavaScript off it jumps there. */}
-            <Button as="a" size="lg" variant="secondary" href="#request" onClick={e => { e.preventDefault(); setQuickOpen(true); }}
-              iconLeft={<Icon name="clipboard-check" size={17} color="var(--web-navy)" />}>Service Request</Button>
           </div>
           <p style={SMALL}>Available 24/7 · Nationwide network · Every job verified</p>
         </div>

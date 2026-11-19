@@ -172,7 +172,8 @@ function LeakDetectionPage({ go }) {
           <h1 style={{ ...DISPLAY, color: '#fff', maxWidth: '22ch', marginBottom: 18 }}>Anywhere in your home, we find the leak — usually to within a metre.</h1>
           <p style={{ ...BODY, color: 'rgba(255,255,255,.85)', fontSize: 17, maxWidth: '54ch', marginBottom: 26 }}>Behind a wall, under a floor, beneath the paving, inside a bricked-in bath. A hidden leak can run for months on your bill before it shows itself. We find it with non-invasive equipment first, so the only thing that gets opened is the piece that has to be.</p>
           <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
-            <Button as="a" size="lg" variant="onDark" href={wa('Hi Home Assist, I think I have a hidden water leak. ', 'LEAK-1')} target="_blank" rel="noopener" iconLeft={<Icon name="message-circle" size={18} color="#fff" />}>WhatsApp us</Button>
+            <ServiceRequestButton onDark source="leak-hero-popup" code="LEAK-SR" />
+            <Button as="a" size="lg" variant="onDark" className="ha-wa" href={wa('Hi Home Assist, I think I have a hidden water leak. ', 'LEAK-1')} target="_blank" rel="noopener" iconLeft={<Icon name="message-circle" size={18} color="#fff" />}>WhatsApp us</Button>
             <Button as="a" size="lg" variant="ghost" href={'tel:' + CH.phoneTel} style={{ color: '#fff', border: '1px solid rgba(255,255,255,.5)' }} iconLeft={<Icon name="phone" size={18} color="#fff" />}>{CH.phone}</Button>
           </div>
         </div>

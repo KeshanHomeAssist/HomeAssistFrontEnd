@@ -53,6 +53,32 @@ p{margin:0}
 .btn-white:hover{background:var(--blue-050)}
 .top .btn{padding:11px 16px;font-size:14px}
 
+/* WhatsApp buttons in WhatsApp green (20 Nov 2026) */
+.btn[data-wa]{background:#25D366;color:var(--white);border-color:transparent}
+.btn[data-wa]:hover{background:#1DB954}
+
+/* Founders waiting list button (20 Nov 2026): white, a ring just outside it
+   and a soft blue glow that breathes about once every two seconds. */
+.btn-founders{background:var(--white);color:var(--navy);border-color:var(--navy);outline:2px solid var(--blue-300);outline-offset:3px;animation:ha-sr-glow 2s ease-in-out infinite}
+.btn-founders:hover{background:var(--blue-050);animation-play-state:paused;outline-color:var(--blue)}
+@keyframes ha-sr-glow{0%,100%{box-shadow:0 0 0 0 rgba(109,148,201,.6),0 0 12px 2px rgba(37,98,172,.35)}50%{box-shadow:0 0 0 7px rgba(109,148,201,0),0 0 28px 8px rgba(37,98,172,.65)}}
+@media (prefers-reduced-motion:reduce){.btn-founders{animation:none;box-shadow:0 0 18px 4px rgba(37,98,172,.5)}}
+
+/* Founders waiting list pop-up: name and mobile, logged to the Website
+   service requests sheet, then WhatsApp offered as a second step. */
+.fw-back{position:fixed;inset:0;background:rgba(24,45,85,.6);z-index:1000;display:none;align-items:center;justify-content:center;padding:20px}
+.fw-back.open{display:flex}
+.fw-box{background:var(--white);border-radius:4px;border-top:4px solid var(--blue);box-shadow:var(--shadow);width:100%;max-width:440px;padding:28px;position:relative}
+.fw-close{position:absolute;top:10px;right:10px;border:0;background:transparent;cursor:pointer;font:400 22px/1 var(--font);color:var(--grey-500);padding:6px}
+.fw-box .label{display:block;font:700 11px/1 var(--font);letter-spacing:.12em;text-transform:uppercase;color:var(--blue);margin-bottom:8px}
+.fw-box h3{font:700 22px/1.2 var(--font);color:var(--navy);margin:0 0 6px}
+.fw-box p{font:400 14px/1.5 var(--font);color:var(--grey-700);margin:0 0 16px}
+.fw-box label.f{display:block;margin-bottom:14px;font:600 13px/1 var(--font);color:var(--navy)}
+.fw-box label.f input{display:block;width:100%;margin-top:6px;padding:11px 12px;border:1px solid var(--grey-300);border-radius:2px;font:400 16px/1.2 var(--font);color:var(--navy)}
+.fw-box label.c{display:flex;gap:10px;align-items:flex-start;margin-bottom:18px;font:400 14px/1.4 var(--font);color:var(--grey-700)}
+.fw-box .btn{width:100%;justify-content:center}
+.fw-box .btn+.btn{margin-top:10px}
+
 /* Hero */
 .hero{padding:48px 0 36px}
 .hero-grid{display:grid;grid-template-columns:1.15fr 1fr;gap:48px;align-items:center}
@@ -276,6 +302,7 @@ footer .logo img{height:30px;width:auto;margin-bottom:28px}
         <div>
           <h1><span data-i="h.l2">Any hour.</span><span data-i="h.l3">Every home emergency handled.</span></h1>
           <div class="ctas">
+            <a class="btn btn-founders" href="#founders" data-fw-open data-i="h.cta0">Join the founders waiting list</a>
             <a class="btn btn-primary" data-wa="page" href="#"><svg><use href="#i-wa"/></svg><span data-i="h.cta1">Join on WhatsApp</span></a>
             <a class="btn btn-ghost" href="#plans" data-i="h.cta2">Explore Membership Options</a>
           </div>
@@ -453,6 +480,28 @@ footer .logo img{height:30px;width:auto;margin-bottom:28px}
       </div>
     </div>
   </section>
+
+<div class="fw-back" id="founders" role="presentation">
+  <div class="fw-box" role="dialog" aria-modal="true" aria-labelledby="fw-title">
+    <button type="button" class="fw-close" data-fw-close aria-label="Close">&times;</button>
+    <form id="fw-form" novalidate>
+      <span class="label" data-i="fw.lbl">Founders waiting list</span>
+      <h3 id="fw-title" data-i="fw.t">Leave your number and we will call you when founder memberships open.</h3>
+      <p data-i="fw.d">Founder members are the first we call when memberships open.</p>
+      <label class="f"><span data-i="fw.name">Full name</span><input name="Full name" required autocomplete="name"></label>
+      <label class="f"><span data-i="fw.mobile">Mobile number</span><input name="Mobile number" type="tel" required autocomplete="tel"></label>
+      <label class="c"><input type="checkbox" required><span data-i="fw.consent">I agree that Home Assist may contact me about the founders waiting list.</span></label>
+      <button type="submit" class="btn btn-navy" data-i="fw.send">Join the waiting list</button>
+    </form>
+    <div id="fw-done" hidden>
+      <span class="label" data-i="fw.lbl2">Request received</span>
+      <h3 data-i="fw.t2">Thank you. You are on the founders waiting list.</h3>
+      <p data-i="fw.d2">We answer 24 hours a day. For the fastest reply, send it to us on WhatsApp as well.</p>
+      <a class="btn btn-navy" id="fw-wa" href="#" target="_blank" rel="noopener"><svg><use href="#i-wa"/></svg><span data-i="fw.wa">Send it on WhatsApp as well</span></a>
+      <button type="button" class="btn btn-ghost" data-fw-close data-i="fw.close">Close</button>
+    </div>
+  </div>
+</div>
 </main>
 
 <footer>
@@ -487,7 +536,10 @@ footer .logo img{height:30px;width:auto;margin-bottom:28px}
     "nav.plans":"Lidmaatskappe","nav.brokers":"Herverkopers","nav.hot":"Noodlyn","nav.join":"Sluit aan op WhatsApp",
     "h.l1":"Een oproep.","h.l2":"Enige uur.","h.l3":"Elke huisnood hanteer.",
     "h.sub":"Betroubare vakmanne dag en nag vir 'n klein, vaste maandelikse fooi. Ons werk saam met jou versekeraar, sodat jou premies vir jou werk.",
-    "h.cta1":"Sluit aan op WhatsApp","h.cta2":"Verken lidmaatskap-opsies",
+    "h.cta0":"Sluit aan by die stigters-waglys","h.cta1":"Sluit aan op WhatsApp","h.cta2":"Verken lidmaatskap-opsies",
+    "fw.lbl":"Stigters-waglys","fw.t":"Los jou nommer en ons bel jou wanneer stigterslidmaatskappe oopmaak.","fw.d":"Stigterslede is die eerstes wat ons bel wanneer lidmaatskappe oopmaak.",
+    "fw.name":"Volle naam","fw.mobile":"Selfoonnommer","fw.consent":"Ek stem in dat Home Assist my oor die stigters-waglys mag kontak.","fw.send":"Sluit aan by die waglys",
+    "fw.lbl2":"Versoek ontvang","fw.t2":"Dankie. Jy is op die stigters-waglys.","fw.d2":"Ons antwoord 24 uur per dag. Vir die vinnigste antwoord, stuur dit ook vir ons op WhatsApp.","fw.wa":"Stuur dit ook op WhatsApp","fw.close":"Maak toe",
     "h.note":"Vir huiseienaars met 'n aktiewe huisversekeringspolis.",
     "h.price1":"Basiese Dekking-lidmaatskappe vanaf","h.price2":"R35 per maand",
     "of2.t":"Oktober 2026-aansluitingsaanbod","of2.d":"Wees een van die eerste 100 nuwe lede in Oktober 2026 en, sodra jou eerste maandelikse betaling deurgaan, installeer ons 'n gratis DB-bordtydskakelaar vir jou geiser en oudit ons jou huis.",
@@ -567,6 +619,35 @@ footer .logo img{height:30px;width:auto;margin-bottom:28px}
     if (q === "af" || q === "en") start = q; else if (s === "af") start = "af";
   } catch(e) {}
   setLang(start);
+
+  /* Founders waiting list pop-up (20 Nov 2026). Logs to the "Website service
+     requests" Google Sheet through the same Apps Script web app the main site
+     uses (source members-founders-waitlist, ref MEMBERS-FOUNDERS), sends
+     request_submit to GA4 if gtag is present, then offers WhatsApp. */
+  var LOG_URL = "https://script.google.com/macros/s/AKfycbw5eRTuZne8rP51RHEMVPsaw_i5VMwHCd0zIqrlueLd7f2_76b2Csazbe9bobomwmSQ/exec";
+  var back = document.getElementById("founders"), form = document.getElementById("fw-form"), done = document.getElementById("fw-done");
+  function fwOpen(e){ if (e) e.preventDefault(); back.classList.add("open"); var f = form.querySelector("input"); if (f) setTimeout(function(){ f.focus(); }, 50);
+    try { if (typeof gtag === "function") gtag("event", "service_request_click", { cta_id: "MEMBERS-FOUNDERS", page_path: "/members" }); } catch(err) {} }
+  function fwClose(){ back.classList.remove("open"); }
+  document.querySelectorAll("[data-fw-open]").forEach(function(a){ a.addEventListener("click", fwOpen); });
+  document.querySelectorAll("[data-fw-close]").forEach(function(b){ b.addEventListener("click", fwClose); });
+  back.addEventListener("click", function(e){ if (e.target === back) fwClose(); });
+  document.addEventListener("keydown", function(e){ if (e.key === "Escape") fwClose(); });
+  if (location.hash === "#founders") fwOpen();
+  form.addEventListener("submit", function(e){
+    e.preventDefault();
+    if (!form.checkValidity()) { form.reportValidity(); return; }
+    var name = form.elements["Full name"].value.trim(), mobile = form.elements["Mobile number"].value.trim();
+    var lang = document.documentElement.lang;
+    try {
+      fetch(LOG_URL, { method: "POST", mode: "no-cors", keepalive: true, headers: { "Content-Type": "text/plain" },
+        body: JSON.stringify({ source: "members-founders-waitlist", ref: "MEMBERS-FOUNDERS", page: "/members", ab_variant: "off", submitted_at: new Date().toISOString(), "Full name": name, "Mobile number": mobile, "Language": lang, "Consent": "Yes" }) });
+    } catch(err) {}
+    try { if (typeof gtag === "function") gtag("event", "request_submit", { cta_id: "MEMBERS-FOUNDERS", page_path: "/members" }); } catch(err) {}
+    var msg = (lang === "af" ? "[MEMBERS-FOUNDERS]\nHallo Home Assist, voeg my asseblief by die stigters-waglys.\n\nVolle naam: " : "[MEMBERS-FOUNDERS]\nHi Home Assist, please add me to the founders waiting list.\n\nFull name: ") + name + (lang === "af" ? "\nSelfoonnommer: " : "\nMobile number: ") + mobile;
+    document.getElementById("fw-wa").href = "https://wa.me/" + WA + "?text=" + encodeURIComponent(msg);
+    form.hidden = true; done.hidden = false;
+  });
 })();
 </script>
 

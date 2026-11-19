@@ -81,8 +81,9 @@ function InsurersBody() {
           <h1 style={{ ...DISPLAY, color: '#fff', maxWidth: '22ch', marginBottom: 18 }}>Hand us your property claims book. Then stop worrying about it.</h1>
           <p style={{ ...BODY, color: 'rgba(255,255,255,.85)', fontSize: 17, maxWidth: '58ch', marginBottom: 26 }}>A turnkey service you hand over once. Home Assist runs the call centre, the providers, the verification and the compliance file, and sends you the report. Take the whole book, or take the modules you are missing.</p>
           <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
+            <ServiceRequestButton onDark source="insurers-hero-popup" code="INSURER-SR" heading="Leave your number and Keshan calls you back." />
             <Button as="a" size="lg" variant="onDark" href={CH.bookingKeshan} target="_blank" rel="noopener">Ask about piloting options</Button>
-            <Button as="a" size="lg" variant="ghost" href={wa('Hi Keshan, I am enquiring about Home Assist managing our property claims book. ', 'INSURER-1', CH.waKeshanDigits)} target="_blank" rel="noopener" style={{ color: '#fff', border: '1px solid rgba(255,255,255,.5)' }} iconLeft={<Icon name="message-circle" size={18} color="#fff" />}>WhatsApp us</Button>
+            <Button as="a" size="lg" variant="navy" className="ha-wa" href={wa('Hi Keshan, I am enquiring about Home Assist managing our property claims book. ', 'INSURER-1', CH.waKeshanDigits)} target="_blank" rel="noopener" iconLeft={<Icon name="message-circle" size={18} color="#fff" />}>WhatsApp us</Button>
           </div>
         </div>
         {/* Explainer video (V5, 39s, voice-over). Autoplays muted with captions so it

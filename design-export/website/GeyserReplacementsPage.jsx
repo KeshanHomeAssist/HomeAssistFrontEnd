@@ -359,7 +359,8 @@ function GeyserReplacementsPage({ go }) {
               person, not a form — the configurator is the second button, not
               the first, and the free warranty check is offered underneath. */}
           <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
-            <Button as="a" size="lg" variant="onDark" target="_blank" rel="noopener"
+            <ServiceRequestButton onDark source="geyser-hero-popup" code="GEYSER-SR" />
+            <Button as="a" size="lg" variant="onDark" className="ha-wa" target="_blank" rel="noopener"
               href={wa('Hi Home Assist, I need a geyser replacement. ', 'GEYSER-1')}
               iconLeft={<Icon name="message-circle" size={18} color="#fff" />}>WhatsApp us</Button>
             <Button as="a" size="lg" variant="ghost" href={'tel:' + CH.phoneTel} style={{ color: '#fff', border: '1px solid rgba(255,255,255,.5)' }} iconLeft={<Icon name="phone" size={18} color="#fff" />}>Call {CH.phone}</Button>

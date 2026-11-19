@@ -283,8 +283,11 @@ function Header({ page, go }) {
           number itself is in the page text — which is what a search engine or an
           AI assistant reads out when somebody asks how to reach us. Both are
           size="sm" so the pair fits where the single button used to sit. */}
+      {/* 20 Nov 2026: Service Request first (glowing, opens the pop-up that
+          logs to the sheet), then WhatsApp in WhatsApp green, then the hotline. */}
       <div style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap' }}>
-        <Button as="a" size="sm" variant="navy" href={wa('Hi Home Assist, I need help with: ', pageRef(page, 'TOP'), waDigitsFor(page))} target="_blank" rel="noopener"
+        <ServiceRequestButton size="sm" source={(page || 'site') + '-top-popup'} code={pageRef(page, 'SR-TOP')} />
+        <Button as="a" size="sm" variant="navy" className="ha-wa" href={wa('Hi Home Assist, I need help with: ', pageRef(page, 'TOP'), waDigitsFor(page))} target="_blank" rel="noopener"
           iconLeft={<Icon name="message-circle" size={15} color="#fff" />}>WhatsApp</Button>
         <Button as="a" size="sm" variant="secondary" href={'tel:' + CH.phoneTel}
           iconLeft={<Icon name="phone" size={15} color="var(--web-navy)" />}>{CH.phone}</Button>
@@ -569,4 +572,29 @@ function QuickRequest({ open, onClose, source, code, intro, heading }) {
   </div>;
 }
 
-Object.assign(window, { CH, wa, mailtoLink, whatsappHandoff, NAV, WRAP, LABEL, H1, H2, H3, DISPLAY, BODY, SMALL, CARD, INPUT, Eyebrow, Section, Header, Footer, NavyBand, LabelCard, Stat, Steps, Accordion, FieldRow, ChannelCard, Confirm, RewardsWheel, SpinWinSign, logRequest, whatsappLinkFor, QuickRequest });
+/* Service Request button (20 Nov 2026). One self-contained button — it owns
+   the open/closed state and renders the QuickRequest pop-up itself — so any
+   hero or the header can drop it in with just a sheet `source` and a CTA
+   `code`. The glow and the ring around it are the .ha-sr class in
+   src/styles/site.css. The click sends `service_request_click` to GA4 (the
+   gap noted on 19 Nov: submits were counted but not clicks), and the pop-up
+   sends `request_submit` as before. `onDark` picks the white-on-navy variant
+   for the navy heroes; the header and white heroes use the secondary one.
+   The href still points at the home page form, so with JavaScript off the
+   button still goes somewhere useful. */
+function ServiceRequestButton({ source, code, size, label, intro, heading, onDark, style, iconSize }) {
+  const [open, setOpen] = React.useState(false);
+  const px = iconSize || (size === 'sm' ? 15 : 18);
+  return <React.Fragment>
+    <Button as="a" size={size || 'lg'} variant={onDark ? 'onDark' : 'secondary'} href="/#request" className="ha-sr" style={style}
+      onClick={e => {
+        e.preventDefault();
+        try { if (typeof window.gtag === 'function') window.gtag('event', 'service_request_click', { cta_id: code || '', page_path: (window.location.pathname.replace(/[/]+$/, '') || '/') }); } catch (err) { /* never block */ }
+        setOpen(true);
+      }}
+      iconLeft={<Icon name="clipboard-check" size={px} color="var(--web-navy)" />}>{label || 'Service Request'}</Button>
+    <QuickRequest open={open} onClose={() => setOpen(false)} source={source} code={code} intro={intro} heading={heading} />
+  </React.Fragment>;
+}
+
+Object.assign(window, { CH, wa, mailtoLink, whatsappHandoff, NAV, WRAP, LABEL, H1, H2, H3, DISPLAY, BODY, SMALL, CARD, INPUT, Eyebrow, Section, Header, Footer, NavyBand, LabelCard, Stat, Steps, Accordion, FieldRow, ChannelCard, Confirm, RewardsWheel, SpinWinSign, logRequest, whatsappLinkFor, QuickRequest, ServiceRequestButton });

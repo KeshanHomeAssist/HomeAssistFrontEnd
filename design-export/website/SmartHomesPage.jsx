@@ -321,7 +321,8 @@ function SmartHomesPage({ go }) {
           <h1 style={{ ...DISPLAY, color: '#fff', maxWidth: '21ch', marginBottom: 18 }}>Your geyser is the biggest thing on your bill. Control it.</h1>
           <p style={{ ...BODY, color: 'rgba(255,255,255,.85)', fontSize: 17, maxWidth: '54ch', marginBottom: 26 }}>Four ways to spend less on hot water — one changes where the energy comes from, three change when and how hot the element runs. They solve different problems, and this page says which is which rather than ranking them on one list.</p>
           <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
-            <Button as="a" size="lg" variant="onDark" target="_blank" rel="noopener"
+            <ServiceRequestButton onDark source="smart-homes-hero-popup" code="SMART-SR" />
+            <Button as="a" size="lg" variant="onDark" className="ha-wa" target="_blank" rel="noopener"
               href={wa('Hi Home Assist, I would like to talk about smart geyser control. ', 'SMART-1')}
               iconLeft={<Icon name="message-circle" size={18} color="#fff" />}>Ask us which one fits</Button>
             <Button as="a" size="lg" variant="ghost" href="#compare" style={{ color: '#fff', border: '1px solid rgba(255,255,255,.5)' }} iconLeft={<Icon name="table" size={18} color="#fff" />}>Compare the four</Button>
