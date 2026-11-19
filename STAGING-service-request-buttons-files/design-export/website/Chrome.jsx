@@ -1,0 +1,600 @@
+const { Button, Icon, Card } = window.HomeAssistDesignSystem_cf0a2b;
+
+const CH = {
+  waHome: '+27 81 849 5489', waHomeDigits: '27818495489',
+  phone: '087 095 5231', phoneTel: '+27870955231',
+  help: 'help@homeassist.co.za',
+  waBiz: '081 849 5489', waBizDigits: '27818495489',
+  /* Operations line: technicians and service providers (/join). Customers stay on waHome, the members line. */
+  waOps: '071 526 2554', waOpsDigits: '27715262554',
+  biz: 'keshan@homeassist.co.za',
+  address: '12 Uitvlugt Road, Pinelands, Cape Town, South Africa, 7405',
+  portal: 'https://portal.homeassist.co.za/',
+  register: 'https://portal.homeassist.co.za/Account/Register',
+  booking: 'https://calendar.google.com/appointments/schedules/AcZssZ1tSq7NDjpwsYM1nkJT1lphxZb8-0N3-YqY_BBf8VnJ64Fhz9usCsahwjdpEMDy1GZSwsi6DEs_',
+  /* Insurer and broker channel (6 November 2026): /insurers books straight into
+     Keshan's calendar and its WhatsApp buttons go to his mobile, not the members line. */
+  bookingKeshan: 'https://calendar.app.google/PzVmxMxv44a5Ceh29',
+  waKeshan: '082 572 8220', waKeshanDigits: '27825728220',
+  complaints: 'complaints@homeassist.co.za',
+  rating: 'https://portal.homeassist.co.za/rating',
+  leonie: 'leonie@homeassist.co.za',
+  vimla: 'vimla@homeassist.co.za'
+};
+/* WhatsApp links — one business line, one ID per button (4 October 2026).
+
+   Every WhatsApp CTA on the site goes to the Home Assist business line and
+   carries a ref: PAGE-n, numbered top to bottom on that page (HOME-1 is the
+   home hero, HOME-6 the service-request form), PAGE-TOP for the header button
+   and PAGE-FOOT for the footer link. The ref is the first line of the
+   prefilled message, so whoever answers the business line can see which page
+   and which button the lead came from — and src/analytics.js reads the same
+   ref back out of the link and sends it to GA4 as `cta_id`. One source of
+   truth: the message and the report can never disagree.
+
+   The full ref list is in the project doc 28-whatsapp-business-line.md. */
+const waText = (msg, ref) => (ref ? '[' + ref + ']\n' : '') + msg;
+const wa = (msg, ref, digits) => `https://wa.me/${digits || CH.waHomeDigits}?text=${encodeURIComponent(waText(msg, ref))}`;
+/* Technician-facing pages route WhatsApp to the operations line instead of the members line. */
+const OPS_PAGES = new Set(['join']);
+/* Insurer-facing pages route WhatsApp to Keshan directly. */
+const KESHAN_PAGES = new Set(['insurers']);
+const waDigitsFor = (page) => (OPS_PAGES.has(page) ? CH.waOpsDigits : KESHAN_PAGES.has(page) ? CH.waKeshanDigits : CH.waHomeDigits);
+const waNumberFor = (page) => (OPS_PAGES.has(page) ? CH.waOps : KESHAN_PAGES.has(page) ? CH.waKeshan : CH.waHome);
+
+/* Page id → the short code used in WhatsApp refs. Unknown pages (404) are SITE. */
+const PAGE_REF = {
+  home: 'HOME', geyserReplacements: 'GEYSER', leakDetection: 'LEAK', smartHomes: 'SMART',
+  smartMetering: 'METER',
+  rewards: 'REWARDS',
+  insurers: 'INSURER', propertyManagers: 'PM', managingAgents: 'MA', join: 'JOIN',
+  portal: 'PORTAL', about: 'ABOUT', blog: 'BLOG', terms: 'TERMS', privacy: 'PRIVACY',
+  complaints: 'COMPLAINTS', dataRequest: 'DATA'
+};
+const pageRef = (page, slot) => (PAGE_REF[page] || 'SITE') + '-' + slot;
+
+const mailtoLink = (to, subject) => 'mailto:' + to + '?subject=' + encodeURIComponent(subject);
+
+/* FORM DELIVERY — WhatsApp handoff.
+
+   This is a static site with no server, so a form has nowhere to post to.
+   The obvious fallback, a mailto: link, was tested and silently did nothing:
+   the page reported success and the enquiry vanished. A form that loses work
+   while telling the customer it worked is worse than no form at all.
+
+   So a submitted form composes a WhatsApp message containing every answer and
+   opens it. Home Assist already answers WhatsApp 24/7 and the whole site points
+   people there, so this lands the enquiry in the channel that is actually
+   staffed — on any device, with nothing to configure.
+
+   To add email delivery later, POST the same answers to a form service
+   (Web3Forms or similar) inside whatsappHandoff and keep the WhatsApp open as
+   the visible confirmation. */
+
+/* Reads a form's answers using the visible field labels, so the message that
+   arrives reads the way the page does. */
+function formAnswers(form) {
+  const out = [];
+  const radioSeen = new Set();
+  form.querySelectorAll('input, select, textarea').forEach(el => {
+    if (el.type === 'submit' || el.type === 'button' || el.type === 'file') return;
+    const wrap = el.closest('label');
+    const wrapText = wrap ? wrap.textContent.trim() : '';
+
+    if (el.type === 'radio') {
+      if (!el.checked) return;
+      const group = el.getAttribute('name') || 'Choice';
+      if (radioSeen.has(group)) return;
+      radioSeen.add(group);
+      out.push([group, wrapText]);
+      return;
+    }
+    if (el.type === 'checkbox') {
+      if (!el.checked) return;
+      out.push([wrapText.slice(0, 90) || 'Consent', 'Yes']);
+      return;
+    }
+    const span = wrap ? wrap.querySelector('span') : null;
+    const label = span ? span.textContent.trim() : (el.getAttribute('placeholder') || 'Field');
+    if (el.value) out.push([label, el.value]);
+  });
+  return out;
+}
+
+/* Opens WhatsApp with the form's answers as the message body. Returns the URL
+   so the page can offer a manual link if the browser blocked the new tab. */
+/* Service request logging (19 Nov 2026). Every submitted form is also sent
+   to a Google Sheet through a Google Apps Script web app, so the request is
+   kept even if the visitor never presses send on WhatsApp.
+
+   SET-UP (Keshan): create the Sheet, add the Apps Script from the notes,
+   deploy it as a web app ("Anyone" can access), and paste the deployment
+   URL into REQUEST_LOG_URL below. While it is empty, nothing is sent and
+   the form behaves exactly as before. The call is fire-and-forget, so a
+   failure never blocks the WhatsApp hand-off. */
+const REQUEST_LOG_URL = 'https://script.google.com/macros/s/AKfycbw5eRTuZne8rP51RHEMVPsaw_i5VMwHCd0zIqrlueLd7f2_76b2Csazbe9bobomwmSQ/exec';  // deployed 19 Nov 2026 by systemsupport@homeassist.co.za, writes to the "Website service requests" sheet
+
+function logRequest(form, { source, ref }) {
+  if (!REQUEST_LOG_URL) return;
+  try {
+    const answers = {};
+    formAnswers(form).forEach(([k, v]) => { answers[k] = v; });
+    const payload = Object.assign({
+      source: source || 'website',
+      ref: ref || '',
+      page: (window.location.pathname.replace(/[/]+$/, '') || '/'),
+      ab_variant: typeof window.HA_AB === 'string' ? window.HA_AB : 'off',
+      submitted_at: new Date().toISOString(),
+    }, answers);
+    fetch(REQUEST_LOG_URL, { method: 'POST', mode: 'no-cors', keepalive: true, headers: { 'Content-Type': 'text/plain' }, body: JSON.stringify(payload) });
+  } catch (e) { /* logging must never block the enquiry */ }
+}
+
+/* The WhatsApp link for a form's answers, without opening it (19 Nov 2026).
+   The home page form submits to the sheet first and offers WhatsApp as a
+   second step; this builds that second-step link. */
+function whatsappLinkFor(form, { intro, ref }) {
+  const answers = formAnswers(form);
+  return wa(intro + '\n\n' + answers.map(([k, v]) => k + ': ' + v).join('\n'), ref);
+}
+
+function whatsappHandoff(form, { intro, ref }) {
+  const answers = formAnswers(form);
+  const text = intro + '\n\n' + answers.map(([k, v]) => k + ': ' + v).join('\n');
+  const url = wa(text, ref);
+  /* GA4: a form hands off through window.open rather than an <a>, so the
+     document-level click tracker in src/analytics.js never sees it. Fire the
+     same whatsapp_click event here so a submitted form counts exactly like a
+     tapped WhatsApp button — same event name, same key event in GA4/Ads.
+     link_text carries the form's intro line so the three forms stay
+     distinguishable in reports. */
+  try {
+    const params = {
+      page_path: (window.location.pathname.replace(/[/]+$/, '') || '/'),
+      link_text: 'form: ' + (intro || '').split('\n')[0].slice(0, 80),
+      link_url: url,
+      cta_id: ref || '(none)'
+    };
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push(Object.assign({ event: 'whatsapp_click' }, params));
+    if (typeof window.gtag === 'function') window.gtag('event', 'whatsapp_click', params);
+  } catch (e) { /* tracking must never block the enquiry */ }
+  let opened = null;
+  try { opened = window.open(url, '_blank', 'noopener'); } catch (e) { opened = null; }
+  if (!opened) window.location.href = url;
+  return url;
+}
+
+/* /insurers is deliberately NOT in the nav. That page and the property-manager
+   pair are reached from outbound links we control — email, LinkedIn, a deck —
+   so the Cloudflare Access log stays a clean record of who we sent it to. The
+   route still exists and the footer still links to it. */
+/* Header navigation.
+
+   `/property-managers` is in the nav from 25 August 2026: it is the public page
+   for managing agents, body corporates and HOAs, and it carries the internal
+   link that stops it being an orphan page in search.
+
+   `/managing-agents` is deliberately NOT here. It is the same offer with a
+   different proposition, held for paid traffic so the two can be tested against
+   each other in Google Ads. Adding it to the nav would put both pages in front
+   of the same visitors and there would be nothing left to compare. */
+const NAV = [
+  {
+    id: 'home', label: 'Home', route: '/',
+    /* Service pages hang off Home rather than getting their own top-level slot.
+       Keeps the nav to six items on a phone, and gives the services somewhere to
+       grow without another rethink. `children` are rendered as a dropdown; the
+       first child is the home page itself, so Home stays reachable on touch,
+       where there is no hover and the parent has to be the toggle. */
+    children: [
+      { id: 'home', label: 'Home page', route: '/' },
+      { id: 'geyserReplacements', label: 'Geyser replacements', route: '/geyser-replacements' },
+      { id: 'leakDetection', label: 'Leak detection', route: '/leak-detection' },
+      { id: 'smartHomes', label: 'Smart homes', route: '/smart-homes' },
+      { id: 'smartMetering', label: 'Smart metering', route: '/smart-homes/smart-metering' }
+    ]
+  },
+  { id: 'propertyManagers', label: 'Property managers', route: '/property-managers' },
+  { id: 'join', label: 'Join us', route: '/join' },
+  { id: 'portal', label: 'Portal', route: '/portal' },
+  { id: 'blog', label: 'Blog', route: '/blog' },
+  { id: 'about', label: 'About', route: '/about' }
+];
+
+const WRAP = { maxWidth: 1200, margin: '0 auto', padding: '0 40px' };
+const LABEL = { font: '700 var(--web-size-label)/var(--web-lh-label) var(--font-core)', letterSpacing: 'var(--web-label-tracking)', textTransform: 'uppercase', color: 'var(--web-navy)' };
+const H1 = { font: '700 var(--web-size-h1)/var(--web-lh-h1) var(--font-core)', color: 'var(--web-navy)', margin: 0 };
+const DISPLAY = { font: '700 var(--web-size-display)/var(--web-lh-display) var(--font-core)', color: 'var(--web-navy)', margin: 0, letterSpacing: '-0.01em' };
+const H2 = { font: '700 var(--web-size-h2)/var(--web-lh-h2) var(--font-core)', color: 'var(--web-navy)', margin: '0 0 12px' };
+const H3 = { font: '600 var(--web-size-h3)/var(--web-lh-h3) var(--font-core)', color: 'var(--web-navy)', margin: '0 0 6px' };
+const BODY = { font: '400 var(--web-size-body)/var(--web-lh-body) var(--font-core)', color: 'var(--web-grey-700)', margin: '0 0 12px' };
+const SMALL = { font: '400 var(--web-size-small)/var(--web-lh-small) var(--font-core)', color: 'var(--web-grey-500)', margin: 0 };
+const CARD = { background: '#fff', border: '1px solid var(--web-grey-100)', borderRadius: 4, boxShadow: 'var(--web-shadow-card)', padding: 24 };
+
+function Eyebrow({ children, onDark }) {
+  return <div style={{ ...LABEL, color: onDark ? 'var(--web-blue-300)' : 'var(--web-navy)', marginBottom: 10 }}>{children}</div>;
+}
+
+function Section({ eyebrow, title, intro, children, tint, id, narrow }) {
+  return <section id={id} style={{ background: tint ? 'var(--web-grey-050)' : '#fff', borderTop: tint ? '1px solid var(--web-grey-100)' : 'none', borderBottom: tint ? '1px solid var(--web-grey-100)' : 'none' }}>
+    <div style={{ ...WRAP, padding: '64px 40px', maxWidth: narrow ? 860 : 1200 }}>
+      {eyebrow ? <Eyebrow>{eyebrow}</Eyebrow> : null}
+      {title ? <h2 style={{ ...H2, fontSize: 26, marginBottom: 14, maxWidth: '22ch' }}>{title}</h2> : null}
+      {title ? <div style={{ width: 56, height: 3, background: 'var(--web-blue)', marginBottom: 24 }}></div> : null}
+      {intro ? <p style={{ ...BODY, maxWidth: '68ch', fontSize: 17 }}>{intro}</p> : null}
+      {children}
+    </div>
+  </section>;
+}
+
+/* One navigation item, with or without a dropdown.
+
+   Click, not hover: hover menus do not exist on a touch screen, and this nav is
+   read on a phone more than anything else. Escape closes it, a click anywhere
+   outside closes it, and the parent shows as active when any of its children is
+   the current page. */
+function NavItem({ item, page, go, linkStyle }) {
+  const [open, setOpen] = React.useState(false);
+  const ref = React.useRef(null);
+  const childIds = (item.children || []).map(c => c.id);
+  const active = page === item.id || childIds.indexOf(page) !== -1;
+
+  React.useEffect(() => {
+    if (!open) return;
+    const onDown = e => { if (ref.current && !ref.current.contains(e.target)) setOpen(false); };
+    const onKey = e => { if (e.key === 'Escape') setOpen(false); };
+    document.addEventListener('mousedown', onDown);
+    document.addEventListener('keydown', onKey);
+    return () => { document.removeEventListener('mousedown', onDown); document.removeEventListener('keydown', onKey); };
+  }, [open]);
+
+  if (!item.children) {
+    return <a href={'#' + item.route} onClick={e => { e.preventDefault(); go(item.id); }} style={linkStyle(active)}>{item.label}</a>;
+  }
+
+  return <div ref={ref} style={{ position: 'relative' }}>
+    <button type="button" aria-haspopup="true" aria-expanded={open} onClick={() => setOpen(!open)}
+      style={{ ...linkStyle(active), background: 'none', border: 0, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 6, padding: 0, minHeight: 'var(--web-tap-min)' }}>
+      {item.label}
+      <Icon name={open ? 'chevron-up' : 'chevron-down'} size={15} color={active ? 'var(--web-navy)' : 'var(--web-grey-500)'} />
+    </button>
+    {open ? <div style={{ position: 'absolute', top: 'calc(100% + 8px)', left: 0, zIndex: 30, minWidth: 220, background: '#fff', border: '1px solid var(--web-grey-100)', borderRadius: 4, boxShadow: '0 8px 24px rgba(24,45,85,.12)', padding: 6, display: 'flex', flexDirection: 'column' }}>
+      {item.children.map(c => <a key={c.route} href={'#' + c.route}
+        onClick={e => { e.preventDefault(); setOpen(false); go(c.id); }}
+        style={{ font: (page === c.id ? '600' : '400') + ' var(--web-size-body)/1.2 var(--font-core)', color: page === c.id ? 'var(--web-navy)' : 'var(--web-grey-700)', textDecoration: 'none', padding: '12px 14px', borderRadius: 3, display: 'block', minHeight: 'var(--web-tap-min)' }}>{c.label}</a>)}
+    </div> : null}
+  </div>;
+}
+
+function Header({ page, go }) {
+  return <header style={{ position: 'sticky', top: 0, zIndex: 20, background: '#fff', borderBottom: '1px solid var(--web-grey-100)', height: 'var(--web-header-height)' }}>
+    <div style={{ ...WRAP, height: '100%', display: 'flex', alignItems: 'center', gap: 28 }}>
+      <a href="#/" onClick={e => { e.preventDefault(); go('home'); }} style={{ display: 'block', lineHeight: 0 }}>
+        <img src="../../assets/logo/homeassist-logo-horizontal.png" alt="Home Assist" style={{ height: 30, width: 'auto', display: 'block' }} />
+      </a>
+      <nav style={{ marginLeft: 'auto', display: 'flex', gap: 22, alignItems: 'center' }}>
+        {NAV.map(n => <NavItem key={n.id + n.route} item={n} page={page} go={go}
+          linkStyle={active => ({ font: (active ? '600' : '400') + ' var(--web-size-body)/1 var(--font-core)', color: active ? 'var(--web-navy)' : 'var(--web-grey-700)', textDecoration: 'none', paddingBottom: 3, borderBottom: active ? '2px solid var(--web-blue)' : '2px solid transparent' })} />)}
+      </nav>
+      {/* Two contact buttons rather than one. On a phone these are the two
+          things an emergency visitor actually wants, and putting the hotline
+          number in the button label rather than behind the word "Call" means the
+          number itself is in the page text — which is what a search engine or an
+          AI assistant reads out when somebody asks how to reach us. Both are
+          size="sm" so the pair fits where the single button used to sit. */}
+      {/* 20 Nov 2026: Service Request first (glowing, opens the pop-up that
+          logs to the sheet), then WhatsApp in WhatsApp green, then the hotline. */}
+      <div style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap' }}>
+        <ServiceRequestButton size="sm" source={(page || 'site') + '-top-popup'} code={pageRef(page, 'SR-TOP')} />
+        <Button as="a" size="sm" variant="navy" className="ha-wa" href={wa('Hi Home Assist, I need help with: ', pageRef(page, 'TOP'), waDigitsFor(page))} target="_blank" rel="noopener"
+          iconLeft={<Icon name="message-circle" size={15} color="#fff" />}>WhatsApp</Button>
+        <Button as="a" size="sm" variant="secondary" href={'tel:' + CH.phoneTel}
+          iconLeft={<Icon name="phone" size={15} color="var(--web-navy)" />}>{CH.phone}</Button>
+      </div>
+    </div>
+  </header>;
+}
+
+function Footer({ go, page }) {
+  const col = { display: 'flex', flexDirection: 'column', gap: 8 };
+  const link = { font: '400 var(--web-size-small)/1.5 var(--font-core)', color: '#fff', opacity: .82, textDecoration: 'none' };
+  const head = { ...LABEL, color: 'var(--web-blue-300)', marginBottom: 6 };
+  return <footer style={{ background: 'var(--web-navy)', color: '#fff' }}>
+    <div style={{ ...WRAP, padding: '56px 40px 40px', display: 'grid', gridTemplateColumns: '1.4fr 1fr 1fr 1.2fr', gap: 40 }}>
+      <div>
+        <img src="../../assets/logo/homeassist-logo-horizontal-white.png" alt="Home Assist" style={{ height: 28, width: 'auto', display: 'block', marginBottom: 16 }} />
+        <p style={{ ...SMALL, color: '#fff', opacity: .8, maxWidth: '30ch' }}>Property Incident management, South Africa.</p>
+      </div>
+      <div style={col}><div style={head}>For homeowners</div>
+        {['Burst geyser', 'Leak detection', 'Burst pipe repair', 'Electrical', 'Building repairs'].map(t =>
+          <a key={t} href="#/" onClick={e => { e.preventDefault(); go('home'); }} style={link}>{t}</a>)}
+        <a href="#/rewards" onClick={e => { e.preventDefault(); go('rewards'); }} style={link}>Home Assist Rewards</a>
+      </div>
+      <div style={col}><div style={head}>For business</div>
+        <a href="#/insurers" onClick={e => { e.preventDefault(); go('insurers'); }} style={link}>Insurers and brokers</a>
+        <a href="#/property-managers" onClick={e => { e.preventDefault(); go('propertyManagers'); }} style={link}>Property managers</a>
+        <a href="#/join" onClick={e => { e.preventDefault(); go('join'); }} style={link}>Join our network</a>
+        <a href="#/portal" onClick={e => { e.preventDefault(); go('portal'); }} style={link}>Portal</a>
+        <div style={{ ...head, marginTop: 14, marginBottom: 6 }}>Legal</div>
+        <a href="#/terms" onClick={e => { e.preventDefault(); go('terms'); }} style={link}>Terms of Use</a>
+        <a href="#/privacy-policy" onClick={e => { e.preventDefault(); go('privacy'); }} style={link}>Privacy Policy</a>
+        <a href="#/complaints" onClick={e => { e.preventDefault(); go('complaints'); }} style={link}>Complaints Policy</a>
+        <a href="#/data-request" onClick={e => { e.preventDefault(); go('dataRequest'); }} style={link}>Data Subject Request</a>
+      </div>
+      <div style={col}><div style={head}>Contact</div>
+        <div><div style={{ ...head, marginBottom: 2 }}>WhatsApp</div><a href={wa('Hi Home Assist, ', pageRef(page, 'FOOT'), waDigitsFor(page))} style={link}>{waNumberFor(page)}</a></div>
+        <div><div style={{ ...head, marginBottom: 2 }}>Phone</div><a href={'tel:' + CH.phoneTel} style={link}>{CH.phone}</a></div>
+        <div><div style={{ ...head, marginBottom: 2 }}>Email</div><a href={'mailto:' + CH.help} style={link}>{CH.help}</a></div>
+        <div><div style={{ ...head, marginBottom: 2 }}>Complaints</div><a href={mailtoLink(CH.complaints, 'Complaint')} style={link}>{CH.complaints}</a></div>
+        <div><div style={{ ...head, marginBottom: 2 }}>Address</div><span style={{ ...link, opacity: .82 }}>{CH.address}</span></div>
+      </div>
+    </div>
+    <div style={{ borderTop: '1px solid rgba(255,255,255,.18)' }}>
+      <div style={{ ...WRAP, padding: '16px 40px', display: 'flex', gap: 16, flexWrap: 'wrap' }}>
+        <p style={{ ...SMALL, color: '#fff', opacity: .6 }}>Home Assist Technologies (Pty) Ltd · homeassist.co.za</p>
+        <p style={{ ...SMALL, color: '#fff', opacity: .6, marginLeft: 'auto' }}>{CH.help} · {CH.phone} · {CH.address}</p>
+      </div>
+    </div>
+  </footer>;
+}
+
+function NavyBand({ eyebrow, title, children }) {
+  return <section style={{ background: 'var(--web-navy)' }}>
+    <div style={{ ...WRAP, padding: '56px 40px', display: 'flex', alignItems: 'center', gap: 40, flexWrap: 'wrap' }}>
+      <div style={{ flex: '1 1 420px' }}>
+        {eyebrow ? <Eyebrow onDark>{eyebrow}</Eyebrow> : null}
+        <h2 style={{ ...H2, fontSize: 26, color: '#fff', margin: 0, maxWidth: '26ch' }}>{title}</h2>
+      </div>
+      <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>{children}</div>
+    </div>
+  </section>;
+}
+
+function LabelCard({ label, title, children, icon }) {
+  return <div style={CARD}>
+    {icon ? <Icon name={icon} size={20} color="var(--web-blue)" style={{ marginBottom: 12 }} /> : null}
+    <div style={{ ...LABEL, marginBottom: 8 }}>{label}</div>
+    {title ? <h3 style={H3}>{title}</h3> : null}
+    <div style={{ ...BODY, margin: 0 }}>{children}</div>
+  </div>;
+}
+
+function Stat({ figure, label }) {
+  return <div>
+    <div style={{ font: '700 var(--web-size-display)/1 var(--font-core)', color: 'var(--web-navy)' }}>{figure}</div>
+    <div style={{ ...LABEL, marginTop: 8 }}>{label}</div>
+  </div>;
+}
+
+function Steps({ items }) {
+  return <div style={{ display: 'grid', gridTemplateColumns: `repeat(${items.length},1fr)`, gap: 24, marginTop: 8 }}>
+    {items.map(([n, t, d]) => <div key={n} style={{ borderTop: '2px solid var(--web-navy)', paddingTop: 14 }}>
+      <div style={{ ...LABEL }}>{n} {t}</div>
+      <p style={{ ...BODY, margin: '10px 0 0' }}>{d}</p>
+    </div>)}
+  </div>;
+}
+
+function Accordion({ items }) {
+  const [open, setOpen] = React.useState(0);
+  return <div style={{ borderTop: '1px solid var(--web-grey-100)' }}>
+    {items.map(([q, a], i) => <div key={q} style={{ borderBottom: '1px solid var(--web-grey-100)' }}>
+      <button onClick={() => setOpen(open === i ? -1 : i)} style={{ width: '100%', display: 'flex', gap: 16, alignItems: 'center', background: 'none', border: 0, padding: '18px 0', cursor: 'pointer', textAlign: 'left', minHeight: 'var(--web-tap-min)' }}>
+        <span style={{ font: '600 17px/1.4 var(--font-core)', color: 'var(--web-navy)', flex: 1 }}>{q}</span>
+        <Icon name={open === i ? 'minus' : 'plus'} size={18} color="var(--web-blue)" />
+      </button>
+      {open === i ? <p style={{ ...BODY, maxWidth: '68ch', padding: '0 0 20px' }}>{a}</p> : null}
+    </div>)}
+  </div>;
+}
+
+function FieldRow({ label, children, hint }) {
+  return <label style={{ display: 'block' }}>
+    <span style={{ ...LABEL, display: 'block', marginBottom: 6 }}>{label}</span>
+    {children}
+    {hint ? <span style={{ ...SMALL, display: 'block', marginTop: 5 }}>{hint}</span> : null}
+  </label>;
+}
+const INPUT = { width: '100%', boxSizing: 'border-box', minHeight: 'var(--web-tap-min)', border: '1px solid var(--web-grey-300)', borderRadius: 4, padding: '10px 12px', font: '400 var(--web-size-body)/1.4 var(--font-core)', color: 'var(--web-grey-700)', background: '#fff' };
+
+function ChannelCard({ label, value, note, action }) {
+  return <div style={CARD}>
+    <div style={{ ...LABEL, marginBottom: 10 }}>{label}</div>
+    <div style={{ font: '700 21px/1.2 var(--font-core)', color: 'var(--web-navy)', marginBottom: 8 }}>{value}</div>
+    <p style={{ ...BODY, marginBottom: action ? 16 : 0 }}>{note}</p>
+    {action}
+  </div>;
+}
+
+function Confirm({ children }) {
+  return <span style={{ ...LABEL, color: 'var(--web-blue)', border: '1px solid var(--web-blue-100)', background: 'var(--web-blue-050)', padding: '2px 6px', borderRadius: 2, whiteSpace: 'nowrap' }}>[CONFIRM{children ? ' ' + children : ''}]</span>;
+}
+
+
+/* ---------------------------------------------------------------------------
+   Home Assist Rewards prize wheel (3 November 2026).
+
+   Decorative, not a game. Winners are drawn once a month with the internal
+   draw tool, overseen by Parker and Associates. This wheel shows the two
+   prizes and spins for show when tapped; it always lands on a prize segment
+   and never awards anything. Shared by the homepage hero (variant B) and
+   /rewards. Keep the "spins for show" line wherever it is used.
+
+   Segments: 8, alternating prize and "Spin again" so neighbours never merge.
+   Colours are brand only: blue, navy, blue-050. Motion is a 4 s ease-out
+   spin; with reduced motion set, the pointer result shows without spinning.
+   --------------------------------------------------------------------------- */
+const RW_SEGMENTS = [
+  { label: 'Smart geyser controller', short: ['Smart geyser', 'controller'], kind: 'ctrl' },
+  { label: 'Spin again', short: ['Spin', 'again'], kind: 'again' },
+  { label: 'R100 coffee voucher', short: ['R100 coffee', 'voucher'], kind: 'coffee' },
+  { label: 'Spin again', short: ['Spin', 'again'], kind: 'again' },
+  { label: 'Smart geyser controller', short: ['Smart geyser', 'controller'], kind: 'ctrl' },
+  { label: 'Spin again', short: ['Spin', 'again'], kind: 'again' },
+  { label: 'R100 coffee voucher', short: ['R100 coffee', 'voucher'], kind: 'coffee' },
+  { label: 'Spin again', short: ['Spin', 'again'], kind: 'again' }
+];
+const RW_FILL = { ctrl: 'var(--web-blue)', coffee: 'var(--web-navy)', again: 'var(--web-blue-050)' };
+const RW_TEXT = { ctrl: '#fff', coffee: '#fff', again: 'var(--web-navy)' };
+
+function rwPolar(cx, cy, r, deg) {
+  const t = (deg - 90) * Math.PI / 180;
+  return [cx + r * Math.cos(t), cy + r * Math.sin(t)];
+}
+
+function RewardsWheel({ size, onResult, compact }) {
+  const [rot, setRot] = React.useState(0);
+  const [spinning, setSpinning] = React.useState(false);
+  const [result, setResult] = React.useState(null);
+  const n = RW_SEGMENTS.length, seg = 360 / n;
+  const px = size || 320;
+
+  function spin() {
+    if (spinning) return;
+    const prizes = RW_SEGMENTS.map((s, i) => s.kind === 'again' ? -1 : i).filter(i => i >= 0);
+    const win = prizes[Math.floor(Math.random() * prizes.length)];
+    const centre = win * seg + seg / 2;
+    const jitter = (Math.random() - 0.5) * seg * 0.6;
+    const turns = 5 + Math.floor(Math.random() * 3);
+    const target = turns * 360 + (360 - centre - jitter);
+    const base = rot - (rot % 360);
+    const reduce = typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    setResult(null);
+    setSpinning(true);
+    setRot(base + target);
+    const done = function () { setSpinning(false); setResult(RW_SEGMENTS[win].label); if (onResult) onResult(RW_SEGMENTS[win].label); };
+    if (reduce) done(); else setTimeout(done, 4200);
+  }
+
+  let paths = '';
+  const parts = RW_SEGMENTS.map((s, i) => {
+    const a0 = i * seg, a1 = (i + 1) * seg;
+    const [x0, y0] = rwPolar(200, 200, 190, a0), [x1, y1] = rwPolar(200, 200, 190, a1);
+    return <path key={i} d={`M200 200 L${x0} ${y0} A190 190 0 0 1 ${x1} ${y1} Z`} fill={RW_FILL[s.kind]} stroke="#fff" strokeWidth="3" />;
+  });
+  const labels = RW_SEGMENTS.map((s, i) => {
+    const mid = i * seg + seg / 2;
+    /* Radial labels: each reads from the centre outwards along its segment. */
+    return <g key={i} transform={`rotate(${mid} 200 200) translate(200 200) rotate(-90)`}>
+      <text fontFamily="var(--font-core)" fontSize="17" fontWeight="700" fill={RW_TEXT[s.kind]} textAnchor="start" dominantBaseline="middle">
+        {s.short.map((l, k) => <tspan key={k} x="46" dy={k === 0 ? -9 : 19}>{l}</tspan>)}
+      </text>
+    </g>;
+  });
+
+  return <div style={{ textAlign: 'center' }}>
+    <div style={{ position: 'relative', width: px, height: px, margin: '0 auto' }}>
+      <div style={{ position: 'absolute', top: -6, left: '50%', transform: 'translateX(-50%)', zIndex: 2, width: 0, height: 0, borderLeft: '14px solid transparent', borderRight: '14px solid transparent', borderTop: '28px solid var(--web-navy)' }} />
+      <svg viewBox="0 0 400 400" width={px} height={px} role="img" aria-label="Prize wheel showing a smart geyser controller and a R100 coffee voucher"
+        style={{ transform: `rotate(${rot}deg)`, transition: spinning ? 'transform 4s cubic-bezier(.17,.67,.12,1)' : 'none', display: 'block', filter: 'drop-shadow(0 6px 18px rgba(24,45,85,.18))' }}>
+        <circle cx="200" cy="200" r="198" fill="#fff" />
+        {parts}
+        {compact ? null : labels}
+        <circle cx="200" cy="200" r="190" fill="none" stroke="#fff" strokeWidth="6" />
+        <circle cx="200" cy="200" r="30" fill="#fff" stroke="var(--web-navy)" strokeWidth="4" />
+      </svg>
+      {compact ? <button type="button" onClick={spin} disabled={spinning} aria-label="Spin the wheel for show"
+        style={{ position: 'absolute', inset: 0, background: 'transparent', border: 0, cursor: spinning ? 'default' : 'pointer' }} /> : null}
+    </div>
+    {compact
+      ? <div style={{ ...SMALL, fontSize: 11, marginTop: 6, lineHeight: 1.3 }} aria-live="polite">{result ? <strong style={{ color: 'var(--web-navy)' }}>{result}</strong> : 'Tap to spin, for show'}</div>
+      : <div>
+          <button type="button" onClick={spin} disabled={spinning} className="ha-rw-spinbtn"
+            style={{ marginTop: 14, padding: '12px 26px', border: 0, borderRadius: 4, background: spinning ? 'var(--web-grey-500)' : 'var(--web-navy)', color: '#fff', font: '700 16px/1 var(--font-core)', cursor: spinning ? 'default' : 'pointer' }}>
+            {spinning ? 'Spinning…' : 'Spin the wheel'}
+          </button>
+          <div style={{ ...SMALL, marginTop: 10, minHeight: 20 }} aria-live="polite">
+            {result ? <span><strong style={{ color: 'var(--web-navy)' }}>{result}.</strong> That is what you could win.</span> : 'Spins for show. Winners are drawn by case number once a month.'}
+          </div>
+        </div>}
+  </div>;
+}
+
+/* Flashing SPIN & WIN sign. Pulses about once a second (well under the
+   3-flashes-a-second accessibility limit) and holds still for reduced
+   motion; the CSS lives in src/styles/site.css (.ha-rw-badge). */
+function SpinWinSign({ onClick, href }) {
+  return <a href={href || '/rewards'} className="ha-rw-badge" onClick={onClick} aria-label="Spin and win: see the Home Assist Rewards prizes">
+    <Icon name="gift" size={24} color="#fff" />
+    <span>Spin &amp; Win</span>
+  </a>;
+}
+
+/* Shared quick request popup (20 Nov 2026). First built on the home page
+   hero (19 Nov); now lives here so any page can open it with its own sheet
+   source and CTA code. A small centred box asking only for a name and
+   mobile number. It logs to the Google Sheet through logRequest and then
+   offers WhatsApp as a second step. Closes on the X, the backdrop, or
+   Escape. `code` is the cta_id (e.g. HOME-7, BLOG-WATER-1). */
+function QuickRequest({ open, onClose, source, code, intro, heading }) {
+  const [sent, setSent] = React.useState(false);
+  const [waLink, setWaLink] = React.useState('');
+  React.useEffect(() => {
+    if (!open) return;
+    const onKey = (e) => { if (e.key === 'Escape') onClose(); };
+    document.addEventListener('keydown', onKey);
+    return () => document.removeEventListener('keydown', onKey);
+  }, [open, onClose]);
+  if (!open) return null;
+  const pagePath = (typeof window !== 'undefined' && window.location) ? (window.location.pathname.replace(/[/]+$/, '') || '/') : '/';
+  return <div onClick={onClose} style={{ position: 'fixed', inset: 0, background: 'rgba(24,45,85,.6)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 20 }}>
+    <div role="dialog" aria-modal="true" aria-labelledby="qr-title" onClick={e => e.stopPropagation()} style={{ ...CARD, width: '100%', maxWidth: 440, padding: 28, position: 'relative', borderTop: '4px solid var(--web-blue)' }}>
+      <button type="button" onClick={onClose} aria-label="Close" style={{ position: 'absolute', top: 10, right: 10, border: 0, background: 'transparent', cursor: 'pointer', padding: 6 }}><Icon name="x" size={20} color="var(--web-grey-500)" /></button>
+      {sent
+        ? <div>
+            <div style={{ ...LABEL, color: 'var(--web-blue)', marginBottom: 8 }}>Request received</div>
+            <h3 id="qr-title" style={{ ...H3, marginBottom: 8 }}>Thank you. We will call you back.</h3>
+            <p style={{ ...BODY, marginBottom: 16 }}>We answer 24 hours a day. For the fastest reply, send it to us on WhatsApp as well.</p>
+            <Button as="a" variant="navy" fullWidth href={waLink} target="_blank" rel="noopener" iconLeft={<Icon name="message-circle" size={17} color="#fff" />}>Send it on WhatsApp as well</Button>
+            <Button variant="secondary" fullWidth onClick={onClose} style={{ marginTop: 10 }}>Close</Button>
+          </div>
+        : <form onSubmit={e => {
+            e.preventDefault();
+            const f = e.currentTarget;
+            logRequest(f, { source: source || 'quick-popup', ref: code || '' });
+            try { if (typeof window.gtag === 'function') window.gtag('event', 'request_submit', { cta_id: code || '', page_path: pagePath }); } catch (err) { /* never block */ }
+            setWaLink(whatsappLinkFor(f, { intro: intro || 'Quick request from the Home Assist website. Please call me back.', ref: code || '' }));
+            setSent(true);
+          }}>
+            <div style={{ ...LABEL, color: 'var(--web-blue)', marginBottom: 8 }}>Service request</div>
+            <h3 id="qr-title" style={{ ...H3, marginBottom: 6 }}>{heading || 'Leave your number and we call you back.'}</h3>
+            <p style={{ ...SMALL, marginBottom: 16 }}>Answered 24 hours a day.</p>
+            <div style={{ marginBottom: 14 }}><FieldRow label="Full name"><input style={INPUT} required autoFocus /></FieldRow></div>
+            <div style={{ marginBottom: 14 }}><FieldRow label="Mobile number"><input style={INPUT} type="tel" required /></FieldRow></div>
+            <label style={{ ...BODY, display: 'flex', gap: 10, alignItems: 'flex-start', marginBottom: 18, fontSize: 14 }}>
+              <input type="checkbox" required style={{ marginTop: 3 }} />
+              <span>I agree that Home Assist may contact me about this request.</span>
+            </label>
+            <Button size="lg" variant="navy" fullWidth iconLeft={<Icon name="send" size={17} color="#fff" />}>Request a call back</Button>
+          </form>}
+    </div>
+  </div>;
+}
+
+/* Service Request button (20 Nov 2026). One self-contained button — it owns
+   the open/closed state and renders the QuickRequest pop-up itself — so any
+   hero or the header can drop it in with just a sheet `source` and a CTA
+   `code`. The glow and the ring around it are the .ha-sr class in
+   src/styles/site.css. The click sends `service_request_click` to GA4 (the
+   gap noted on 19 Nov: submits were counted but not clicks), and the pop-up
+   sends `request_submit` as before. `onDark` picks the white-on-navy variant
+   for the navy heroes; the header and white heroes use the secondary one.
+   The href still points at the home page form, so with JavaScript off the
+   button still goes somewhere useful. */
+function ServiceRequestButton({ source, code, size, label, intro, heading, onDark, style, iconSize }) {
+  const [open, setOpen] = React.useState(false);
+  const px = iconSize || (size === 'sm' ? 15 : 18);
+  return <React.Fragment>
+    <Button as="a" size={size || 'lg'} variant={onDark ? 'onDark' : 'secondary'} href="/#request" className="ha-sr" style={style}
+      onClick={e => {
+        e.preventDefault();
+        try { if (typeof window.gtag === 'function') window.gtag('event', 'service_request_click', { cta_id: code || '', page_path: (window.location.pathname.replace(/[/]+$/, '') || '/') }); } catch (err) { /* never block */ }
+        setOpen(true);
+      }}
+      iconLeft={<Icon name="clipboard-check" size={px} color="var(--web-navy)" />}>{label || 'Service Request'}</Button>
+    <QuickRequest open={open} onClose={() => setOpen(false)} source={source} code={code} intro={intro} heading={heading} />
+  </React.Fragment>;
+}
+
+Object.assign(window, { CH, wa, mailtoLink, whatsappHandoff, NAV, WRAP, LABEL, H1, H2, H3, DISPLAY, BODY, SMALL, CARD, INPUT, Eyebrow, Section, Header, Footer, NavyBand, LabelCard, Stat, Steps, Accordion, FieldRow, ChannelCard, Confirm, RewardsWheel, SpinWinSign, logRequest, whatsappLinkFor, QuickRequest, ServiceRequestButton });
