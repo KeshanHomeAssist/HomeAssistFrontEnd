@@ -35,9 +35,15 @@ function normalisePath(pathname) {
   return pathname.replace(/[/]+$/, '') || '/';
 }
 
+/* Every event carries ab_variant explicitly (19 Nov 2026). index.html also
+   calls gtag('set', { ab_variant }) before the first event, but setting it on
+   each event as well means the A/B dimension in GA4 can never come through
+   blank, whatever order the scripts load in. window.HA_AB is 'a', 'b' or
+   'off', written by the head script in index.html. */
 function send(name, params) {
   if (typeof window === 'undefined' || typeof window.gtag !== 'function') return;
-  window.gtag('event', name, params);
+  const ab = typeof window.HA_AB === 'string' ? window.HA_AB : 'off';
+  window.gtag('event', name, Object.assign({ ab_variant: ab }, params || {}));
 }
 
 /** Which CTA a link is, from its href. Null means we do not track it. */
