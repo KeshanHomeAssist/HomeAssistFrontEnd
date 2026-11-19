@@ -385,7 +385,7 @@ export function articleMeta(post) {
   const image = youtube
     ? `https://img.youtube.com/vi/${youtube}/maxresdefault.jpg`
     : img
-      ? `${SITE_URL}/assets/illustrations/${img}`
+      ? (/^https?:/.test(img) ? img : `${SITE_URL}/assets/illustrations/${img}`)
       : ORG.logo;
 
   return {

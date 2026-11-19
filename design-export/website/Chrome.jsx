@@ -518,4 +518,55 @@ function SpinWinSign({ onClick, href }) {
   </a>;
 }
 
-Object.assign(window, { CH, wa, mailtoLink, whatsappHandoff, NAV, WRAP, LABEL, H1, H2, H3, DISPLAY, BODY, SMALL, CARD, INPUT, Eyebrow, Section, Header, Footer, NavyBand, LabelCard, Stat, Steps, Accordion, FieldRow, ChannelCard, Confirm, RewardsWheel, SpinWinSign, logRequest, whatsappLinkFor });
+/* Shared quick request popup (20 Nov 2026). First built on the home page
+   hero (19 Nov); now lives here so any page can open it with its own sheet
+   source and CTA code. A small centred box asking only for a name and
+   mobile number. It logs to the Google Sheet through logRequest and then
+   offers WhatsApp as a second step. Closes on the X, the backdrop, or
+   Escape. `code` is the cta_id (e.g. HOME-7, BLOG-WATER-1). */
+function QuickRequest({ open, onClose, source, code, intro, heading }) {
+  const [sent, setSent] = React.useState(false);
+  const [waLink, setWaLink] = React.useState('');
+  React.useEffect(() => {
+    if (!open) return;
+    const onKey = (e) => { if (e.key === 'Escape') onClose(); };
+    document.addEventListener('keydown', onKey);
+    return () => document.removeEventListener('keydown', onKey);
+  }, [open, onClose]);
+  if (!open) return null;
+  const pagePath = (typeof window !== 'undefined' && window.location) ? (window.location.pathname.replace(/[/]+$/, '') || '/') : '/';
+  return <div onClick={onClose} style={{ position: 'fixed', inset: 0, background: 'rgba(24,45,85,.6)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 20 }}>
+    <div role="dialog" aria-modal="true" aria-labelledby="qr-title" onClick={e => e.stopPropagation()} style={{ ...CARD, width: '100%', maxWidth: 440, padding: 28, position: 'relative', borderTop: '4px solid var(--web-blue)' }}>
+      <button type="button" onClick={onClose} aria-label="Close" style={{ position: 'absolute', top: 10, right: 10, border: 0, background: 'transparent', cursor: 'pointer', padding: 6 }}><Icon name="x" size={20} color="var(--web-grey-500)" /></button>
+      {sent
+        ? <div>
+            <div style={{ ...LABEL, color: 'var(--web-blue)', marginBottom: 8 }}>Request received</div>
+            <h3 id="qr-title" style={{ ...H3, marginBottom: 8 }}>Thank you. We will call you back.</h3>
+            <p style={{ ...BODY, marginBottom: 16 }}>We answer 24 hours a day. For the fastest reply, send it to us on WhatsApp as well.</p>
+            <Button as="a" variant="navy" fullWidth href={waLink} target="_blank" rel="noopener" iconLeft={<Icon name="message-circle" size={17} color="#fff" />}>Send it on WhatsApp as well</Button>
+            <Button variant="secondary" fullWidth onClick={onClose} style={{ marginTop: 10 }}>Close</Button>
+          </div>
+        : <form onSubmit={e => {
+            e.preventDefault();
+            const f = e.currentTarget;
+            logRequest(f, { source: source || 'quick-popup', ref: code || '' });
+            try { if (typeof window.gtag === 'function') window.gtag('event', 'request_submit', { cta_id: code || '', page_path: pagePath }); } catch (err) { /* never block */ }
+            setWaLink(whatsappLinkFor(f, { intro: intro || 'Quick request from the Home Assist website. Please call me back.', ref: code || '' }));
+            setSent(true);
+          }}>
+            <div style={{ ...LABEL, color: 'var(--web-blue)', marginBottom: 8 }}>Service request</div>
+            <h3 id="qr-title" style={{ ...H3, marginBottom: 6 }}>{heading || 'Leave your number and we call you back.'}</h3>
+            <p style={{ ...SMALL, marginBottom: 16 }}>Answered 24 hours a day.</p>
+            <div style={{ marginBottom: 14 }}><FieldRow label="Full name"><input style={INPUT} required autoFocus /></FieldRow></div>
+            <div style={{ marginBottom: 14 }}><FieldRow label="Mobile number"><input style={INPUT} type="tel" required /></FieldRow></div>
+            <label style={{ ...BODY, display: 'flex', gap: 10, alignItems: 'flex-start', marginBottom: 18, fontSize: 14 }}>
+              <input type="checkbox" required style={{ marginTop: 3 }} />
+              <span>I agree that Home Assist may contact me about this request.</span>
+            </label>
+            <Button size="lg" variant="navy" fullWidth iconLeft={<Icon name="send" size={17} color="#fff" />}>Request a call back</Button>
+          </form>}
+    </div>
+  </div>;
+}
+
+Object.assign(window, { CH, wa, mailtoLink, whatsappHandoff, NAV, WRAP, LABEL, H1, H2, H3, DISPLAY, BODY, SMALL, CARD, INPUT, Eyebrow, Section, Header, Footer, NavyBand, LabelCard, Stat, Steps, Accordion, FieldRow, ChannelCard, Confirm, RewardsWheel, SpinWinSign, logRequest, whatsappLinkFor, QuickRequest });

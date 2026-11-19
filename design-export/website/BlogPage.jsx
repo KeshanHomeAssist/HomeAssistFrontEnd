@@ -40,6 +40,50 @@ const EL_NINO_SOURCES = [
 
 const YOUTUBE_ID = 'sWh5zmPczDM';
 
+/* Cape Town water restrictions post (20 Nov 2026). Body kinds beyond the
+   El Niño post: 'video' (self-hosted clip, inline HTML like the page heroes)
+   and 'cta' (a Service Request button that opens the shared QuickRequest
+   popup with its own sheet source and code, see Chrome.jsx). */
+const WATER_BODY = [
+  ['p', 'By Keshan Patel — CEO and Co-Founder, Home Assist Technologies', 'byline'],
+  ['p', 'On Monday the Minister of Water and Sanitation cut the Western Cape’s water allocations: 7% for homes and industry, 15% for farms. Two below-average winters in a row and a forecast strong to extreme El Niño, which means more heat, more evaporation and less rain reaching the dams. Her words: “let us act now, not when our dams are empty.”'],
+  ['p', 'The City of Cape Town answered with Level 1 restrictions from 1 December. Dams are at 70.4%, 13 points lower than last year, and the city is using 951 million litres a day against a target of 860. The ask is to use 10% less and stay under 85 litres per person per day.'],
+  ['h2', 'We have done this before'],
+  ['p', 'The drought that nearly emptied Cape Town built over three dry winters from 2015, the worst run in over a century. By early 2018 the dams were at 26% and Day Zero had a date. Level 6 came in on 1 January 2018 at 87 litres a person. Level 6B on 1 February cut it to 50 litres, with every garden tap, pool top-up and car wash banned. Then the rains came, demand fell 30%, and Day Zero was called off.'],
+  ['quote', 'We are not back at 50. But El Niño is the variable that turns a dry winter into a dry summer into another dry winter.'],
+  ['p', 'The City is asking for 85 now so that it never has to ask for 50 again.'],
+  ['h2', 'What 85 litres looks like'],
+  ['video', '/assets/illustrations/a-day-in-85-litres.mp4', '/assets/illustrations/a-day-in-85-litres-poster.jpg'],
+  ['p', 'Three minutes in the shower, three flushes, your share of a wash load, a basin of dishes. It is a budget you can live inside without thinking about it much, provided nothing on your property is quietly spending it for you.'],
+  ['h2', 'The leak you have not found is using more than you are'],
+  ['p', 'A running toilet loses up to 433 litres a day, by the City’s own figures. That is one person’s entire 85-litre budget, up to five times over, 24 hours a day, whether anyone is home or not. A dripping tap is up to 87. An underground pipe or a cracked geyser overflow line can be worse, and you will never hear it.'],
+  ['p', 'The first check is free. Close every tap, read your meter, wait 15 minutes, read it again. If it moved, you have a leak. What the test cannot tell you is where, and that is where people lose weeks digging up the wrong piece of garden or opening a wall on a guess.'],
+  ['p', 'Home Assist finds leaks across South Africa with thermal imaging, tracer gas and acoustic listening, usually to within a metre, without opening what does not need opening. We repair the pipe, pressure-test the line, and once the area has dried out we make good the damage. You get a written report for the repair and, if you are insured, your claim.'],
+  ['cta', 'I think I have a leak', { source: 'blog-water-leak', code: 'BLOG-WATER-1', heading: 'Leave your number and we call you back about the leak.', intro: 'From the Cape Town water restrictions article: I think I have a leak. Please call me back.', link: '/leak-detection', linkLabel: 'How leak detection works' }],
+  ['h2', 'The best meter tells you before the bill does'],
+  ['p', 'The City’s smart meters will one day send leak alerts through its app. Until then, and even after, they sit on the municipal bulk meter at your boundary. If you own a standalone home you can put a smart reader on your existing meter today and see your use on your phone.'],
+  ['p', 'Where it matters most is private property with one municipal meter and many homes behind it. In a body corporate, cluster or estate, one running toilet is paid for by everyone and nobody can tell whose it is. Home Assist puts a small reader on each unit’s water (and electricity) meter. Readings come in several times a day over a low-power network, every home is billed from its own meter, and when a unit shows flow at 03:00 we phone the owner that day. It is available now.'],
+  ['cta', 'Get smart water metering for my property', { source: 'blog-water-meter', code: 'BLOG-WATER-2', heading: 'Leave your number and we call you back about metering.', intro: 'From the Cape Town water restrictions article: I want smart water metering for my property. Please call me back.', link: '/smart-homes/smart-metering', linkLabel: 'See the smart metering offering' }],
+  ['h2', 'Why it is worth doing properly'],
+  ['p', 'This has been the year everyone talks about artificial intelligence. Nothing alive gets by without water, and no amount of computing changes that. Cape Town got through 2018 by cutting demand 30% under rules nobody enjoyed. The lesson was not that we can do 50 litres. It was that we never should have had to. Fix the running toilet, put a reader on the meter, act on the first alert, and the city stays at 85.'],
+  ['cta', 'Talk to Home Assist', { source: 'blog-water-general', code: 'BLOG-WATER-3', intro: 'From the Cape Town water restrictions article. Please call me back.' }]
+];
+
+const WATER_SOURCES = [
+  ['City of Cape Town — Capetonians called to use 10% less water under Level 1 restrictions, 16 November 2026', 'https://www.capetown.gov.za/media-and-news/capetonians-called-to-use-10-less-water-under-level-1-restrictions-this-summer/'],
+  ['City of Cape Town — How to find and fix leaks on your property', 'https://www.capetown.gov.za/Media-and-news/How%20to%20find%20and%20fix%20leaks%20on%20your%20property%20to%20avoid%20excessive%20usage%20and%20warning%20letters'],
+  ['City of Cape Town — Water meter readings', 'https://www.capetown.gov.za/family-and-home/residential-utility-services/residential-water-and-sanitation-services/water-meter-readings/'],
+  ['The National — Water restrictions for Western Cape as El Niño looms and dam levels slip, 16 November 2026', 'https://thenational.co.za/news/2026-11-16-water-restrictions-for-western-cape-as-el-nino-looms-and-dam-levels-slip/'],
+  ['Western Cape Government — Level 6B water restriction guidelines, February 2018', 'https://d7.westerncape.gov.za/text/2018/January/level_6b_water_restriction_guidelines-_eng.pdf'],
+  ['National Geographic — Why Cape Town is running out of water, and who’s next', 'https://education.nationalgeographic.org/resource/why-cape-town-running-out-water-and-whos-next/'],
+  ['InQuestion — Cape Town Running Out of Water Again | Did Government Learn Nothing? (YouTube)', 'https://www.youtube.com/watch?v=FixRFuPTRSk']
+];
+
+/* Card and share image: the InQuestion "Day Zero 2.0?" frame (YouTube
+   FixRFuPTRSk), kept locally so the card never depends on YouTube's thumbnail
+   host. Credited in the sources list. */
+const WATER_THUMB = 'blog-water-day-zero.jpg';
+
 const PLATES = [
   ['plate-ariston-trendline-150.jpg', 'Trendline 150 — serial on the green rating plate'],
   ['plate-ariston-axios-150.jpg', 'Axios 150 — serial below the SABS mark'],
@@ -52,6 +96,7 @@ const PLATES = [
 ];
 
 const ALL_POSTS = [
+  ['Leaks', 'Cape Town has been here before: what 50 litres a day taught us, and why 85 is the number to watch now', 'Level 1 restrictions start 1 December. Dams are at 70%, El Niño is forecast, and the City wants you under 85 litres a day. In 2018 it was 50. Here is what 85 litres looks like, and how to find the leak that is spending it for you.', '20 November 2026', '4 min', WATER_THUMB, false, WATER_BODY, WATER_SOURCES, ''],
   ['Insurance', 'The 2026/27 fire season won’t break your claims budget. It will break your call centre.', 'NOAA now puts a very strong El Niño over the 2026/27 summer at above 90%, with a 69% chance of a record-breaking event. South African insurers and brokers are not resourced for the FNOL surge that follows.', '17 August 2026', '8 min', '', false, EL_NINO_BODY, EL_NINO_SOURCES, YOUTUBE_ID],
   ['Geysers', 'What to do in the first ten minutes after your geyser bursts', 'Close the main water supply, then switch the geyser off at the distribution board. The order matters: water first, then electricity.', '12 August 2026', '4 min', 'blog-geyser-kwikot.png'],
   ['Geysers', 'How to tell if your geyser is still under warranty', 'The serial number plate carries the manufacturer and the date of manufacture. Decode it before you agree to a replacement.', '5 August 2026', '5 min', 'serial-plate-electrolux.jpg', false, null, null, '', PLATES],
@@ -88,7 +133,7 @@ function BlogPage() {
           <a key={title} href="#" onClick={e => { e.preventDefault(); setPost(i); }} style={{ ...CARD, padding: 0, overflow: 'hidden', textDecoration: 'none', display: 'flex', flexDirection: 'column' }}>
             <div style={{ position: 'relative', height: 170, background: img || youtube ? 'var(--web-grey-050)' : 'var(--web-navy)', borderBottom: '1px solid var(--web-grey-100)', overflow: 'hidden', display: 'grid', placeItems: img || youtube ? 'stretch' : 'center' }}>
               {youtube ? <img src={'https://img.youtube.com/vi/' + youtube + '/maxresdefault.jpg'} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
-                : img ? <img src={'../../assets/illustrations/' + img} alt="" style={{ width: '100%', height: '100%', objectFit: 'contain', display: 'block' }} />
+                : img ? <img src={/^https?:/.test(img) ? img : '../../assets/illustrations/' + img} alt="" style={{ width: '100%', height: '100%', objectFit: (/^https?:/.test(img) || /^blog-water/.test(img)) ? 'cover' : 'contain', display: 'block' }} />
                   : <span style={{ ...LABEL, color: 'var(--web-blue-300)', textAlign: 'center', padding: '0 24px' }}>{cat} · {date}</span>}
               {damp ? <div className="ha-damp"></div> : null}
             </div>
@@ -106,7 +151,9 @@ function BlogPage() {
 
 function Article({ post, back, related }) {
   const [cat, title, excerpt, date, read, img, damp, body, sources, youtube, plates] = post;
+  const [quick, setQuick] = React.useState(null);  // the 'cta' options of the open popup, or null
   return <main>
+    <QuickRequest open={quick !== null} onClose={() => setQuick(null)} source={quick ? quick.source : ''} code={quick ? quick.code : ''} intro={quick ? quick.intro : ''} heading={quick ? quick.heading : ''} />
     <div style={{ ...WRAP, maxWidth: 720, padding: '48px 40px 0' }}>
       <a href="#" onClick={e => { e.preventDefault(); back(); }} style={{ ...LABEL, color: 'var(--web-blue)', textDecoration: 'none' }}>← All articles</a>
       <div style={{ ...LABEL, marginTop: 28 }}>{cat}</div>
@@ -123,6 +170,12 @@ function Article({ post, back, related }) {
           if (kind === 'quote') return <blockquote key={i} style={{ margin: '28px 0', paddingLeft: 22, borderLeft: '3px solid var(--web-blue)' }}>
             <p style={{ font: '600 21px/1.4 var(--font-core)', color: 'var(--web-navy)', margin: 0 }}>{a}</p>
           </blockquote>;
+          if (kind === 'video') return <div key={i} style={{ margin: '8px auto 24px', maxWidth: 420 }} dangerouslySetInnerHTML={{
+            __html: '<video autoplay muted loop playsinline controls preload="metadata" poster="' + b + '" aria-label="A day in 85 litres" style="width:100%;height:auto;display:block;aspect-ratio:4/5;border-radius:4px;border:1px solid var(--web-grey-100)"><source src="' + a + '" type="video/mp4"></video>' }} />;
+          if (kind === 'cta') return <div key={i} style={{ ...CARD, background: 'var(--web-blue-050)', border: '1px solid var(--web-blue-100)', display: 'flex', gap: 14, alignItems: 'center', flexWrap: 'wrap', margin: '24px 0 32px' }}>
+            <Button as="a" variant="navy" href="#request" onClick={e => { e.preventDefault(); setQuick(b); }} iconLeft={<Icon name="clipboard-check" size={17} color="#fff" />}>Service Request: {a}</Button>
+            {b.link ? <a href={b.link} style={{ ...LABEL, color: 'var(--web-blue)', textDecoration: 'none' }}>{b.linkLabel || 'Learn more'} →</a> : null}
+          </div>;
           if (kind === 'lead') return <p key={i} style={{ ...BODY, fontSize: 17 }}><strong style={{ color: 'var(--web-navy)' }}>{a}</strong> {b}</p>;
           if (b === 'byline') return <p key={i} style={{ ...BODY, fontSize: 17, fontWeight: 600, color: 'var(--web-navy)' }}>{a}</p>;
           return <p key={i} style={{ ...BODY, fontSize: 17 }}>{a}</p>;

@@ -166,59 +166,12 @@ function HomeRewardsPanel({ go }) {
   </div>;
 }
 
-/* Quick request popup (19 Nov 2026). Opened by the hero's "Service Request"
-   button: a small centred box asking only for a name and mobile number. It
-   logs to the Google Sheet (source home-quick-popup, ref HOME-7) and then
-   offers WhatsApp as a second step, like the full form. Closes on the X,
-   the dark backdrop, or Escape. */
-function QuickRequest({ open, onClose }) {
-  const [sent, setSent] = React.useState(false);
-  const [waLink, setWaLink] = React.useState('');
-  React.useEffect(() => {
-    if (!open) return;
-    const onKey = (e) => { if (e.key === 'Escape') onClose(); };
-    document.addEventListener('keydown', onKey);
-    return () => document.removeEventListener('keydown', onKey);
-  }, [open, onClose]);
-  if (!open) return null;
-  return <div onClick={onClose} style={{ position: 'fixed', inset: 0, background: 'rgba(24,45,85,.6)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 20 }}>
-    <div role="dialog" aria-modal="true" aria-labelledby="qr-title" onClick={e => e.stopPropagation()} style={{ ...CARD, width: '100%', maxWidth: 440, padding: 28, position: 'relative', borderTop: '4px solid var(--web-blue)' }}>
-      <button type="button" onClick={onClose} aria-label="Close" style={{ position: 'absolute', top: 10, right: 10, border: 0, background: 'transparent', cursor: 'pointer', padding: 6 }}><Icon name="x" size={20} color="var(--web-grey-500)" /></button>
-      {sent
-        ? <div>
-            <div style={{ ...LABEL, color: 'var(--web-blue)', marginBottom: 8 }}>Request received</div>
-            <h3 id="qr-title" style={{ ...H3, marginBottom: 8 }}>Thank you. We will call you back.</h3>
-            <p style={{ ...BODY, marginBottom: 16 }}>We answer 24 hours a day. For the fastest reply, send it to us on WhatsApp as well.</p>
-            <Button as="a" variant="navy" fullWidth href={waLink} target="_blank" rel="noopener" iconLeft={<Icon name="message-circle" size={17} color="#fff" />}>Send it on WhatsApp as well</Button>
-            <Button variant="secondary" fullWidth onClick={onClose} style={{ marginTop: 10 }}>Close</Button>
-          </div>
-        : <form onSubmit={e => {
-            e.preventDefault();
-            const f = e.currentTarget;
-            logRequest(f, { source: 'home-quick-popup', ref: 'HOME-7' });
-            try { if (typeof window.gtag === 'function') window.gtag('event', 'request_submit', { cta_id: 'HOME-7', page_path: '/' }); } catch (err) { /* never block */ }
-            setWaLink(whatsappLinkFor(f, { intro: 'Quick request from the Home Assist website. Please call me back.', ref: 'HOME-7' }));
-            setSent(true);
-          }}>
-            <div style={{ ...LABEL, color: 'var(--web-blue)', marginBottom: 8 }}>Service request</div>
-            <h3 id="qr-title" style={{ ...H3, marginBottom: 6 }}>Leave your number and we call you back.</h3>
-            <p style={{ ...SMALL, marginBottom: 16 }}>Answered 24 hours a day.</p>
-            <div style={{ marginBottom: 14 }}><FieldRow label="Full name"><input style={INPUT} required autoFocus /></FieldRow></div>
-            <div style={{ marginBottom: 14 }}><FieldRow label="Mobile number"><input style={INPUT} type="tel" required /></FieldRow></div>
-            <label style={{ ...BODY, display: 'flex', gap: 10, alignItems: 'flex-start', marginBottom: 18, fontSize: 14 }}>
-              <input type="checkbox" required style={{ marginTop: 3 }} />
-              <span>I agree that Home Assist may contact me about this request.</span>
-            </label>
-            <Button size="lg" variant="navy" fullWidth iconLeft={<Icon name="send" size={17} color="#fff" />}>Request a call back</Button>
-          </form>}
-    </div>
-  </div>;
-}
-
+/* The hero's "Service Request" button opens the shared QuickRequest popup
+   (Chrome.jsx) with the home page's sheet source and code. */
 function HomePage({ go }) {
   const [quickOpen, setQuickOpen] = React.useState(false);
   return <main>
-    <QuickRequest open={quickOpen} onClose={() => setQuickOpen(false)} />
+    <QuickRequest open={quickOpen} onClose={() => setQuickOpen(false)} source="home-quick-popup" code="HOME-7" />
     {/* Hero */}
     <section style={{ borderBottom: '1px solid var(--web-grey-100)' }}>
       <div style={{ ...WRAP, padding: '64px 40px 56px', display: 'grid', gridTemplateColumns: '1.15fr .85fr', gap: 56, alignItems: 'center' }}>
