@@ -112,7 +112,7 @@ function formAnswers(form) {
    URL into REQUEST_LOG_URL below. While it is empty, nothing is sent and
    the form behaves exactly as before. The call is fire-and-forget, so a
    failure never blocks the WhatsApp hand-off. */
-const REQUEST_LOG_URL = '';
+const REQUEST_LOG_URL = 'https://script.google.com/macros/s/AKfycbw5eRTuZne8rP51RHEMVPsaw_i5VMwHCd0zIqrlueLd7f2_76b2Csazbe9bobomwmSQ/exec';  // deployed 19 Nov 2026 by systemsupport@homeassist.co.za, writes to the "Website service requests" sheet
 
 function logRequest(form, { source, ref }) {
   if (!REQUEST_LOG_URL) return;
