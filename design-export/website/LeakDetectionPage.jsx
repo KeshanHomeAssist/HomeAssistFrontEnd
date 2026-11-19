@@ -25,6 +25,86 @@ const LD_SIGNS = [
   'Paint bubbling, plaster blistering, or a musty smell that will not clear'
 ];
 
+/* "Signs of a hidden leak" tabs (19 Nov 2026). The video on the right is
+   Episode 1 of the "Diagnose the problem" series — leak or burst pipe, three
+   signs, three different incidents. The tabs carry the signs list and the
+   five-minute test that were already on the page, plus the two points the
+   video makes: which of the three incidents you are looking at, and why
+   sudden-vs-gradual matters to the claim. Keep the tab copy in step with the
+   video if the video is re-cut. */
+const LD_TIP_TABS = [
+  {
+    id: 'signs',
+    label: 'Signs to look for',
+    lead: 'Any one of these is worth a meter test. Two together usually means water is going somewhere it should not.',
+    bullets: LD_SIGNS
+  },
+  {
+    id: 'meter',
+    label: 'The five-minute test',
+    lead: 'The one check you can do yourself before anybody comes out.',
+    paras: [
+      'Close every tap in the house and switch off anything that draws water automatically. Then look at your water meter. If the dial is still moving, water is being lost between the meter and your taps.',
+      'Photograph the meter, wait an hour, photograph it again. Send us both pictures and we can tell you roughly how much you are losing before anybody comes out.'
+    ]
+  },
+  {
+    id: 'which',
+    label: 'Leak or burst?',
+    lead: 'Three signs, three different incidents. They are found differently and they are claimed differently.',
+    items: [
+      ['01', 'Concealed leak', 'A slowly growing damp patch. Usually a weeping joint inside the wall — small, quiet, and often months old by the time it shows.'],
+      ['02', 'Spreading leak', 'Water running with every tap off. An active leak in a wall, ceiling or floor that will keep going until it is found.'],
+      ['03', 'Visible burst', 'Water gushing from the pipe. A full burst under mains pressure — shut the water off at the meter first, then call.']
+    ]
+  },
+  {
+    id: 'claim',
+    label: 'Sudden or gradual?',
+    lead: 'This is why we diagnose before we repair.',
+    paras: [
+      'Insurers generally treat a sudden burst as an insured event and a slow, long-running leak as wear and maintenance. The same damp ceiling can be either, and the repair looks the same once it is done — so the diagnosis has to be made and written down before anything is opened.',
+      'A Home Assist plumber pinpoints the leak and issues a report first. The claim is then assessed on what was actually found, not on what is left after the repair.'
+    ]
+  }
+];
+
+function LeakTipTabs() {
+  const [active, setActive] = React.useState(LD_TIP_TABS[0].id);
+  const tab = LD_TIP_TABS.find(t => t.id === active) || LD_TIP_TABS[0];
+  return <div style={{ ...CARD, display: 'flex', flexDirection: 'column' }}>
+    <div role="tablist" aria-label="Helpful tips" style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: 18, paddingBottom: 14, borderBottom: '1px solid var(--web-grey-100)' }}>
+      {LD_TIP_TABS.map(t => {
+        const on = t.id === active;
+        return <button key={t.id} type="button" role="tab" id={'ld-tab-' + t.id} aria-selected={on} aria-controls={'ld-panel-' + t.id}
+          onClick={() => setActive(t.id)}
+          style={{
+            font: '600 14px/1 var(--font-core)', padding: '9px 14px', borderRadius: 999, cursor: 'pointer',
+            border: '1px solid ' + (on ? 'var(--web-navy)' : 'var(--web-grey-200)'),
+            background: on ? 'var(--web-navy)' : '#fff', color: on ? '#fff' : 'var(--web-navy)'
+          }}>{t.label}</button>;
+      })}
+    </div>
+    <div role="tabpanel" id={'ld-panel-' + tab.id} aria-labelledby={'ld-tab-' + tab.id}>
+      <p style={{ ...BODY, fontWeight: 600, color: 'var(--web-navy)' }}>{tab.lead}</p>
+      {tab.bullets && <ul style={{ ...BODY, margin: 0, paddingLeft: 18, display: 'flex', flexDirection: 'column', gap: 8 }}>
+        {tab.bullets.map(s => <li key={s}>{s}</li>)}
+      </ul>}
+      {tab.paras && tab.paras.map((p, i) => <p key={i} style={{ ...BODY, margin: i === tab.paras.length - 1 ? 0 : undefined }}>{p}</p>)}
+      {tab.items && <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+        {/* flex, not grid: responsive.css collapses every inline grid to one column on phones */}
+        {tab.items.map(([n, title, body]) => <div key={n} style={{ display: 'flex', gap: 12, alignItems: 'flex-start' }}>
+          <div style={{ ...LABEL, color: 'var(--web-blue)', paddingTop: 3, flex: '0 0 28px' }}>{n}</div>
+          <div style={{ minWidth: 0 }}>
+            <div style={{ font: '700 16px/1.3 var(--font-core)', color: 'var(--web-navy)', marginBottom: 4 }}>{title}</div>
+            <p style={{ ...BODY, margin: 0 }}>{body}</p>
+          </div>
+        </div>)}
+      </div>}
+    </div>
+  </div>;
+}
+
 const LD_STEPS = [
   ['01', 'Isolation test', 'Everything closed, then we watch the meter. This establishes that water is actually being lost before anyone opens anything.'],
   ['02', 'Visual inspection', 'A walk of the property looking for what the water is already telling us — damp, warm floors, stained ceilings, corrosion on exposed pipework.'],
@@ -104,17 +184,25 @@ function LeakDetectionPage({ go }) {
 
     {/* Signs */}
     <Section eyebrow="Do you have one" title="Signs of a hidden leak"
-      intro="Any one of these is worth a meter test. Two together usually means water is going somewhere it should not.">
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20 }}>
-        <div style={CARD}>
-          <ul style={{ ...BODY, margin: 0, paddingLeft: 18, display: 'flex', flexDirection: 'column', gap: 8 }}>
-            {LD_SIGNS.map(s => <li key={s}>{s}</li>)}
-          </ul>
-        </div>
-        <div style={{ ...CARD, background: 'var(--web-blue-050)', border: '1px solid var(--web-blue-100)' }}>
-          <div style={{ ...LABEL, marginBottom: 10 }}>The five-minute test you can do yourself</div>
-          <p style={BODY}>Close every tap in the house and switch off anything that draws water automatically. Then look at your water meter. If the dial is still moving, water is being lost between the meter and your taps.</p>
-          <p style={{ ...BODY, margin: 0 }}>Photograph the meter, wait an hour, photograph it again. Send us both pictures and we can tell you roughly how much you are losing before anybody comes out.</p>
+      intro="Any one of these is worth a meter test. Two together usually means water is going somewhere it should not. The short video shows the three ways a pipe problem announces itself; the tabs cover what to do about each.">
+      <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 3fr) minmax(0, 2fr)', gap: 24, alignItems: 'start' }}>
+        <LeakTipTabs />
+        {/* "Diagnose the problem — Episode 1: Leak or burst pipe?" Portrait 4:5 cut
+            (720x900), 25s, with sound. Muted autoplay so it moves as the visitor
+            scrolls to it; controls so they can unmute. Rendered via
+            dangerouslySetInnerHTML for the same reason as the geyser hero: React 18's
+            server render drops the muted attribute, which would block autoplay in the
+            prerendered HTML before hydration. */}
+        <div style={{ ...CARD, padding: 0, overflow: 'hidden', background: 'var(--web-blue-050)', maxWidth: 440, width: '100%', justifySelf: 'center' }}>
+          <div
+            aria-label="Diagnose the problem, episode 1: leak or burst pipe? Three signs — a slowly growing damp patch, water running with every tap off, and water gushing from the pipe — and why sudden or gradual matters to the claim."
+            dangerouslySetInnerHTML={{
+              __html: '<video autoplay muted loop playsinline controls preload="metadata" poster="/assets/illustrations/leak-diagnose-burst-pipes-poster.jpg" style="width:100%;height:auto;display:block;aspect-ratio:4/5"><source src="/assets/illustrations/leak-diagnose-burst-pipes.mp4" type="video/mp4"></video>'
+            }} />
+          <div style={{ padding: '12px 16px', borderTop: '1px solid var(--web-blue-100)' }}>
+            <div style={{ ...LABEL, color: 'var(--web-grey-500)' }}>Diagnose the problem · Episode 1</div>
+            <div style={{ font: '600 14px/1.4 var(--font-core)', color: 'var(--web-navy)', marginTop: 2 }}>Leak or burst pipe? Three signs, three different incidents.</div>
+          </div>
         </div>
       </div>
     </Section>
