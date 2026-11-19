@@ -213,20 +213,47 @@ function HomePage({ go }) {
       </div>
     </section>
 
-    {/* Trust strip */}
-    <div style={{ background: 'var(--web-grey-050)', borderBottom: '1px solid var(--web-grey-100)' }}>
-      <div style={{ ...WRAP, padding: '20px 40px', display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 24 }}>
-        {[['Verified artisans', 'Registered, licensed, vetted & Contracted'], ['COC issued, checked and logged', 'All Installations are aligned to South African National Standards SANS'], ['24/7 response', 'WhatsApp and hotline, every day'], ['Work guaranteed', '1 year workmanship warranty on all work. Terms and conditions apply.']].map(([l, v]) =>
-          <div key={l}><div style={LABEL}>{l}</div><div style={{ ...SMALL, marginTop: 6 }}>{v}</div></div>)}
+    {/* Trust strip (19 Nov 2026): a slow navy marquee. The four promises
+        scroll across once every 40 s, pause on hover, and stand still for
+        reduced motion (CSS in site.css, .ha-marquee). The list is repeated
+        twice so the loop has no gap. */}
+    <div className="ha-marquee" aria-label="Verified artisans, COC issued, 24/7 response, work guaranteed">
+      <div className="ha-marquee-track">
+        {[0, 1].map(function (k) {
+          return <div key={k} className="ha-marquee-set" aria-hidden={k === 1}>
+            {[['shield-check', 'Verified artisans', 'Registered, licensed, vetted and contracted'], ['file-check', 'COC issued, checked and logged', 'Every installation to South African National Standards'], ['clock', '24/7 response', 'WhatsApp and hotline, every day'], ['award', 'Work guaranteed', '1 year workmanship warranty on all work']].map(function (r) {
+              return <div key={r[1]} className="ha-marquee-item">
+                <span className="ha-marquee-icon"><Icon name={r[0]} size={20} color="#fff" /></span>
+                <span><span className="ha-marquee-l">{r[1]}</span><span className="ha-marquee-v">{r[2]}</span></span>
+              </div>;
+            })}
+          </div>;
+        })}
       </div>
     </div>
 
     {/* Choose a need */}
     <Section eyebrow="Where to start" title="What do you need help with?">
+      {/* Picture cards (19 Nov 2026). Each card opens with an illustration;
+          none of these three pictures is used anywhere else on the page. */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 20 }}>
-        <a href="#geyser" style={{ textDecoration: 'none' }}><LabelCard icon="droplets" label="Plumbing emergency" title="Burst geyser replacement">A burst geyser is a plumbing emergency. Close the main water supply, switch the geyser off at the DB board, and message us.</LabelCard></a>
-        <a href="#leaks" style={{ textDecoration: 'none' }}><LabelCard icon="search" label="Hidden water loss" title="Leak detection and burst pipe repair">Unexplained high water bill, damp walls or the sound of running water with all the taps closed.</LabelCard></a>
-        <a href="#trades" style={{ textDecoration: 'none' }}><LabelCard icon="zap" label="Power and repairs" title="Electrical and building repairs">No power, a tripping board, or the ceiling and waterproofing repairs that follow a water leak.</LabelCard></a>
+        {[
+          ['#geyser', 'geyser-cylinder-burst.png', 'An electric hot water cylinder', 'droplets', 'Plumbing emergency', 'Burst geyser replacement', 'A burst geyser is a plumbing emergency. Close the main water supply, switch the geyser off at the DB board, and message us.', 'contain'],
+          ['#leaks', 'leak-gas-sniffer.jpg', 'A Home Assist technician tracing a leak behind a bath with a gas sniffer', 'search', 'Hidden water loss', 'Leak detection and burst pipe repair', 'Unexplained high water bill, damp walls or the sound of running water with all the taps closed.', 'cover'],
+          ['#trades', 'help-electrical-appliances.jpg', 'Home Assist electricians testing a wall socket and an appliance', 'zap', 'Power and repairs', 'Electrical and building repairs', 'No power, a tripping board, or the ceiling and waterproofing repairs that follow a water leak.', 'cover']
+        ].map(function (c) {
+          return <a key={c[0]} href={c[0]} style={{ textDecoration: 'none' }}>
+            <div style={{ ...CARD, padding: 0, overflow: 'hidden', height: '100%' }}>
+              <img src={'/assets/illustrations/' + c[1]} alt={c[2]} loading="lazy" style={{ width: '100%', height: 190, objectFit: c[7], display: 'block', background: '#fff', borderBottom: '1px solid var(--web-grey-100)' }} />
+              <div style={{ padding: 22 }}>
+                <Icon name={c[3]} size={20} color="var(--web-blue)" style={{ marginBottom: 12 }} />
+                <div style={{ ...LABEL, marginBottom: 8 }}>{c[4]}</div>
+                <h3 style={H3}>{c[5]}</h3>
+                <div style={{ ...BODY, margin: 0 }}>{c[6]}</div>
+              </div>
+            </div>
+          </a>;
+        })}
       </div>
     </Section>
 
@@ -261,14 +288,25 @@ function HomePage({ go }) {
           <p style={BODY}>Before any of that, the first step costs you nothing: we check whether your existing geyser is still under manufacturer warranty. If it is, the replacement may cost you nothing either.</p>
           <Button variant="navy" fullWidth onClick={() => go('geyserReplacements')} iconLeft={<Icon name="camera" size={17} color="#fff" />}>Check my warranty first</Button>
         </div>
-        <div style={{ ...CARD, background: 'var(--web-blue-050)', border: '1px solid var(--web-blue-100)' }}>
-          <div style={{ ...LABEL, marginBottom: 10 }}>What it costs</div>
-          <CostReveal context="burst_geyser" lines={['The cost depends on the size of the unit, the brand, the type — electric, solar or heat pump — how accessible the installation is, and whether the existing unit is still under manufacturer warranty. We typically see costs ranging between R 9,800 ex VAT and R 13,200 ex VAT for a safe, compliant electric geyser replacement']}>
-            <Button as="a" variant="navy" fullWidth href={wa('Hi Home Assist, my geyser has burst. ', 'HOME-3')} target="_blank" rel="noopener" iconLeft={<Icon name="message-circle" size={17} color="#fff" />}>Send us the details</Button>
-          </CostReveal>
-          <div style={{ marginTop: 16 }}>
-            <img src="../../assets/illustrations/geyser-cylinder-burst.png" alt="An electric hot water cylinder on its mounting feet, showing the element cover plate and thermostat access" style={{ width: '100%', height: 'auto', display: 'block' }} />
+        {/* Warranty and serial check (19 Nov 2026; replaced the "What it
+            costs" card). Same plate picture and checklist as the warranty
+            block on /geyser-replacements. HOME-3 now carries the plate photo. */}
+        <div style={{ ...CARD, background: 'var(--web-navy)', border: 0, color: '#fff' }}>
+          <div style={{ ...LABEL, color: 'var(--web-blue-300)', marginBottom: 10 }}>Check your warranty first</div>
+          <p style={{ ...BODY, color: 'rgba(255,255,255,.88)' }}>Most geysers carry a five-year manufacturer warranty. If yours is still covered, the replacement may cost you nothing. Send us one photo of the plate on the side of the cylinder and we decode the serial and date code for you, free.</p>
+          <div style={{ position: 'relative', borderRadius: 4, overflow: 'hidden', border: '1px solid rgba(255,255,255,.22)', background: 'var(--web-navy-900)', margin: '14px 0' }}>
+            <img src="/assets/illustrations/serial-plate-electrolux.jpg" alt="The rating plate on the side of a geyser, showing the brand, capacity, serial number and manufacture date code" style={{ display: 'block', width: '100%', height: 170, objectFit: 'cover' }} />
+            <div className="ha-scan"></div>
+            <div style={{ position: 'absolute', left: 10, bottom: 8, ...LABEL, fontSize: 10, color: '#fff', background: 'rgba(11,29,58,.72)', padding: '3px 6px', borderRadius: 2 }}>Decoding serial</div>
           </div>
+          <div style={{ ...LABEL, color: 'var(--web-blue-300)', marginBottom: 8 }}>What we need to see</div>
+          {['Brand', 'Capacity in litres', 'Serial number', 'Manufacture date code'].map(function (t) {
+            return <div key={t} style={{ display: 'flex', gap: 8, alignItems: 'center', marginBottom: 6 }}>
+              <Icon name="check" size={14} color="var(--web-blue-300)" />
+              <span style={{ ...SMALL, color: 'rgba(255,255,255,.85)' }}>{t}</span>
+            </div>;
+          })}
+          <Button as="a" variant="onDark" style={{ marginTop: 14, width: '100%', boxSizing: 'border-box', display: 'flex', justifyContent: 'center' }} href={wa('Hi Home Assist, I would like to check if my geyser is under warranty. I have attached a photo of the geyser plate. ', 'HOME-3')} target="_blank" rel="noopener" iconLeft={<Icon name="camera" size={17} color="var(--web-navy)" />}>Send us the serial plate</Button>
         </div>
       </div>
 
@@ -325,7 +363,7 @@ function HomePage({ go }) {
           images of different proportions still line up across the row. */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 20, alignItems: 'start' }}>
         <div style={{ ...CARD, padding: 0, overflow: 'hidden' }}>
-          <img src="/assets/illustrations/trade-electrical.jpg" alt="A house with rooftop solar, an inverter and battery, and a Home Assist van at an electric vehicle charging point" style={{ width: '100%', height: 168, objectFit: 'cover', display: 'block' }} />
+          <img src="/assets/illustrations/trade-electrician-db.jpg" alt="A Home Assist electrician working in a distribution board while a colleague fits a ceiling light" style={{ width: '100%', height: 168, objectFit: 'cover', display: 'block' }} />
           <div style={{ padding: 24 }}>
             <h3 style={H3}>Electricians</h3>
             <p style={BODY}>No power, a distribution board that keeps tripping, fault finding, rewiring, and the electrical certificate of compliance a property sale requires.</p>
@@ -350,18 +388,6 @@ function HomePage({ go }) {
         </div>
       </div>
     </Section>
-
-    {/* How it works */}
-    <Section eyebrow="How it works" title="From your first message to a finished job">
-      <Steps items={[
-        ['01', 'You message us', 'WhatsApp, call or the form below. Tell us what has happened and where you are.'],
-        ['02', 'We find the artisan', 'From our verified nationwide network, matched to your job and your area.'],
-        ['03', 'The work is verified', "We check the technician's registration, the certificate is issued and logged, and the price is checked against benchmark."],
-        ['04', 'You are looked after', 'One point of contact from the first message to the finished job.']
-      ]} />
-    </Section>
-
-    <RequestForm />
 
     {/* Reviews */}
     <Section eyebrow="Reviews" title="What our customers say"
@@ -391,6 +417,18 @@ function HomePage({ go }) {
           </div>
         </div>
       </div>
+    </Section>
+
+    <RequestForm />
+
+    {/* How it works */}
+    <Section eyebrow="How it works" title="From your first message to a finished job">
+      <Steps items={[
+        ['01', 'You message us', 'WhatsApp, call or the form below. Tell us what has happened and where you are.'],
+        ['02', 'We find the artisan', 'From our verified nationwide network, matched to your job and your area.'],
+        ['03', 'The work is verified', "We check the technician's registration, the certificate is issued and logged, and the price is checked against benchmark."],
+        ['04', 'You are looked after', 'One point of contact from the first message to the finished job.']
+      ]} />
     </Section>
 
     {/* FAQ */}
