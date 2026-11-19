@@ -130,6 +130,14 @@ function logRequest(form, { source, ref }) {
   } catch (e) { /* logging must never block the enquiry */ }
 }
 
+/* The WhatsApp link for a form's answers, without opening it (19 Nov 2026).
+   The home page form submits to the sheet first and offers WhatsApp as a
+   second step; this builds that second-step link. */
+function whatsappLinkFor(form, { intro, ref }) {
+  const answers = formAnswers(form);
+  return wa(intro + '\n\n' + answers.map(([k, v]) => k + ': ' + v).join('\n'), ref);
+}
+
 function whatsappHandoff(form, { intro, ref }) {
   const answers = formAnswers(form);
   const text = intro + '\n\n' + answers.map(([k, v]) => k + ': ' + v).join('\n');
@@ -510,4 +518,4 @@ function SpinWinSign({ onClick, href }) {
   </a>;
 }
 
-Object.assign(window, { CH, wa, mailtoLink, whatsappHandoff, NAV, WRAP, LABEL, H1, H2, H3, DISPLAY, BODY, SMALL, CARD, INPUT, Eyebrow, Section, Header, Footer, NavyBand, LabelCard, Stat, Steps, Accordion, FieldRow, ChannelCard, Confirm, RewardsWheel, SpinWinSign, logRequest });
+Object.assign(window, { CH, wa, mailtoLink, whatsappHandoff, NAV, WRAP, LABEL, H1, H2, H3, DISPLAY, BODY, SMALL, CARD, INPUT, Eyebrow, Section, Header, Footer, NavyBand, LabelCard, Stat, Steps, Accordion, FieldRow, ChannelCard, Confirm, RewardsWheel, SpinWinSign, logRequest, whatsappLinkFor });

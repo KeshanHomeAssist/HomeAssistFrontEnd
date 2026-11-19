@@ -32,7 +32,7 @@ const CHROME_EXPORTS = [
   'CH', 'wa', 'mailtoLink', 'whatsappHandoff', 'NAV', 'WRAP', 'LABEL', 'H1', 'H2', 'H3', 'DISPLAY', 'BODY',
   'SMALL', 'CARD', 'INPUT', 'Eyebrow', 'Section', 'Header', 'Footer',
   'NavyBand', 'LabelCard', 'Stat', 'Steps', 'Accordion', 'FieldRow',
-  'ChannelCard', 'Confirm', 'RewardsWheel', 'SpinWinSign', 'logRequest',
+  'ChannelCard', 'Confirm', 'RewardsWheel', 'SpinWinSign', 'logRequest', 'whatsappLinkFor',
 ];
 
 // What each generated module must export for App.jsx to route to it.

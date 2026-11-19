@@ -453,11 +453,11 @@ function RequestForm() {
   const row = { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20, marginBottom: 20 };
   if (sent) return <Section tint eyebrow="Request received">
     <div style={{ background: 'var(--web-navy)', borderRadius: 4, padding: '40px 44px' }}>
-      <Eyebrow onDark>One step left</Eyebrow>
-      <h2 style={{ ...H2, color: '#fff', fontSize: 26 }}>Press send on WhatsApp and we have it.</h2>
-      <p style={{ ...BODY, color: 'rgba(255,255,255,.85)', maxWidth: '60ch' }}>WhatsApp has opened with your details already filled in. Send the message and a consultant will pick it up — we answer 24 hours a day. If WhatsApp did not open, use the button below.</p>
+      <Eyebrow onDark>Thank you</Eyebrow>
+      <h2 style={{ ...H2, color: '#fff', fontSize: 26 }}>We have your request. A consultant will come back to you.</h2>
+      <p style={{ ...BODY, color: 'rgba(255,255,255,.85)', maxWidth: '60ch' }}>We answer 24 hours a day. For the fastest reply, send the same details to us on WhatsApp as well: the button below opens WhatsApp with your answers already filled in.</p>
       <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
-        <Button as="a" variant="onDark" href={waLink || wa('Hi Home Assist, I would like to log a service request. ', 'HOME-6')} target="_blank" rel="noopener">Open WhatsApp with my request</Button>
+        <Button as="a" variant="onDark" href={waLink || wa('Hi Home Assist, I would like to log a service request. ', 'HOME-6')} target="_blank" rel="noopener" iconLeft={<Icon name="message-circle" size={18} color="var(--web-navy)" />}>Send it to us on WhatsApp as well</Button>
         <Button as="a" variant="ghost" href={'tel:' + CH.phoneTel} style={{ color: '#fff', border: '1px solid rgba(255,255,255,.5)' }}>Call {CH.phone} instead</Button>
         <Button variant="ghost" onClick={() => setSent(false)} style={{ color: '#fff', border: '1px solid rgba(255,255,255,.5)' }}>Edit my request</Button>
       </div>
@@ -469,7 +469,15 @@ function RequestForm() {
         is optional, so a one-line request is enough. Every submission is
         logged to the Google Sheet through logRequest (see Chrome.jsx) before
         the WhatsApp hand-off. */}
-    <form onSubmit={e => { e.preventDefault(); logRequest(e.currentTarget, { source: 'home-service-request', ref: 'HOME-6' }); setWaLink(whatsappHandoff(e.currentTarget, { intro: 'New service request from the Home Assist website.', ref: 'HOME-6' })); setSent(true); }} style={{ ...CARD, padding: 32, maxWidth: 900 }}>
+    <form onSubmit={e => {
+      e.preventDefault();
+      const f = e.currentTarget;
+      logRequest(f, { source: 'home-service-request', ref: 'HOME-6' });
+      try { if (typeof window.gtag === 'function') window.gtag('event', 'request_submit', { cta_id: 'HOME-6', page_path: '/' }); } catch (err) { /* never block */ }
+      setWaLink(whatsappLinkFor(f, { intro: 'New service request from the Home Assist website.', ref: 'HOME-6' }));
+      setSent(true);
+      try { window.scrollTo({ top: document.getElementById('request') ? document.getElementById('request').offsetTop - 80 : 0, behavior: 'smooth' }); } catch (err) { /* ignore */ }
+    }} style={{ ...CARD, padding: 32, maxWidth: 900 }}>
       <div style={row}>
         <FieldRow label="Full name"><input style={INPUT} required /></FieldRow>
         <FieldRow label="Mobile number" hint="South African format, e.g. 082 123 4567"><input style={INPUT} type="tel" required /></FieldRow>
@@ -512,8 +520,8 @@ function RequestForm() {
         <input type="checkbox" required style={{ marginTop: 3 }} />
         <span>I agree that Home Assist may contact me about this request.</span>
       </label>
-      <Button size="lg" variant="navy" iconLeft={<Icon name="message-circle" size={18} color="#fff" />}>Send my request on WhatsApp</Button>
-      <p style={{ ...SMALL, marginTop: 14 }}>This opens WhatsApp with your answers filled in, so you can send them to us in one tap. We answer 24 hours a day.</p>
+      <Button size="lg" variant="navy" iconLeft={<Icon name="send" size={18} color="#fff" />}>Submit my request</Button>
+      <p style={{ ...SMALL, marginTop: 14 }}>We answer 24 hours a day. After you submit, you can also send the same details to us on WhatsApp in one tap.</p>
     </form>
   </Section>;
 }
