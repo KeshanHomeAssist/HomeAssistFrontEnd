@@ -264,7 +264,7 @@ function HomePage({ go }) {
         <div style={CARD}>
           <div style={{ ...LABEL, marginBottom: 10 }}>What to do first</div>
           <ol style={{ margin: 0, padding: 0, listStyle: 'none' }}>
-            {['Close the main water supply at the meter.', 'Switch the geyser off at the distribution board.', 'Open a hot tap to relieve the pressure.', 'Move what you can out of the way of the water.', 'Take photographs before anything is moved.'].map((s, i) =>
+            {['Close the main water supply at the meter.', 'Switch the geyser off at the distribution board.', 'Open a hot tap to relieve the pressure.'].map((s, i) =>
               <li key={s} style={{ display: 'flex', gap: 14, padding: '10px 0', borderBottom: '1px solid var(--web-grey-100)' }}>
                 <span style={{ ...LABEL, color: 'var(--web-blue)', width: 22 }}>{String(i + 1).padStart(2, '0')}</span>
                 <span style={{ ...BODY, margin: 0 }}>{s}</span>
@@ -277,6 +277,10 @@ function HomePage({ go }) {
             <Button as="a" variant="navy" size="lg" href={wa('Hi Home Assist, my geyser has burst. ', 'HOME-2')} target="_blank" rel="noopener" iconLeft={<Icon name="message-circle" size={18} color="#fff" />}>Message us on WhatsApp</Button>
             <p style={{ ...SMALL, marginTop: 8, textAlign: 'center' }}>Or call <a href={'tel:' + CH.phoneTel} style={{ fontWeight: 600 }}>{CH.phone}</a> — answered 24 hours a day.</p>
           </div>
+          <div style={{ ...LABEL, margin: '22px 0 10px' }}>What it costs</div>
+          <CostReveal context="burst_geyser" lines={['The cost depends on the size of the unit, the brand, the type — electric, solar or heat pump — how accessible the installation is, and whether the existing unit is still under manufacturer warranty. We typically see costs ranging between R 9,800 ex VAT and R 13,200 ex VAT for a safe, compliant electric geyser replacement']}>
+            <Button as="a" variant="secondary" fullWidth href={wa('Hi Home Assist, my geyser has burst. ', 'HOME-3')} target="_blank" rel="noopener" iconLeft={<Icon name="message-circle" size={17} color="var(--web-navy)" />}>Send us the details</Button>
+          </CostReveal>
         </div>
         <div style={CARD}>
           <div style={{ ...LABEL, marginBottom: 10 }}>What a replacement includes</div>
@@ -286,7 +290,6 @@ function HomePage({ go }) {
           <div style={{ ...LABEL, margin: '22px 0 10px' }}>How long it takes</div>
           <p style={BODY}>Most like-for-like replacements are completed within 3 - 5 hours, normally in a single visit on the same day. High volumes of work in winter sometimes mean next-day service.</p>
           <p style={BODY}>Before any of that, the first step costs you nothing: we check whether your existing geyser is still under manufacturer warranty. If it is, the replacement may cost you nothing either.</p>
-          <Button variant="navy" fullWidth onClick={() => go('geyserReplacements')} iconLeft={<Icon name="camera" size={17} color="#fff" />}>Check my warranty first</Button>
         </div>
         {/* Warranty and serial check (19 Nov 2026; replaced the "What it
             costs" card). Same plate picture and checklist as the warranty
@@ -306,7 +309,7 @@ function HomePage({ go }) {
               <span style={{ ...SMALL, color: 'rgba(255,255,255,.85)' }}>{t}</span>
             </div>;
           })}
-          <Button as="a" variant="onDark" style={{ marginTop: 14, width: '100%', boxSizing: 'border-box', display: 'flex', justifyContent: 'center' }} href={wa('Hi Home Assist, I would like to check if my geyser is under warranty. I have attached a photo of the geyser plate. ', 'HOME-3')} target="_blank" rel="noopener" iconLeft={<Icon name="camera" size={17} color="var(--web-navy)" />}>Send us the serial plate</Button>
+          <Button as="a" variant="onDark" style={{ marginTop: 14, width: '100%', boxSizing: 'border-box', display: 'flex', justifyContent: 'center' }} href={wa('Hi Home Assist, I would like to check if my geyser is under warranty. I have attached a photo of the geyser plate. ', 'HOME-4')} target="_blank" rel="noopener" iconLeft={<Icon name="camera" size={17} color="var(--web-navy)" />}>Send us the serial plate</Button>
         </div>
       </div>
 
@@ -462,39 +465,43 @@ function RequestForm() {
   </Section>;
   return <Section id="request" tint eyebrow="Service request" title="Tell us what you need"
     intro="We will match you with an artisan and come back to you on WhatsApp.">
-    <form onSubmit={e => { e.preventDefault(); setWaLink(whatsappHandoff(e.currentTarget, { intro: 'New service request from the Home Assist website.', ref: 'HOME-6' })); setSent(true); }} style={{ ...CARD, padding: 32, maxWidth: 900 }}>
+    {/* Only the name and mobile number are required (19 Nov 2026). The rest
+        is optional, so a one-line request is enough. Every submission is
+        logged to the Google Sheet through logRequest (see Chrome.jsx) before
+        the WhatsApp hand-off. */}
+    <form onSubmit={e => { e.preventDefault(); logRequest(e.currentTarget, { source: 'home-service-request', ref: 'HOME-6' }); setWaLink(whatsappHandoff(e.currentTarget, { intro: 'New service request from the Home Assist website.', ref: 'HOME-6' })); setSent(true); }} style={{ ...CARD, padding: 32, maxWidth: 900 }}>
       <div style={row}>
         <FieldRow label="Full name"><input style={INPUT} required /></FieldRow>
         <FieldRow label="Mobile number" hint="South African format, e.g. 082 123 4567"><input style={INPUT} type="tel" required /></FieldRow>
       </div>
       <div style={row}>
         <FieldRow label="Email address (optional)"><input style={INPUT} type="email" /></FieldRow>
-        <FieldRow label="What do you need?"><select style={INPUT} required defaultValue="">
+        <FieldRow label="What do you need? (optional)"><select style={INPUT} defaultValue="">
           <option value="" disabled>Select a service</option>
           {['Burst geyser', 'Leak detection', 'Burst pipe repair', 'Electrical', 'Building or ceiling repair', 'Something else'].map(o => <option key={o}>{o}</option>)}
         </select></FieldRow>
       </div>
       <div style={{ marginBottom: 20 }}>
-        <FieldRow label="Describe the problem"><textarea style={{ ...INPUT, minHeight: 96, resize: 'vertical' }} required /></FieldRow>
+        <FieldRow label="Describe the problem (optional)"><textarea style={{ ...INPUT, minHeight: 96, resize: 'vertical' }} /></FieldRow>
       </div>
       <div style={row}>
-        <FieldRow label="Suburb or area"><input style={INPUT} required /></FieldRow>
-        <FieldRow label="City"><select style={INPUT} required defaultValue="">
+        <FieldRow label="Suburb or area (optional)"><input style={INPUT} /></FieldRow>
+        <FieldRow label="City (optional)"><select style={INPUT} defaultValue="">
           <option value="" disabled>Select a city</option>
           {['Cape Town', 'Johannesburg', 'Pretoria', 'Durban', 'Gqeberha', 'Other'].map(o => <option key={o}>{o}</option>)}
         </select></FieldRow>
       </div>
       <div style={row}>
-        <FieldRow label="Is this an emergency?">
+        <FieldRow label="Is this an emergency? (optional)">
           <div style={{ display: 'flex', flexDirection: 'column', gap: 8, paddingTop: 4 }}>
             {['Yes, today', 'Within a few days', 'Just getting a quote'].map(o =>
-              <label key={o} style={{ ...BODY, margin: 0, display: 'flex', gap: 9, alignItems: 'center' }}><input type="radio" name="urgency" required />{o}</label>)}
+              <label key={o} style={{ ...BODY, margin: 0, display: 'flex', gap: 9, alignItems: 'center' }}><input type="radio" name="urgency" />{o}</label>)}
           </div>
         </FieldRow>
-        <FieldRow label="Are you claiming from insurance?">
+        <FieldRow label="Are you claiming from insurance? (optional)">
           <div style={{ display: 'flex', flexDirection: 'column', gap: 8, paddingTop: 4 }}>
             {['Yes', 'No', 'Not sure'].map(o =>
-              <label key={o} style={{ ...BODY, margin: 0, display: 'flex', gap: 9, alignItems: 'center' }}><input type="radio" name="claim" required />{o}</label>)}
+              <label key={o} style={{ ...BODY, margin: 0, display: 'flex', gap: 9, alignItems: 'center' }}><input type="radio" name="claim" />{o}</label>)}
           </div>
         </FieldRow>
       </div>

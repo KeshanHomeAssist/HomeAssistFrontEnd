@@ -103,6 +103,33 @@ function formAnswers(form) {
 
 /* Opens WhatsApp with the form's answers as the message body. Returns the URL
    so the page can offer a manual link if the browser blocked the new tab. */
+/* Service request logging (19 Nov 2026). Every submitted form is also sent
+   to a Google Sheet through a Google Apps Script web app, so the request is
+   kept even if the visitor never presses send on WhatsApp.
+
+   SET-UP (Keshan): create the Sheet, add the Apps Script from the notes,
+   deploy it as a web app ("Anyone" can access), and paste the deployment
+   URL into REQUEST_LOG_URL below. While it is empty, nothing is sent and
+   the form behaves exactly as before. The call is fire-and-forget, so a
+   failure never blocks the WhatsApp hand-off. */
+const REQUEST_LOG_URL = '';
+
+function logRequest(form, { source, ref }) {
+  if (!REQUEST_LOG_URL) return;
+  try {
+    const answers = {};
+    formAnswers(form).forEach(([k, v]) => { answers[k] = v; });
+    const payload = Object.assign({
+      source: source || 'website',
+      ref: ref || '',
+      page: (window.location.pathname.replace(/[/]+$/, '') || '/'),
+      ab_variant: typeof window.HA_AB === 'string' ? window.HA_AB : 'off',
+      submitted_at: new Date().toISOString(),
+    }, answers);
+    fetch(REQUEST_LOG_URL, { method: 'POST', mode: 'no-cors', keepalive: true, headers: { 'Content-Type': 'text/plain' }, body: JSON.stringify(payload) });
+  } catch (e) { /* logging must never block the enquiry */ }
+}
+
 function whatsappHandoff(form, { intro, ref }) {
   const answers = formAnswers(form);
   const text = intro + '\n\n' + answers.map(([k, v]) => k + ': ' + v).join('\n');
@@ -483,4 +510,4 @@ function SpinWinSign({ onClick, href }) {
   </a>;
 }
 
-Object.assign(window, { CH, wa, mailtoLink, whatsappHandoff, NAV, WRAP, LABEL, H1, H2, H3, DISPLAY, BODY, SMALL, CARD, INPUT, Eyebrow, Section, Header, Footer, NavyBand, LabelCard, Stat, Steps, Accordion, FieldRow, ChannelCard, Confirm, RewardsWheel, SpinWinSign });
+Object.assign(window, { CH, wa, mailtoLink, whatsappHandoff, NAV, WRAP, LABEL, H1, H2, H3, DISPLAY, BODY, SMALL, CARD, INPUT, Eyebrow, Section, Header, Footer, NavyBand, LabelCard, Stat, Steps, Accordion, FieldRow, ChannelCard, Confirm, RewardsWheel, SpinWinSign, logRequest });
